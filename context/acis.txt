@@ -1,0 +1,35 @@
+-- 1. Regulatory Events Table (The Pulse)
+-- This stores the data fetched from CMS/HHS/NIST.
+CREATE TABLE IF NOT EXISTS regulatory_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source TEXT NOT NULL,           -- e.g., 'CMS', 'HHS', 'NIST'
+    title TEXT NOT NULL,
+    url TEXT NOT NULL,
+    published_date DATETIME,
+    ingested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    risk_score INTEGER DEFAULT 0,   -- 1-10 calculated by Claude
+    summary TEXT,
+    tags TEXT,                      -- e.g., 'RxDC, Gag Clause, HIPAA'
+    remediation_steps TEXT          -- AI-generated advice
+);
+
+-- 2. Attestation Vault (The Client Tracker)
+-- This tracks mock clients for your portfolio demonstration.
+CREATE TABLE IF NOT EXISTS attestation_vault (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_name TEXT NOT NULL,
+    pbm_name TEXT,                  -- Pharmacy Benefit Manager
+    rxdc_status TEXT DEFAULT 'Pending', -- 'Pending', 'In-Progress', 'Submitted'
+    gag_clause_status TEXT DEFAULT 'Not Started',
+    last_contact_date DATETIME,
+    r2_folder_path TEXT             -- Path to the PDFs in Cloudflare R2
+);
+
+-- 3. Agent Memory Table (Stateful Intelligence)
+-- This allows your agent to remember past decisions.
+CREATE TABLE IF NOT EXISTS agent_memory (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    context_key TEXT UNIQUE,        -- e.g., 'last_cms_crawl'
+    context_value TEXT,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

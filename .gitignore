@@ -1,0 +1,15 @@
+# Secrets - never commit
+.mcp.json
+.env
+.env.*
+*.secret
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Node
+node_modules/
+
+# Wrangler
+.wrangler/
+dist/
