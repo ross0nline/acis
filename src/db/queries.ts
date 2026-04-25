@@ -156,6 +156,17 @@ export async function updateIncidentStatus(
     .run();
 }
 
+export async function updateIncidentPlaybook(
+  db: D1Database,
+  id: number,
+  playbook: string,
+): Promise<void> {
+  await db
+    .prepare('UPDATE incidents SET playbook = ? WHERE id = ?')
+    .bind(playbook, id)
+    .run();
+}
+
 // ── Agent Memory ───────────────────────────────────────────────────────────
 
 export async function getMemory(db: D1Database, key: string): Promise<string | null> {
