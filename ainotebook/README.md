@@ -17,3 +17,4 @@ Each entry documents a decision made during design or development: what was deci
 | [009](009-nist-playbook-agent.md) | NIST 800-61 Incident Playbook Agent | Decided & Implemented |
 | [010](010-vendor-scanner-agent.md) | Vendor Security Scanner Agent | Decided & Implemented |
 | [011](011-claude-api-usage-inventory.md) | Claude API Usage Inventory | Reference |
+| [012](012-heartbeat-agent.md) | Heartbeat Agent: Daily Self-Audit Loop | Decided & Implemented |

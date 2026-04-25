@@ -1,6 +1,6 @@
 # 008 — Current Build State & Remaining Roadmap
 
-**Date:** 2026-04-25 (updated 2026-04-25 — vendor scanner live)  
+**Date:** 2026-04-25 (updated 2026-04-25 — heartbeat agent live)  
 **Status:** Reference — updated as phases complete
 
 ---
@@ -16,8 +16,9 @@ flowchart LR
         VR["Vendor Risk\nDB + API + scanner agent: LIVE\nReal TLS + 6-header scoring (0–100)\nclaude-opus-4-7 risk summary\nPOST /api/vendors/:id/scan"]
     end
 
+        HB["Heartbeat Agent\nDaily cron after scraper\n13-query D1 batch, claude-opus-4-7\nGreen/Yellow/Red per module\nPOST /api/heartbeat/run"]
+
     subgraph BLOCKED ["🔲 Not Started"]
-        HB["Heartbeat Agent\nDaily self-audit loop\nReports to CCC Admin via Service Binding"]
         EL["Agent Logs Panel\nPulls from AI Gateway logs\nRenders Claude reasoning trace"]
     end
 ```
@@ -72,5 +73,4 @@ flowchart LR
 
 ## Remaining Build Order
 
-1. **Heartbeat agent** — daily self-audit loop, reports system health to CCC Admin via Service Binding; this is the "autonomous" in ACIS
-2. **Agent Logs panel** — pulls AI Gateway request log, renders Claude reasoning trace in the Executive Hub; closes the observability story
+1. **Agent Logs panel** — pulls AI Gateway request log, renders Claude reasoning trace in the Executive Hub; closes the observability story
