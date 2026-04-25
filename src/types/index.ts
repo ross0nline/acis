@@ -6,6 +6,7 @@ export interface Env {
   AI_GATEWAY_URL: string;
   ADMIN_TOKEN: string;
   REGULATIONS_GOV_API_KEY: string;
+  FIRECRAWL_API_KEY: string;
   ENVIRONMENT: string;
 }
 

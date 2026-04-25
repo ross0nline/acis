@@ -53,6 +53,67 @@ interface RegGovResponse {
   errors?: unknown;
 }
 
+// ── Firecrawl sources (press releases / fact sheets not in Federal Register) ─
+
+const FIRECRAWL_BASE = 'https://api.firecrawl.dev/v1/scrape';
+
+const FIRECRAWL_SOURCES = [
+  { source: 'CMS-News', url: 'https://www.cms.gov/newsroom', label: 'CMS Newsroom' },
+  { source: 'HHS-News', url: 'https://www.hhs.gov/press-room/index.html', label: 'HHS Press Room' },
+];
+
+interface FirecrawlResponse {
+  success: boolean;
+  data?: {
+    markdown: string;
+    metadata: { statusCode: number; url: string };
+  };
+}
+
+interface ParsedNewsItem {
+  title: string;
+  url: string;
+  date: string;
+  summary: string;
+  type: string;
+}
+
+// Use Claude to extract structured article list from raw newsroom markdown
+async function parseNewsroomMarkdown(
+  client: Anthropic,
+  markdown: string,
+  sourceLabel: string,
+): Promise<ParsedNewsItem[]> {
+  try {
+    const msg = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: 'Extract structured article data from government newsroom markdown. Return only valid JSON array.',
+      messages: [{
+        role: 'user',
+        content: `Extract up to 10 articles from this ${sourceLabel} listing page markdown. For each article extract:
+- title: article headline
+- url: full https:// URL (from "Read more" links; skip items with no URL)
+- date: YYYY-MM-DD format (use current year if only month/day shown)
+- summary: 1-sentence description from the snippet text
+- type: article type (e.g. "Press Release", "News Alert", "Fact Sheet", "Blog Post")
+
+Return JSON array only, no explanation:
+[{"title":"...","url":"...","date":"YYYY-MM-DD","summary":"...","type":"..."}]
+
+Markdown (first 4000 chars):
+${markdown.slice(0, 4000)}`,
+      }],
+    });
+
+    const text = msg.content[0].type === 'text' ? msg.content[0].text : '[]';
+    const cleaned = text.replace(/```json\n?|\n?```/g, '').trim();
+    return JSON.parse(cleaned) as ParsedNewsItem[];
+  } catch {
+    return [];
+  }
+}
+
 // ── Claude scoring ─────────────────────────────────────────────────────────
 
 async function scoreWithClaude(
@@ -220,6 +281,67 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
         }) : null,
       });
       ingested++;
+    }
+  }
+
+  // ── Firecrawl (CMS/HHS press releases not in Federal Register) ──
+  if (env.FIRECRAWL_API_KEY) {
+    for (const feed of FIRECRAWL_SOURCES) {
+      let markdown: string;
+      try {
+        const resp = await fetch(FIRECRAWL_BASE, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${env.FIRECRAWL_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            url: feed.url,
+            formats: ['markdown'],
+            onlyMainContent: true,
+          }),
+        });
+        if (!resp.ok) continue;
+        const fcData = await resp.json() as FirecrawlResponse;
+        if (!fcData.success || !fcData.data?.markdown) continue;
+        markdown = fcData.data.markdown;
+      } catch {
+        continue;
+      }
+
+      const articles = await parseNewsroomMarkdown(client, markdown, feed.label);
+      if (articles.length === 0) continue;
+
+      for (const article of articles) {
+        if (!article.url || !article.title) continue;
+
+        const existing = await env.ACIS_DB
+          .prepare('SELECT id FROM regulatory_events WHERE url = ?')
+          .bind(article.url)
+          .first();
+        if (existing) { skipped++; continue; }
+
+        const scored = await scoreWithClaude(
+          client,
+          article.title,
+          article.summary,
+          feed.source,
+          article.type,
+          null
+        );
+
+        await insertRegulatoryEvent(env.ACIS_DB, {
+          source: feed.source,
+          title: article.title,
+          url: article.url,
+          published_date: article.date ? new Date(article.date).toISOString() : new Date().toISOString(),
+          risk_score: scored ? riskLevelToScore(scored.risk_level) : 0,
+          summary: scored?.summary ?? article.summary,
+          tags: scored?.impacted_field ?? null,
+          remediation_steps: scored ? JSON.stringify(scored) : null,
+        });
+        ingested++;
+      }
     }
   }
 
