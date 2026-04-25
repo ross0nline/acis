@@ -41,7 +41,7 @@ export default function App() {
     if (a.status === 'fulfilled') setAttestation(a.value);
     if (v.status === 'fulfilled') setVendors(v.value);
     if (i.status === 'fulfilled') setIncidents(i.value);
-    setLoading({ pulse: false, attestation: false, vendors: false, incidents: false });
+    setLoading({ pulse: false, attestation: false, vendors: false, incidents: false, operations: false });
     setLastRefresh(new Date());
   }, []);
 
