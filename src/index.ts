@@ -7,6 +7,8 @@ import { attestationRoutes } from './modules/attestation';
 import { vendorRoutes } from './modules/vendor';
 import { incidentRoutes } from './modules/incidents';
 import { runScraper } from './agents/scraper';
+import { runHeartbeat } from './agents/heartbeat';
+import { getMemory } from './db/queries';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -39,6 +41,21 @@ app.post('/api/scraper/run', async (c) => {
   return c.json({ ok: true, ...result });
 });
 
+// Heartbeat — last stored report and manual trigger
+app.get('/api/heartbeat/last', async (c) => {
+  const raw = await getMemory(c.env.ACIS_DB, 'last_heartbeat');
+  if (!raw) return c.json({ error: 'No heartbeat on record yet' }, 404);
+  return c.json(JSON.parse(raw));
+});
+
+app.post('/api/heartbeat/run', async (c) => {
+  const token = c.req.header('Authorization')?.replace('Bearer ', '');
+  if (token !== c.env.ADMIN_TOKEN) return c.json({ error: 'Unauthorized' }, 401);
+  const report = await runHeartbeat(c.env);
+  if (!report) return c.json({ error: 'Heartbeat generation failed' }, 500);
+  return c.json({ ok: true, ...report });
+});
+
 // Internal service binding endpoint (called by agents via Service Binding)
 app.post('/internal/event', async (c) => {
   const token = c.req.header('Authorization')?.replace('Bearer ', '');
@@ -60,9 +77,10 @@ app.post('/internal/event', async (c) => {
   return c.json({ ok: true });
 });
 
-// Scheduled handler — runs on cron trigger
+// Scheduled handler — runs daily at 08:00 UTC
 const scheduled: ExportedHandlerScheduledHandler<Env> = async (_event, env) => {
   await runScraper(env);
+  await runHeartbeat(env);
 };
 
 export default {
