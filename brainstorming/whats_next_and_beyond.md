@@ -37,9 +37,11 @@ Three sections: Manual Triggers (Run Scraper, Run Heartbeat, Scan All Vendors wi
 ### Attestation Email Reminders
 *Originally in ACIS_synthesis as "Attestation Reminder — 30-day deadline cron + SendGrid." Never built.*
 
-A cron that queries `attestation_vault` for clients with upcoming or overdue `rxdc_status` / `gag_clause_status` and fires a templated reminder email via Resend (or SendGrid). Targets `contact_email` on the vendor record. This is a real-world compliance workflow — healthcare administrators actually do this today.
+A cron that queries `attestation_vault` for clients with upcoming or overdue `rxdc_status` / `gag_clause_status` and fires a templated reminder email via **Resend** (ADR 015). Targets `contact_email` on the vendor record. This is a real-world compliance workflow — healthcare administrators actually do this today.
 
 The heartbeat already detects overdue attestations and flags them Yellow/Red. The next step is acting on that signal rather than just reporting it.
+
+**Provider decision (ADR 015):** Use Resend now — API key already in `.dev.vars`, proven deliverability, mature API. Cloudflare launched a native Email Service (public beta, $0.35/1K, Workers binding `env.SEND_EMAIL`) — migrate to it when it exits beta. Before deploying: `wrangler secret put RESEND_API_KEY`.
 
 **Effort:** Low-medium — Resend has a simple REST API, one new cron task, one email template.
 
@@ -117,8 +119,9 @@ Worth revisiting after the Operations Tab is live. The D1 key-value approach is 
 
 ## Recommended Next Order
 
-1. **Operations Tab** — closes the roadmap, makes the demo complete
+1. ~~**Operations Tab**~~ — ✅ Live. `onDataRefresh` callback added 2026-04-25; panels refresh after Run Scraper and Scan All Vendors.
 2. **Playbook agent → claude-opus-4-7** — trivial, immediate quality improvement
 3. **Vendor scanner in daily cron** — trivial, self-heals the heartbeat's stale vendor alert
-4. **Attestation email reminders** — builds the most real-world-relevant automation
-5. **GitHub PR automation** — the conversation-stopper feature for the interview demo
+4. **Attestation email reminders** — Resend (ADR 015), API key ready, just needs wiring
+5. **Incident escalation notifications** — reuses same Resend integration once #4 is built
+6. **GitHub PR automation** — the conversation-stopper feature for the interview demo

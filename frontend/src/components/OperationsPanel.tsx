@@ -30,7 +30,11 @@ function StatusBadge({ status }: { status: 'Green' | 'Yellow' | 'Red' }) {
   );
 }
 
-export function OperationsPanel() {
+interface OperationsPanelProps {
+  onDataRefresh?: () => void;
+}
+
+export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY) ?? '');
   const [tokenVisible, setTokenVisible] = useState(false);
 
@@ -92,7 +96,8 @@ export function OperationsPanel() {
       }
       setState({ status: 'success', message: summarize(data) });
       if (path.includes('heartbeat')) void fetchHeartbeat();
-      if (path.includes('vendor')) void fetchLogs();
+      if (path.includes('vendor')) { void fetchLogs(); onDataRefresh?.(); }
+      if (path.includes('scraper')) onDataRefresh?.();
     } catch (e) {
       setState({ status: 'error', message: e instanceof Error ? e.message : 'Request failed' });
     }

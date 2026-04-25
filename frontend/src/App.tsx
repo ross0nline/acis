@@ -141,7 +141,7 @@ export default function App() {
           {tab === 'attestation' && <AttestationPanel data={attestation} loading={loading.attestation} />}
           {tab === 'vendors'     && <VendorBoard vendors={vendors} loading={loading.vendors} />}
           {tab === 'incidents'   && <IncidentTracker incidents={incidents} loading={loading.incidents} />}
-          {tab === 'operations'  && <OperationsPanel />}
+          {tab === 'operations'  && <OperationsPanel onDataRefresh={fetchAll} />}
         </div>
       </main>
 
