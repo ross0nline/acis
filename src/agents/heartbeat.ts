@@ -110,6 +110,7 @@ Return exactly:
       },
       body: JSON.stringify({
         event_type: 'heartbeat',
+        project_id: 2,
         project_slug: 'acis',
         description,
         triggered_by: 'acis-heartbeat',
