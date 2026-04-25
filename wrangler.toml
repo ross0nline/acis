@@ -19,3 +19,6 @@ bucket_name = "acis-vault"
 [[services]]
 binding = "CCC_ADMIN"
 service = "ccc-admin"
+
+[triggers]
+crons = ["0 8 * * *"]
