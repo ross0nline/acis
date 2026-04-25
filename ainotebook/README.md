@@ -11,3 +11,6 @@ Each entry documents a decision made during design or development: what was deci
 | [003](003-d1-schema.md) | D1 Schema: Five-Table Design | Decided |
 | [004](004-cloudflare-agents-sdk.md) | Cloudflare Agents SDK for Stateful Memory | Decided |
 | [005](005-ai-gateway-routing.md) | AI Gateway as Observability Layer | Decided |
+| [006](006-regulatory-ingestion-architecture.md) | Regulatory Ingestion: Three-Source Architecture | Decided & Implemented |
+| [007](007-firecrawl-bot-bypass.md) | Bypassing Bot Protection on CMS.gov and HHS.gov | Decided & Implemented |
+| [008](008-build-state-and-roadmap.md) | Current Build State & Remaining Roadmap | Reference |
