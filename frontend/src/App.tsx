@@ -4,16 +4,18 @@ import { LivePulse } from './components/LivePulse';
 import { AttestationPanel } from './components/AttestationPanel';
 import { VendorBoard } from './components/VendorBoard';
 import { IncidentTracker } from './components/IncidentTracker';
+import { OperationsPanel } from './components/OperationsPanel';
 
 const API = 'https://acis.rossonlineservices.workers.dev';
 
-type Tab = 'pulse' | 'attestation' | 'vendors' | 'incidents';
+type Tab = 'pulse' | 'attestation' | 'vendors' | 'incidents' | 'operations';
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'pulse',       label: 'Live Pulse',    icon: '⚡' },
   { id: 'attestation', label: 'Attestation',   icon: '📋' },
   { id: 'vendors',     label: 'Vendor Risk',   icon: '🔍' },
   { id: 'incidents',   label: 'Incidents',     icon: '🚨' },
+  { id: 'operations',  label: 'Operations',    icon: '⚙️' },
 ];
 
 export default function App() {
@@ -24,11 +26,11 @@ export default function App() {
   const [vendors, setVendors] = useState<VendorRisk[]>([]);
   const [incidents, setIncidents] = useState<Incident[]>([]);
 
-  const [loading, setLoading] = useState({ pulse: true, attestation: true, vendors: true, incidents: true });
+  const [loading, setLoading] = useState({ pulse: true, attestation: true, vendors: true, incidents: true, operations: false });
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
   const fetchAll = useCallback(async () => {
-    setLoading({ pulse: true, attestation: true, vendors: true, incidents: true });
+    setLoading({ pulse: true, attestation: true, vendors: true, incidents: true, operations: false });
     const [e, a, v, i] = await Promise.allSettled([
       fetch(`${API}/api/regulatory`).then(r => r.json() as Promise<RegulatoryEvent[]>),
       fetch(`${API}/api/attestation`).then(r => r.json() as Promise<AttestationResponse>),
@@ -139,6 +141,7 @@ export default function App() {
           {tab === 'attestation' && <AttestationPanel data={attestation} loading={loading.attestation} />}
           {tab === 'vendors'     && <VendorBoard vendors={vendors} loading={loading.vendors} />}
           {tab === 'incidents'   && <IncidentTracker incidents={incidents} loading={loading.incidents} />}
+          {tab === 'operations'  && <OperationsPanel />}
         </div>
       </main>
 

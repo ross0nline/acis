@@ -52,3 +52,34 @@ export interface Incident {
   opened_at: string;
   closed_at: string | null;
 }
+
+export interface HeartbeatModuleStatus {
+  status: 'Green' | 'Yellow' | 'Red';
+  summary: string;
+}
+
+export interface HeartbeatReport {
+  timestamp: string;
+  overall_status: 'Green' | 'Yellow' | 'Red';
+  summary: string;
+  modules: {
+    regulatory_pulse: HeartbeatModuleStatus;
+    attestation_vault: HeartbeatModuleStatus;
+    vendor_risk: HeartbeatModuleStatus;
+    incident_response: HeartbeatModuleStatus;
+  };
+  action_items: string[];
+}
+
+export interface GatewayLog {
+  id: string;
+  created_at: string;
+  model: string;
+  provider: string;
+  status_code: number;
+  tokens_in: number;
+  tokens_out: number;
+  duration: number;
+  success: boolean;
+  cached: boolean;
+}

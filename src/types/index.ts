@@ -7,6 +7,7 @@ export interface Env {
   ADMIN_TOKEN: string;
   REGULATIONS_GOV_API_KEY: string;
   FIRECRAWL_API_KEY: string;
+  CF_API_TOKEN?: string;
   ENVIRONMENT: string;
 }
 

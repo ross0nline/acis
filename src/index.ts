@@ -10,6 +10,19 @@ import { runScraper } from './agents/scraper';
 import { runHeartbeat } from './agents/heartbeat';
 import { getMemory } from './db/queries';
 
+interface GatewayLog {
+  id: string;
+  created_at: string;
+  model: string;
+  provider: string;
+  status_code: number;
+  tokens_in: number;
+  tokens_out: number;
+  duration: number;
+  success: boolean;
+  cached: boolean;
+}
+
 const app = new Hono<{ Bindings: Env }>();
 
 app.use('*', cors());
@@ -54,6 +67,21 @@ app.post('/api/heartbeat/run', async (c) => {
   const report = await runHeartbeat(c.env);
   if (!report) return c.json({ error: 'Heartbeat generation failed' }, 500);
   return c.json({ ok: true, ...report });
+});
+
+// Agent Logs — proxies AI Gateway request log (requires CF_API_TOKEN secret)
+app.get('/api/logs', async (c) => {
+  if (!c.env.CF_API_TOKEN) {
+    return c.json({ logs: [], configured: false });
+  }
+  const [accountId, gatewaySlug] = c.env.AI_GATEWAY_URL.split('/v1/')[1].split('/');
+  const resp = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai-gateway/gateways/${gatewaySlug}/logs?order_by=created_at&direction=desc&per_page=25`,
+    { headers: { 'Authorization': `Bearer ${c.env.CF_API_TOKEN}` } }
+  );
+  if (!resp.ok) return c.json({ logs: [], configured: true, error: `Gateway API returned ${resp.status}` });
+  const data = await resp.json() as { result: GatewayLog[] };
+  return c.json({ logs: data.result ?? [], configured: true });
 });
 
 // Internal service binding endpoint (called by agents via Service Binding)
