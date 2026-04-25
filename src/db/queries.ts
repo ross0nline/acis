@@ -115,6 +115,24 @@ export async function insertVendor(
     .run();
 }
 
+export async function updateVendorScan(
+  db: D1Database,
+  id: number,
+  tls_valid: number,
+  headers_score: number,
+  ai_risk_summary: string,
+  overall_status: VendorRisk['overall_status'],
+): Promise<void> {
+  await db
+    .prepare(
+      `UPDATE vendor_risk
+       SET tls_valid = ?, headers_score = ?, ai_risk_summary = ?, overall_status = ?, scanned_at = CURRENT_TIMESTAMP
+       WHERE id = ?`
+    )
+    .bind(tls_valid, headers_score, ai_risk_summary, overall_status, id)
+    .run();
+}
+
 // ── Incidents ──────────────────────────────────────────────────────────────
 
 export async function getIncidents(db: D1Database): Promise<Incident[]> {
