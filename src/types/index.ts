@@ -1,6 +1,6 @@
 export interface Env {
   ACIS_DB: D1Database;
-  ACIS_VAULT: R2Bucket | undefined;
+  ACIS_VAULT: R2Bucket;
   CCC_ADMIN: Fetcher;
   ANTHROPIC_API_KEY: string;
   AI_GATEWAY_URL: string;

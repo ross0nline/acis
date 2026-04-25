@@ -12,10 +12,9 @@ binding = "ACIS_DB"
 database_name = "acis-db"
 database_id = "422765ca-9d3e-40d1-9c6c-94f556869557"
 
-# [[r2_buckets]]
-# binding = "ACIS_VAULT"
-# bucket_name = "acis-vault"
-# Uncomment after enabling R2 in Cloudflare dashboard and creating the bucket
+[[r2_buckets]]
+binding = "ACIS_VAULT"
+bucket_name = "acis-vault"
 
 [[services]]
 binding = "CCC_ADMIN"
