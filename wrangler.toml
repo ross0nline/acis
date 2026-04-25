@@ -1,0 +1,22 @@
+name = "acis"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+AI_GATEWAY_URL = "https://gateway.ai.cloudflare.com/v1/384fc5d6758abeb5f11df18f963eac5d/acis-gateway/anthropic"
+
+[[d1_databases]]
+binding = "ACIS_DB"
+database_name = "acis-db"
+database_id = "422765ca-9d3e-40d1-9c6c-94f556869557"
+
+# [[r2_buckets]]
+# binding = "ACIS_VAULT"
+# bucket_name = "acis-vault"
+# Uncomment after enabling R2 in Cloudflare dashboard and creating the bucket
+
+[[services]]
+binding = "CCC_ADMIN"
+service = "ccc-admin"
