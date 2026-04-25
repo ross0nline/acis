@@ -18,3 +18,4 @@ Each entry documents a decision made during design or development: what was deci
 | [010](010-vendor-scanner-agent.md) | Vendor Security Scanner Agent | Decided & Implemented |
 | [011](011-claude-api-usage-inventory.md) | Claude API Usage Inventory | Reference |
 | [012](012-heartbeat-agent.md) | Heartbeat Agent: Daily Self-Audit Loop | Decided & Implemented |
+| [013](013-operations-tab-admin-panel.md) | Operations Tab: Admin Controls in the Executive Hub | Decided |
