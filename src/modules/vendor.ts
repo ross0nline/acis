@@ -30,10 +30,10 @@ vendorRoutes.post('/', async (c) => {
     vendor_name: body.vendor_name,
     vendor_url: body.vendor_url,
     contact_email: body.contact_email ?? null,
-    tls_valid: 0,
-    headers_score: 0,
-    ai_risk_summary: null,
-    overall_status: 'Pending Review',
+    tls_valid: body.tls_valid ?? 0,
+    headers_score: body.headers_score ?? 0,
+    ai_risk_summary: body.ai_risk_summary ?? null,
+    overall_status: body.overall_status ?? 'Pending Review',
   });
   return c.json({ ok: true }, 201);
 });

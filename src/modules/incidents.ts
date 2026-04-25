@@ -28,8 +28,8 @@ incidentRoutes.post('/', async (c) => {
     incident_type: body.incident_type,
     description: body.description ?? null,
     reporter: body.reporter ?? null,
-    status: 'Open',
-    playbook: null,
+    status: body.status ?? 'Open',
+    playbook: body.playbook ?? null,
   });
   return c.json({ ok: true, id }, 201);
 });
