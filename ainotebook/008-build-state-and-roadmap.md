@@ -1,6 +1,6 @@
 # 008 — Current Build State & Remaining Roadmap
 
-**Date:** 2026-04-25 (updated 2026-04-25)  
+**Date:** 2026-04-25 (updated 2026-04-25 — vendor scanner live)  
 **Status:** Reference — updated as phases complete
 
 ---
@@ -13,10 +13,7 @@ flowchart LR
         RP["Regulatory Pulse\nReal scraper + Claude scoring\n5 sources, daily cron\n64 events in DB"]
         AV["Attestation Vault\nFull CRUD + status lifecycle\nRxDC + Gag Clause tracking\n8 client records seeded"]
         IR["Incident Response\nDB + API + status lifecycle: done\nNIST 800-61 playbook agent: LIVE\nAuto-generates on every new incident"]
-    end
-
-    subgraph SCAFFOLDED ["⚠️ Scaffolded — Agent Layer Pending"]
-        VR["Vendor Risk\nDB + API: done\nScanning agent: NOT built\ntls_valid/headers_score: static seed data"]
+        VR["Vendor Risk\nDB + API + scanner agent: LIVE\nReal TLS + 6-header scoring (0–100)\nclaude-opus-4-7 risk summary\nPOST /api/vendors/:id/scan"]
     end
 
     subgraph BLOCKED ["🔲 Not Started"]
@@ -51,16 +48,14 @@ flowchart LR
 - Playbook structure: severity, HIPAA reportability, 60-day OCR deadline, 5 NIST phases, CFR citations, escalation contacts
 - Executive Hub renders full `PlaybookView` with semantic color-coding per phase
 
-## Vendor Risk — DB + API Only
+## Vendor Risk — Complete (see ADR 010)
 
-The POST handler accepts full field payloads. But there is no active scanning agent — `tls_valid`, `headers_score`, and `ai_risk_summary` are set via seeded data, not computed.
-
-**What the scanning agent needs to do (next phase):**
-1. `fetch()` the vendor URL, check TLS via response metadata
-2. Inspect response headers (HSTS, CSP, X-Frame-Options, X-Content-Type-Options)
-3. Compute a 0–100 `headers_score`
-4. Pass findings to Claude for `ai_risk_summary` and `overall_status`
-5. Store results and update the record
+- `POST /api/vendors/scan-all` — scans all 6 vendors in parallel (admin auth)
+- `POST /api/vendors/:id/scan` — on-demand single-vendor scan (admin auth)
+- Scanner: HEAD-fetches vendor URL with 10s timeout, inspects 6 security headers, computes 0–100 `headers_score`
+- Headers scored: HSTS (20), CSP (20), X-Frame-Options (15), X-Content-Type-Options (15), Referrer-Policy (15), Permissions-Policy (15)
+- `claude-opus-4-7` produces HIPAA-framed `ai_risk_summary` and `overall_status` (Approved / Requires Review / High Risk / Pending Review)
+- `updateVendorScan()` writes computed results + refreshes `scanned_at`
 
 ---
 
@@ -77,6 +72,5 @@ The POST handler accepts full field payloads. But there is no active scanning ag
 
 ## Remaining Build Order
 
-1. **Vendor scanner agent** — real computed TLS/headers scores, Claude risk summary; makes Vendor Risk panel genuinely functional and demo-credible
-2. **Heartbeat agent** — daily self-audit loop, reports system health to CCC Admin via Service Binding; this is the "autonomous" in ACIS
-3. **Agent Logs panel** — pulls AI Gateway request log, renders Claude reasoning trace in the Executive Hub; closes the observability story
+1. **Heartbeat agent** — daily self-audit loop, reports system health to CCC Admin via Service Binding; this is the "autonomous" in ACIS
+2. **Agent Logs panel** — pulls AI Gateway request log, renders Claude reasoning trace in the Executive Hub; closes the observability story
