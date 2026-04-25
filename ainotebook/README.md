@@ -14,3 +14,4 @@ Each entry documents a decision made during design or development: what was deci
 | [006](006-regulatory-ingestion-architecture.md) | Regulatory Ingestion: Three-Source Architecture | Decided & Implemented |
 | [007](007-firecrawl-bot-bypass.md) | Bypassing Bot Protection on CMS.gov and HHS.gov | Decided & Implemented |
 | [008](008-build-state-and-roadmap.md) | Current Build State & Remaining Roadmap | Reference |
+| [009](009-nist-playbook-agent.md) | NIST 800-61 Incident Playbook Agent | Decided & Implemented |
