@@ -1,7 +1,7 @@
 # 013 — Operations Tab: Admin Controls in the Executive Hub
 
 **Date:** 2026-04-25  
-**Status:** Decided — implementation pending
+**Status:** Decided & Implemented — Operations tab live at acis.rossonlineservices.com; CF_API_TOKEN set, Agent Logs streaming active
 
 ---
 
