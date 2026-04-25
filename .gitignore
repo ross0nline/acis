@@ -1,5 +1,6 @@
 # Secrets - never commit
 .mcp.json
+.dev.vars
 .env
 .env.*
 *.secret
