@@ -5,6 +5,7 @@ export interface Env {
   ANTHROPIC_API_KEY: string;
   AI_GATEWAY_URL: string;
   ADMIN_TOKEN: string;
+  REGULATIONS_GOV_API_KEY: string;
   ENVIRONMENT: string;
 }
 
