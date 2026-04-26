@@ -1,4 +1,7 @@
 # ACIS Foundation Checklist
+
+> **Archived — all 12 steps complete as of 2026-04-25.** ACIS is fully deployed. This document is retained as a historical record of the pre-build setup sequence. Refer to `ainotebook/008-build-state-and-roadmap.md` for current state and remaining queue.
+
 *Revised: 2026-04-24 — includes MCP integrations for Claude Code autonomy*
 
 ---

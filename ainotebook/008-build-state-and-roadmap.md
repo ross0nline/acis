@@ -1,6 +1,6 @@
 # 008 — Current Build State & Remaining Roadmap
 
-**Date:** 2026-04-25 (updated 2026-04-25 — heartbeat agent live)  
+**Date:** 2026-04-25 (updated 2026-04-25 — all modules live, Operations tab + Agent Logs streaming active)  
 **Status:** Reference — updated as phases complete
 
 ---
@@ -18,9 +18,7 @@ flowchart LR
 
         HB["Heartbeat Agent\nDaily cron after scraper\n13-query D1 batch, claude-opus-4-7\nGreen/Yellow/Red per module\nPOST /api/heartbeat/run"]
 
-    subgraph BLOCKED ["🔲 Not Started"]
-        EL["Agent Logs Panel\nPulls from AI Gateway logs\nRenders Claude reasoning trace"]
-    end
+        OT["Operations Tab\nSystem Health (Green/Yellow/Red)\nAgent Logs (AI Gateway streaming)\nAdmin Controls (token-gated triggers)"]
 ```
 
 ---
@@ -71,6 +69,10 @@ flowchart LR
 
 ---
 
-## Remaining Build Order
+## Remaining Build Queue
 
-1. **Agent Logs panel** — pulls AI Gateway request log, renders Claude reasoning trace in the Executive Hub; closes the observability story
+1. **Vendor scanner in daily cron** — wire `scanVendor()` for stale vendors in `scheduled()` handler; ~10 lines in `src/index.ts`
+2. **Attestation email reminders** — Resend (ADR 015); new `src/services/email.ts` abstraction; set `RESEND_API_KEY` Worker secret first
+3. **Incident escalation notifications** — reuses Resend; heartbeat already detects `stale_open_7d > 0`
+4. **Portfolio viewer** — `portfolio.rossonlineservices.com`; KV-backed toggle controls for curated doc visibility
+5. **GitHub PR automation** — high-risk regulatory event → auto PR via GitHub MCP

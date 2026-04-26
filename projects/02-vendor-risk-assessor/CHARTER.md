@@ -39,14 +39,14 @@
 
 | Module | Component | Status | Notes |
 |---|---|---|---|
-| Backend | Worker API Endpoint | [Uninitiated] | POST /vendor — accepts URL + metadata |
-| Backend | HTTP Header Scanner | [Uninitiated] | Check CSP, HSTS, X-Frame-Options, etc. |
-| Backend | TLS Checker | [Uninitiated] | Validate cert expiry and issuer |
-| Backend | AI Policy Analyzer | [Uninitiated] | Claude API — extract SOC2/HIPAA mentions |
-| Database | D1 Vendor Schema | [Uninitiated] | Fields: id, name, url, risk_score, status, scan_date |
-| Frontend | Vendor Intake Form | [Uninitiated] | Simple form → POST to Worker |
-| Frontend | Risk Status Dashboard | [Uninitiated] | Table with status badges |
-| DevOps | GitHub CI/CD | [Uninitiated] | Automated deploy to Pages + Workers |
+| Backend | Worker API Endpoint | [Implemented] | POST /vendor — accepts URL + metadata |
+| Backend | HTTP Header Scanner | [Implemented] | Check CSP, HSTS, X-Frame-Options, etc. |
+| Backend | TLS Checker | [Implemented] | Validate cert expiry and issuer |
+| Backend | AI Policy Analyzer | [Implemented] | Claude API — extract SOC2/HIPAA mentions |
+| Database | D1 Vendor Schema | [Implemented] | Fields: id, name, url, risk_score, status, scan_date |
+| Frontend | Vendor Intake Form | [Implemented] | Simple form → POST to Worker |
+| Frontend | Risk Status Dashboard | [Implemented] | Table with status badges |
+| DevOps | GitHub CI/CD | [Implemented] | Automated deploy to Pages + Workers |
 
 ---
 
@@ -55,3 +55,18 @@
 **Sub-Agent: Vendor Policy Reviewer**
 - Scope: Receives a privacy policy URL, fetches the text, and uses Claude API to identify SOC 2, HIPAA, ISO 27001 compliance signals or red flags.
 - Output: Structured JSON with compliance_mentions[], red_flags[], and overall_risk_score.
+
+---
+
+## E. Implementation Notes (Added: 2026-04-25)
+
+This project is fully implemented as the **Vendor Risk** module within ACIS (`src/modules/vendor.ts`, `src/agents/vendor-scanner.ts`).
+
+**What was built vs. planned:**
+- Scanner uses real HEAD-fetch (not privacy policy text) — TLS validity + 6 HTTP security header scores (0–100)
+- AI model: `claude-opus-4-7` producing HIPAA Business Associate risk assessment (not generic SOC 2 analysis)
+- Status values: `Approved | Requires Review | High Risk | Pending Review`
+- 6 vendor records seeded (including Change Healthcare flagged High Risk)
+- `POST /api/vendors/scan-all` and `POST /api/vendors/:id/scan` — both live
+- On-demand scanning only (daily cron wire-in is next build queue item)
+- No frontend intake form — vendors managed via API and seeded data

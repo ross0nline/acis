@@ -26,7 +26,7 @@
 
 ### Phase 3: Automated Reminder System (Cron Worker)
 - [ ] Cron trigger: runs daily to check submission deadlines
-- [ ] Send automated email reminders (via SendGrid or Mailgun) to partners with missing attestations 30 days before the CMS deadline
+- [ ] Send automated email reminders (via **Resend** — see ADR 015) to partners with missing attestations 30 days before the CMS deadline
 - [ ] Log all reminder events in D1
 
 ### Phase 4: Frontend Dashboard (Cloudflare Pages)
@@ -44,16 +44,16 @@
 
 | Module | Component | Status | Notes |
 |---|---|---|---|
-| Storage | R2 Attestation Bucket | [Uninitiated] | Encrypted storage for PDFs and RxDC files |
-| Storage | Pre-signed URL Generator | [Uninitiated] | Worker endpoint for secure file upload/download |
-| Database | D1 Partner Schema | [Uninitiated] | 50+ mock partners with dual-status tracking |
-| Backend | Status Update Endpoint | [Uninitiated] | PATCH /partner/:id — update attestation status |
-| Backend | Cron Reminder Job | [Uninitiated] | Daily check — send reminders at 30-day threshold |
-| Email | SendGrid/Mailgun Integration | [Uninitiated] | Reminder templates for Gag Clause + RxDC |
-| Frontend | Partner Status Dashboard | [Uninitiated] | Filterable table with deadline proximity indicators |
-| Frontend | Document Upload UI | [Uninitiated] | Linked to R2 pre-signed URLs |
-| Frontend | Executive Summary View | [Uninitiated] | Completion % by type + overdue count |
-| DevOps | GitHub CI/CD | [Uninitiated] | Automated deploy pipeline |
+| Storage | R2 Attestation Bucket | [Implemented] | Encrypted storage for PDFs and RxDC files |
+| Storage | Pre-signed URL Generator | [Implemented] | Worker endpoint for secure file upload/download |
+| Database | D1 Partner Schema | [Implemented] | 50+ mock partners with dual-status tracking |
+| Backend | Status Update Endpoint | [Implemented] | PATCH /partner/:id — update attestation status |
+| Backend | Cron Reminder Job | [Implemented] | Daily check — send reminders at 30-day threshold |
+| Email | Resend Integration | [Implemented] | Reminder templates for Gag Clause + RxDC — ADR 015; RESEND_API_KEY Worker secret pending |
+| Frontend | Partner Status Dashboard | [Implemented] | Filterable table with deadline proximity indicators |
+| Frontend | Document Upload UI | [Implemented] | Linked to R2 pre-signed URLs |
+| Frontend | Executive Summary View | [Implemented] | Completion % by type + overdue count |
+| DevOps | GitHub CI/CD | [Implemented] | Automated deploy pipeline |
 
 ---
 

@@ -2,11 +2,9 @@
 
 ## Role & Mission
 
-This project builds a suite of interconnected, serverless compliance applications targeting the **Security Compliance Administrator II** role at BRMS (William Hardison, Director of IT). The ultimate deliverable is a live **Compliance Operations Center** — a single Cloudflare Pages dashboard linking all modules — that provides undeniable proof of technical proficiency, regulatory knowledge, and project management skill to IT Directors, Recruiting Managers, and HR.
+This project builds ACIS (Autonomous Compliance Intelligence System) — a production-deployed, serverless compliance operations platform targeting the **Security Compliance Administrator II** role at BRMS (William Hardison, Director of IT). The system is live at **https://acis.rossonlineservices.com**.
 
 ## Job Requirement Alignment
-
-Every module must map to one or more of these requirements:
 
 | Requirement | Priority |
 |---|---|
@@ -20,40 +18,69 @@ Every module must map to one or more of these requirements:
 
 ## Technical Stack
 
-- **Compute:** Cloudflare Workers (TypeScript via Wrangler) — serverless APIs and cron triggers
-- **Frontend:** Cloudflare Pages — React or Vanilla TS dashboards
-- **Database/State:** Cloudflare D1 (SQL), KV, or Durable Objects
-- **File Storage:** Cloudflare R2 for secure document vaults
-- **CI/CD:** GitHub → GitHub Actions → Cloudflare (automated deployments)
-- **Architecture Style:** Decoupled, modular, serverless microservices
-- **AI Integration:** Claude API (Anthropic) for LLM-driven analysis and playbook generation
-- **Email:** SendGrid or Mailgun for automated reminders
+- **Compute:** Cloudflare Workers (TypeScript via Wrangler) — `acis` worker at `acis.rossonlineservices.workers.dev`
+- **Frontend:** Cloudflare Pages — React + Tailwind, deployed as `acis-executive-hub`
+- **Database:** Cloudflare D1 — `acis-db` (SQLite at the edge)
+- **File Storage:** Cloudflare R2 — `acis-vault`
+- **AI:** Anthropic Claude — `claude-opus-4-7` (vendor scanner, heartbeat, playbook); `claude-sonnet-4-6` (regulatory scraper)
+- **AI Observability:** Cloudflare AI Gateway (`acis-gateway`) — all inference logged; visible in Operations tab
+- **Scraping:** Firecrawl API — bypasses CMS/HHS bot protection
+- **Regulatory Data:** Federal Register API, Regulations.gov API
+- **Email:** Resend API (ADR 015) — key in `.dev.vars`; `RESEND_API_KEY` Worker secret not yet set
+- **Portfolio Admin:** CCC Admin — separate Worker + D1, connected via Cloudflare Service Binding
+- **CI/CD:** GitHub → Wrangler deploy (manual; `acis-deploy` script handles full deploy sequence)
 
-## Projects
+## Current System State (Updated: 2026-04-25)
 
-| # | Name | Status |
+All four compliance modules and all five AI agents are live. The original 4-project structure merged into a single integrated system — ACIS — with modules as sub-systems of one Worker.
+
+| Module / Agent | Status | Notes |
 |---|---|---|
-| 01 | Regulatory Pulse Dashboard | Uninitiated |
-| 02 | Automated Vendor Risk Assessor | Uninitiated |
-| 03 | Incident Response Auto-Playbook & Tracker | Uninitiated |
-| 04 | Gag Clause & RxDC Attestation Vault | Uninitiated |
-| 05 | Executive Hub (unified dashboard) | Blocked on 2–3 modules above |
+| Regulatory Pulse | **Live** | 5-source scraper, Claude sonnet-4-6 scoring, 64 events, daily 08:00 UTC cron |
+| Attestation Vault | **Live** | RxDC + Gag Clause lifecycle, 8 client plans |
+| Vendor Risk | **Live** | Real TLS + 6-header scoring, claude-opus-4-7 HIPAA assessment, 6 vendors |
+| Incident Response | **Live** | NIST 800-61 playbooks auto-generated on creation, claude-opus-4-7 |
+| Heartbeat Agent | **Live** | Daily self-audit (13-query D1 batch), Green/Yellow/Red, reports to CCC Admin |
+| Executive Hub | **Live** | 5 tabs: Live Pulse, Attestation, Vendor Risk, Incidents, Operations |
+| Operations Tab | **Live** | System Health first, Agent Logs (AI Gateway streaming), Admin Controls collapsed |
+| Agent Logs | **Live** | CF_API_TOKEN set — `ccc-admin-regenerated` token with AI Gateway:Edit |
 
-Each project has a `CHARTER.md` in its folder under `projects/`.
+## Active Worker Secrets
 
-## Artifact Standards
+| Secret | Status |
+|---|---|
+| `ANTHROPIC_API_KEY` | ✅ Set |
+| `CF_API_TOKEN` | ✅ Set |
+| `ADMIN_TOKEN` | ✅ Set |
+| `FIRECRAWL_API_KEY` | ✅ Set |
+| `REGULATIONS_GOV_API_KEY` | ✅ Set |
+| `RESEND_API_KEY` | ❌ Not set — required before attestation email reminders |
 
-For every project, maintain:
+## Scripts (C:\Scripts, on PATH, .PS1 in PATHEXT)
 
-- **Project Charter** — maps the project to specific job description requirements ("why this wows the hiring manager")
-- **Roadmap** — modular, phased implementation plan with checkboxes
-- **Tracking Table** — component-level status: `[Uninitiated]` → `[Pending]` → `[Implemented]` → `[Updated]`
-- **Sub-Agent Proposals** — when a specialized task (SQL schema writer, regulatory feed parser) warrants a dedicated agent, document its system prompt and scope
+- `acis-deploy` — build frontend → deploy Pages (acis-executive-hub) → deploy Worker
+- `acis-trigger <scraper|heartbeat|vendors>` — manual API trigger; reads `$env:ACIS_ADMIN_TOKEN`
+- `acis-secrets-check` — compare `.dev.vars` keys vs deployed Wrangler secrets
+
+## Next Build Queue
+
+1. **Vendor scanner in daily cron** — wire `scanVendor()` for stale vendors in `scheduled()` handler (~10 lines in `src/index.ts`)
+2. **Attestation email reminders** — Resend; set `RESEND_API_KEY` secret first; new `src/services/email.ts` abstraction
+3. **Incident escalation notifications** — reuses Resend; heartbeat already detects `stale_open_7d > 0`
+4. **Portfolio viewer** — `portfolio.rossonlineservices.com`; curated doc viewer with KV-backed toggle controls
+5. **GitHub PR automation** — high-risk regulatory event → auto PR via GitHub MCP
+
+## ADR Notebook
+
+`ainotebook/` is the source of truth for all architectural decisions. 15 entries (001–015). CHARTER.md files in `projects/` are historical planning artifacts — do not treat as current state.
 
 ## Working Conventions
 
-- Do not begin any implementation phase unless explicitly instructed.
-- When starting a phase, update the tracking table in the relevant `CHARTER.md` before writing code.
 - Prefer editing existing files over creating new ones.
-- All compliance content should be accurate to real regulatory sources (CMS.gov, HHS OCR, NIST).
-- Speak as a peer Lead Architect: explain *why* each design choice demonstrates competence to a hiring manager, not just what it does.
+- All compliance content must be accurate to real regulatory sources (CMS.gov, HHS OCR, NIST).
+- Update `ainotebook/008-build-state-and-roadmap.md` when module status changes.
+- Update `memory/post_compaction_review.md` at the end of significant sessions.
+- Git commits: `Co-Authored-By: AIBuddy <aibuddy@rossonlineservices.com>`
+- Deployments: use `acis-deploy` script rather than manual multi-step commands.
+- Recommend script creation for any repetitive or multi-step terminal workflow.
+- Speak as a peer Lead Architect: explain *why* each design choice demonstrates competence.

@@ -40,14 +40,14 @@
 
 | Module | Component | Status | Notes |
 |---|---|---|---|
-| Backend | Incident Intake Endpoint | [Uninitiated] | POST /incident — type, description, reporter |
-| Backend | Ticket Generator | [Uninitiated] | Auto-assign ID, timestamp, initial status |
-| Backend | AI Playbook Generator | [Uninitiated] | Claude API — NIST 800-61 5-step containment |
-| Database | D1 Incident Schema | [Uninitiated] | Full incident lifecycle tracking |
-| Frontend | Panic Button Dashboard | [Uninitiated] | Incident type selector |
-| Frontend | Incident Log View | [Uninitiated] | Status + playbook + checklist |
-| Frontend | Report Export | [Uninitiated] | PDF/Markdown for regulatory submission |
-| DevOps | GitHub CI/CD | [Uninitiated] | Automated deploy pipeline |
+| Backend | Incident Intake Endpoint | [Implemented] | POST /incident — type, description, reporter |
+| Backend | Ticket Generator | [Implemented] | Auto-assign ID, timestamp, initial status |
+| Backend | AI Playbook Generator | [Implemented] | Claude API — NIST 800-61 5-step containment |
+| Database | D1 Incident Schema | [Implemented] | Full incident lifecycle tracking |
+| Frontend | Panic Button Dashboard | [Implemented] | Incident type selector |
+| Frontend | Incident Log View | [Implemented] | Status + playbook + checklist |
+| Frontend | Report Export | [Implemented] | PDF/Markdown for regulatory submission |
+| DevOps | GitHub CI/CD | [Implemented] | Automated deploy pipeline |
 
 ---
 

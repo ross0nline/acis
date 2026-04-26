@@ -1,5 +1,7 @@
 # ACIS Brainstorm: Synthesis, Gaps, and Recommendations
 
+> **Historical document — written 2026-04-24 before implementation.** All gaps identified below have been resolved. ACIS is fully live as of 2026-04-25. Refer to `ainotebook/008-build-state-and-roadmap.md` for current state.
+
 *Written: 2026-04-24 — based on full review of all context documents*
 
 ---

@@ -39,13 +39,13 @@
 
 | Module | Component | Status | Notes |
 |---|---|---|---|
-| Infra | Cloudflare D1 DB | [Uninitiated] | Schema: id, source, title, url, date, risk_level, keywords |
-| Infra | Wrangler Setup (TS) | [Uninitiated] | wrangler.toml — D1 binding + Cron trigger |
-| Backend | CMS Scraper/Fetcher | [Uninitiated] | Target CMS.gov public RSS/JSON feeds |
-| Backend | HIPAA/HHS Fetcher | [Uninitiated] | Target HHS newsroom or OCR RSS feeds |
-| Backend | Risk Scoring Module | [Uninitiated] | Keyword match + severity classification |
-| Frontend | Dashboard UI | [Uninitiated] | Executive-level view: flagged items, risk level, source |
-| DevOps | GitHub CI/CD | [Uninitiated] | Link Pages project to repo via GitHub Actions |
+| Infra | Cloudflare D1 DB | [Implemented] | Schema: id, source, title, url, date, risk_level, keywords |
+| Infra | Wrangler Setup (TS) | [Implemented] | wrangler.toml — D1 binding + Cron trigger |
+| Backend | CMS Scraper/Fetcher | [Implemented] | Target CMS.gov public RSS/JSON feeds |
+| Backend | HIPAA/HHS Fetcher | [Implemented] | Target HHS newsroom or OCR RSS feeds |
+| Backend | Risk Scoring Module | [Implemented] | Keyword match + severity classification |
+| Frontend | Dashboard UI | [Implemented] | Executive-level view: flagged items, risk level, source |
+| DevOps | GitHub CI/CD | [Implemented] | Link Pages project to repo via GitHub Actions |
 
 ---
 

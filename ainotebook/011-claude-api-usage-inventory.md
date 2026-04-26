@@ -12,13 +12,15 @@ All Claude calls go through the Cloudflare AI Gateway (`acis-gateway`) via the `
 ```mermaid
 flowchart LR
     scraper["scraper.ts\nclaude-sonnet-4-6"]
-    playbook["playbook.ts\nclaude-sonnet-4-6"]
+    playbook["playbook.ts\nclaude-opus-4-7"]
     scanner["vendor-scanner.ts\nclaude-opus-4-7"]
+    heartbeat["heartbeat.ts\nclaude-opus-4-7"]
 
     scraper -->|scoreWithClaude| GW["AI Gateway\nacis-gateway"]
     scraper -->|parseNewsroomMarkdown| GW
     playbook -->|generatePlaybook| GW
     scanner -->|scanVendor| GW
+    heartbeat -->|runHeartbeat| GW
     GW --> API["Anthropic API"]
 ```
 
@@ -44,7 +46,7 @@ Extracts structured article objects from raw Firecrawl markdown dumps of CMS and
 
 ---
 
-### `src/agents/playbook.ts` — `claude-sonnet-4-6`
+### `src/agents/playbook.ts` — `claude-opus-4-7`
 
 **Call — `generatePlaybook()`**  
 Generates a structured NIST SP 800-61 Rev 2 incident response playbook.  
@@ -52,7 +54,19 @@ Generates a structured NIST SP 800-61 Rev 2 incident response playbook.
 - Output: `IncidentPlaybook` — severity, HIPAA reportability, OCR deadline, 5 NIST phases, CFR citations, escalation contacts  
 - `max_tokens: 2048`  
 - Called synchronously on every `POST /api/incidents`; also on `POST /api/incidents/:id/playbook` (admin-triggered regeneration)  
-- See ADR 009 for design rationale
+- Upgraded from `claude-sonnet-4-6` on 2026-04-25 for improved CFR citation precision (see ADR 009, ADR 011)
+
+---
+
+### `src/agents/heartbeat.ts` — `claude-opus-4-7`
+
+**Call — `runHeartbeat()`**  
+Audits all four compliance modules and produces a system health report.  
+- Input: 13 D1 metrics — recent events, high-risk events, overdue attestations, high-risk vendors, stale incidents, unscanned vendors  
+- Output: `HeartbeatReport` — `overall_status` (Green/Yellow/Red), per-module status + summary, `action_items[]`  
+- `max_tokens: 1024`  
+- Runs daily after the scraper in the `scheduled()` handler; also on `POST /api/heartbeat/run` (admin auth)  
+- Persists report to `agent_memory` key `last_heartbeat`; POSTs activity event to CCC Admin via Service Binding
 
 ---
 
@@ -68,16 +82,15 @@ Assesses vendor security posture as a HIPAA Business Associate.
 
 ---
 
-## Model Version Gap
+## Model Version Summary
 
-The scraper and playbook agents were written before the `/claude-api` skill established `claude-opus-4-7` as the default for new agent code. The vendor scanner (written after) uses `claude-opus-4-7`.
-
-| Agent | Model | Upgrade Candidate? |
+| Agent | Model | Notes |
 |---|---|---|
-| scraper — scoreWithClaude | claude-sonnet-4-6 | Low priority — classification task; Sonnet is cost-appropriate for high-volume document scoring |
-| scraper — parseNewsroomMarkdown | claude-sonnet-4-6 | Low priority — structured extraction; Sonnet handles it well |
-| playbook — generatePlaybook | claude-sonnet-4-6 | Medium — HIPAA regulatory accuracy would benefit from Opus depth; upgrade when next touching incidents |
+| scraper — scoreWithClaude | claude-sonnet-4-6 | Appropriate — high-volume classification; cost-efficient |
+| scraper — parseNewsroomMarkdown | claude-sonnet-4-6 | Appropriate — structured extraction; `max_tokens` bumped 1024→2048 on 2026-04-25 to prevent JSON truncation |
+| playbook — generatePlaybook | claude-opus-4-7 | Upgraded 2026-04-25 — improved CFR citation precision |
 | vendor-scanner — scanVendor | claude-opus-4-7 | Current |
+| heartbeat — runHeartbeat | claude-opus-4-7 | Current |
 
 ---
 
@@ -86,8 +99,9 @@ The scraper and playbook agents were written before the `/claude-api` skill esta
 | Agent | Calls/Day | Model | Input est. | Output est. |
 |---|---|---|---|---|
 | scoreWithClaude | ~20 | Sonnet 4.6 | ~15K tokens | ~5K tokens |
-| parseNewsroomMarkdown | 2 | Sonnet 4.6 | ~16K tokens | ~2K tokens |
-| generatePlaybook | on incident creation (rare) | Sonnet 4.6 | ~1K tokens | ~2K tokens |
-| scanVendor | on demand only | Opus 4.7 | ~0.5K tokens | ~0.2K tokens |
+| parseNewsroomMarkdown | 2 | Sonnet 4.6 | ~16K tokens | ~4K tokens |
+| runHeartbeat | 1 | Opus 4.7 | ~2K tokens | ~1K tokens |
+| generatePlaybook | on incident creation (rare) | Opus 4.7 | ~1K tokens | ~2K tokens |
+| scanVendor | on demand / stale-vendor cron | Opus 4.7 | ~0.5K tokens | ~0.2K tokens |
 
-Daily cron cost is dominated by the scraper. On-demand costs (playbook, vendor scan) are negligible at demo scale.
+Daily cron cost is dominated by the scraper (~$0.11/day at current volume). Heartbeat adds ~$0.03/day. Playbook and vendor scan are negligible at demo scale.
