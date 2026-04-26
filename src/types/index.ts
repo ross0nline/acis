@@ -8,6 +8,7 @@ export interface Env {
   REGULATIONS_GOV_API_KEY: string;
   FIRECRAWL_API_KEY: string;
   CF_API_TOKEN?: string;
+  RESEND_API_KEY?: string;
   ENVIRONMENT: string;
 }
 

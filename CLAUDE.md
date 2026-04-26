@@ -54,7 +54,7 @@ All four compliance modules and all five AI agents are live. The original 4-proj
 | `ADMIN_TOKEN` | ✅ Set |
 | `FIRECRAWL_API_KEY` | ✅ Set |
 | `REGULATIONS_GOV_API_KEY` | ✅ Set |
-| `RESEND_API_KEY` | ❌ Not set — required before attestation email reminders |
+| `RESEND_API_KEY` | ✅ Set |
 
 ## Scripts (C:\Scripts, on PATH, .PS1 in PATHEXT)
 
