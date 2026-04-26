@@ -114,6 +114,23 @@ ${markdown.slice(0, 4000)}`,
   }
 }
 
+// ── URL validation ────────────────────────────────────────────────────────
+
+async function isUrlLive(url: string): Promise<boolean> {
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return false;
+  try {
+    const resp = await fetch(url, {
+      method: 'HEAD',
+      redirect: 'follow',
+      signal: AbortSignal.timeout(5000),
+    });
+    // 405 = HEAD not allowed but the resource exists; treat as live
+    return resp.ok || resp.status === 405;
+  } catch {
+    return false;
+  }
+}
+
 // ── Claude scoring ─────────────────────────────────────────────────────────
 
 async function scoreWithClaude(
@@ -192,7 +209,12 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
 
     if (!Array.isArray(data.results) || data.results.length === 0) continue;
 
-    for (const article of data.results) {
+    // Validate all URLs in parallel — skip dead links before scoring
+    const liveResults = (await Promise.all(
+      data.results.map(async (a) => ({ a, ok: await isUrlLive(a.html_url) }))
+    )).filter(({ ok }) => ok).map(({ a }) => a);
+
+    for (const article of liveResults) {
       const existing = await env.ACIS_DB
         .prepare('SELECT id FROM regulatory_events WHERE url = ?')
         .bind(article.html_url)
@@ -238,9 +260,15 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
 
     if (!Array.isArray(data.data) || data.data.length === 0) continue;
 
-    for (const doc of data.data) {
-      if (doc.attributes.withdrawn) continue;
+    const activeDocs = data.data.filter(d => !d.attributes.withdrawn);
 
+    // Validate all document URLs in parallel
+    const liveDocFlags = await Promise.all(
+      activeDocs.map(d => isUrlLive(`https://www.regulations.gov/document/${d.id}`))
+    );
+    const liveDocs = activeDocs.filter((_, i) => liveDocFlags[i]);
+
+    for (const doc of liveDocs) {
       const docUrl = `https://www.regulations.gov/document/${doc.id}`;
       const existing = await env.ACIS_DB
         .prepare('SELECT id FROM regulatory_events WHERE url = ?')
@@ -312,8 +340,12 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
       const articles = await parseNewsroomMarkdown(client, markdown, feed.label);
       if (articles.length === 0) continue;
 
-      for (const article of articles) {
-        if (!article.url || !article.title) continue;
+      // Filter malformed entries, then validate URLs in parallel
+      const candidates = articles.filter(a => a.url && a.title);
+      const liveArticleFlags = await Promise.all(candidates.map(a => isUrlLive(a.url)));
+      const liveArticles = candidates.filter((_, i) => liveArticleFlags[i]);
+
+      for (const article of liveArticles) {
 
         const existing = await env.ACIS_DB
           .prepare('SELECT id FROM regulatory_events WHERE url = ?')
