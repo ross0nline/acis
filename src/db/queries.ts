@@ -93,6 +93,13 @@ export async function getVendors(db: D1Database): Promise<VendorRisk[]> {
   return result.results;
 }
 
+export async function getStaleVendors(db: D1Database): Promise<VendorRisk[]> {
+  const result = await db
+    .prepare(`SELECT * FROM vendor_risk WHERE scanned_at IS NULL OR scanned_at < datetime('now', '-30 days') ORDER BY scanned_at ASC`)
+    .all<VendorRisk>();
+  return result.results;
+}
+
 export async function insertVendor(
   db: D1Database,
   vendor: Omit<VendorRisk, 'id' | 'scanned_at'>

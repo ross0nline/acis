@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
-import type { VendorRisk } from '../types';
+import type { Env, VendorRisk } from '../types';
+import { getStaleVendors, updateVendorScan } from '../db/queries';
 
 export interface VendorScanResult {
   tls_valid: number;
@@ -97,4 +98,24 @@ Status determination:
     console.error('[vendor-scanner] Claude assessment failed:', err instanceof Error ? err.message : String(err));
     return null;
   }
+}
+
+export async function runVendorScan(env: Env): Promise<{ scanned: number; skipped: number }> {
+  const stale = await getStaleVendors(env.ACIS_DB);
+  if (stale.length === 0) return { scanned: 0, skipped: 0 };
+
+  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, baseURL: env.AI_GATEWAY_URL });
+  let scanned = 0;
+
+  await Promise.allSettled(
+    stale.map(async (vendor) => {
+      const result = await scanVendor(client, vendor.vendor_name, vendor.vendor_url);
+      if (result) {
+        await updateVendorScan(env.ACIS_DB, vendor.id, result.tls_valid, result.headers_score, result.ai_risk_summary, result.overall_status);
+        scanned++;
+      }
+    })
+  );
+
+  return { scanned, skipped: stale.length - scanned };
 }

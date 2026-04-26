@@ -8,6 +8,7 @@ import { vendorRoutes } from './modules/vendor';
 import { incidentRoutes } from './modules/incidents';
 import { runScraper } from './agents/scraper';
 import { runHeartbeat } from './agents/heartbeat';
+import { runVendorScan } from './agents/vendor-scanner';
 import { getMemory } from './db/queries';
 
 interface GatewayLog {
@@ -108,6 +109,7 @@ app.post('/internal/event', async (c) => {
 // Scheduled handler — runs daily at 08:00 UTC
 const scheduled: ExportedHandlerScheduledHandler<Env> = async (_event, env) => {
   await runScraper(env);
+  await runVendorScan(env);
   await runHeartbeat(env);
 };
 
