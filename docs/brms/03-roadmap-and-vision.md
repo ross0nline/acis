@@ -19,16 +19,16 @@
 
 ## Near-Term Roadmap (Next 30 Days)
 
+### ✅ Playbook Agent Upgrade — Complete (2026-04-25)
+The NIST playbook generator has been upgraded from `claude-sonnet-4-6` to `claude-opus-4-7`. CFR citation precision and phase-level specificity for complex incident types (supply chain compromise, insider threat) are measurably improved. Every new incident now receives an Opus-quality playbook.
+
 ### 1. Attestation Email Reminders
 Automated outbound reminders to client plans with approaching or overdue RxDC and Gag Clause deadlines. Triggered by the daily cron when `rxdc_status` or `gag_clause_status` reaches a threshold. Sent via Resend API with HIPAA-appropriate templating. This closes the loop between tracking and action — the system doesn't just surface overdue records, it contacts the responsible parties.
 
-### 2. Playbook Agent Upgrade
-The NIST playbook generator is currently on claude-sonnet-4-6. Upgrading to claude-opus-4-7 improves the precision of CFR citations and the specificity of phase-level guidance for unusual incident types (e.g., supply chain compromise, insider threat). One-line change, meaningful quality improvement for the compliance team's most critical output.
-
-### 3. Incident Escalation Notifications
+### 2. Incident Escalation Notifications
 When the Heartbeat Agent detects an incident open longer than 7 days, send a targeted alert to the compliance administrator and log an escalation event to the admin layer. Ensures incidents don't silently age past the HIPAA Breach Notification Rule's 60-day OCR reporting window.
 
-### 4. GitHub PR Automation
+### 3. GitHub PR Automation
 When the Regulatory Pulse detects a new High-risk event (e.g., a CMS bulletin changing an RxDC submission deadline), the system opens a GitHub pull request automatically — updating the organization's policy documentation with the new requirement, citing the source regulatory document, and tagging the change for review. This is the feature that demonstrates ACIS is not just monitoring but *acting*: the compliance administrator reviews a PR rather than manually researching a bulletin.
 
 ---

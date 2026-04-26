@@ -54,7 +54,10 @@ Runs automatically        ──────▶  ↳ Green / Yellow / Red per mo
                                     ↳ Attestation panel
                                     ↳ Vendor Risk panel
                                     ↳ Incident Tracker + Playbooks
-                                    ↳ Operations tab (admin controls)
+                                    ↳ Operations tab
+                                        ↳ System Health (Green/Yellow/Red)
+                                        ↳ Agent Logs (AI Gateway inference log)
+                                        ↳ Admin Controls (manual triggers)
 ```
 
 ---
@@ -85,7 +88,7 @@ Four distinct AI agents are deployed:
 | Agent | Model | Trigger | Purpose |
 |---|---|---|---|
 | Regulatory Risk Scorer | claude-sonnet-4-6 | Daily cron (per document) | Risk level, impacted field, remediation step, deadline |
-| NIST Playbook Generator | claude-sonnet-4-6 | On incident creation | NIST 800-61 playbook with HIPAA-specific obligations |
+| NIST Playbook Generator | claude-opus-4-7 | On incident creation | NIST 800-61 playbook with HIPAA-specific obligations |
 | Vendor Security Assessor | claude-opus-4-7 | On demand | HIPAA Business Associate risk classification |
 | System Health Auditor | claude-opus-4-7 | Daily cron (after scraper) | Green/Yellow/Red module health report |
 

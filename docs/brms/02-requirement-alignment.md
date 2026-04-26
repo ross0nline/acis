@@ -84,7 +84,8 @@ Claude produces a Green/Yellow/Red assessment per module and a list of specific 
 **Demonstrated by:**
 - Executive Hub dashboard at `acis.rossonlineservices.com` — visual summary of all four compliance domains
 - Heartbeat Agent: structured Green/Yellow/Red report forwarded to CCC Admin (the portfolio-level admin layer) daily
-- Operations tab: Last Heartbeat section provides a board-ready module status view at a glance
+- Operations tab: System Health section provides a board-ready module status view at a glance
+- Agent Logs: every Claude inference call is logged and rendered in the Operations tab — model used, tokens, latency, pass/fail. The reasoning behind every risk scoring decision, vendor assessment, and incident playbook is visible and auditable. This is not a black box.
 
 ---
 
@@ -98,7 +99,7 @@ Claude produces a Green/Yellow/Red assessment per module and a list of specific 
 | Annual RxDC reporting | Attestation Vault `rxdc_status` lifecycle with completion percentage tracking |
 | Annual Gag Clause Attestation | Attestation Vault `gag_clause_status` lifecycle, independent of RxDC |
 | Vendor Management | Vendor Risk module with real security scanning, risk classification, and status tracking |
-| Analytical and risk assessment skills | Five Claude-powered risk scoring and assessment agents across four modules |
+| Analytical and risk assessment skills | Four Claude agents, five inference calls — risk scoring, playbook generation, vendor assessment, system health audit |
 | Written and verbal communication | Every AI output (playbooks, risk summaries, heartbeat reports) demonstrates precise regulatory language |
 | Executive reporting | Executive Hub + Heartbeat Agent provide the reporting layer |
 | Project management | CCC Admin tracks this project: 10 modules, 5 agents, 8 planned features, version history |
