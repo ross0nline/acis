@@ -1,0 +1,13 @@
+name = "portfolio"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+GITHUB_OWNER = "ross0nline"
+GITHUB_REPO = "compliance-portfolio"
+GITHUB_BRANCH = "master"
+
+[[kv_namespaces]]
+binding = "PORTFOLIO_KV"
+id = "f4ca69034b36452cacc5d753faca26ef"
