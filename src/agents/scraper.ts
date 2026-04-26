@@ -87,7 +87,7 @@ async function parseNewsroomMarkdown(
   try {
     const msg = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1024,
+      max_tokens: 2048,
       system: 'Extract structured article data from government newsroom markdown. Return only valid JSON array.',
       messages: [{
         role: 'user',
