@@ -111,13 +111,13 @@ export default function App() {
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-slate-800">
-          <nav className="flex gap-1">
+        <div className="border-b border-slate-800 overflow-x-auto">
+          <nav className="flex gap-1 min-w-max">
             {TABS.map(t => (
               <button
                 key={t.id}
                 onClick={() => setTab(t.id)}
-                className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                className={`shrink-0 whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                   tab === t.id
                     ? 'border-cyan-500 text-cyan-400'
                     : 'border-transparent text-slate-500 hover:text-slate-300'
