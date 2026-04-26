@@ -59,17 +59,27 @@ async function setPublished(kv: KVNamespace, slug: string, published: boolean): 
 
 // ── GitHub content fetcher ───────────────────────────────────────────────────
 
-async function fetchMarkdown(env: Env, path: string): Promise<string | null> {
-  const url = `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/contents/${path}?ref=${env.GITHUB_BRANCH}`;
-  const headers: Record<string, string> = {
-    'User-Agent': 'ACIS-Portfolio/1.0',
-    'Accept': 'application/vnd.github.v3.raw',
-  };
-  if (env.GITHUB_TOKEN) headers['Authorization'] = `Bearer ${env.GITHUB_TOKEN}`;
+async function fetchMarkdown(env: Env, path: string): Promise<{ content: string } | { error: string }> {
+  let fetchUrl: string;
+  const headers: Record<string, string> = { 'User-Agent': 'ACIS-Portfolio/1.0' };
 
-  const resp = await fetch(url, { headers });
-  if (!resp.ok) return null;
-  return resp.text();
+  if (env.GITHUB_TOKEN) {
+    fetchUrl = `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/contents/${path}?ref=${env.GITHUB_BRANCH}`;
+    headers['Accept'] = 'application/vnd.github.v3.raw';
+    headers['Authorization'] = `Bearer ${env.GITHUB_TOKEN}`;
+  } else {
+    fetchUrl = `https://raw.githubusercontent.com/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/${env.GITHUB_BRANCH}/${path}`;
+  }
+
+  try {
+    const resp = await fetch(fetchUrl, { headers });
+    if (!resp.ok) return { error: `HTTP ${resp.status} from ${fetchUrl}` };
+    const content = await resp.text();
+    if (!content) return { error: `Empty response from ${fetchUrl}` };
+    return { content };
+  } catch (err) {
+    return { error: `Fetch threw: ${err instanceof Error ? err.message : String(err)} — URL: ${fetchUrl}` };
+  }
 }
 
 // ── HTML templates ───────────────────────────────────────────────────────────
@@ -252,24 +262,33 @@ export default {
     // ── Doc viewer ───────────────────────────────────────────────────────────
     const slug = pathname.slice(1);
     const doc = DOCS.find(d => d.slug === slug);
-    if (!doc) return new Response('Not found', { status: 404 });
+    if (!doc) return html('<p>Not found</p>', 404);
 
-    const published = await isPublished(env.PORTFOLIO_KV, doc.slug);
-    if (!published) return new Response('Not found', { status: 404 });
+    try {
+      const published = await isPublished(env.PORTFOLIO_KV, doc.slug);
+      if (!published) return html('<p>Not found</p>', 404);
 
-    const markdown = await fetchMarkdown(env, doc.path);
-    if (!markdown) return new Response('Content unavailable', { status: 503 });
+      const fetched = await fetchMarkdown(env, doc.path);
+      if ('error' in fetched) return html(errorPage('Content unavailable', fetched.error), 503);
 
-    // Wrap mermaid blocks so client-side Mermaid.js picks them up
-    const preprocessed = markdown.replace(/```mermaid\n([\s\S]*?)```/g, '<div class="mermaid">$1</div>');
-    const htmlContent = await marked(preprocessed, { gfm: true });
+      const preprocessed = fetched.content.replace(/```mermaid\n([\s\S]*?)```/g, '<div class="mermaid">$1</div>');
+      const result = marked(preprocessed, { gfm: true });
+      const htmlContent = result instanceof Promise ? await result : result;
 
-    return html(docPage(doc, htmlContent as string));
+      return html(docPage(doc, htmlContent));
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return html(errorPage('Rendering error', msg), 500);
+    }
   },
 };
 
-function html(body: string): Response {
-  return new Response(body, { headers: { 'Content-Type': 'text/html;charset=utf-8' } });
+function html(body: string, status = 200): Response {
+  return new Response(body, { status, headers: { 'Content-Type': 'text/html;charset=utf-8' } });
+}
+
+function errorPage(title: string, detail: string): string {
+  return shell(title, `<h1 style="color:#dc2626">${title}</h1><p style="font-family:monospace;background:#f1f5f9;padding:16px;border-radius:6px;font-size:13px;white-space:pre-wrap">${detail}</p><p><a href="/">← Back</a></p>`);
 }
 
 function authPrompt(): Response {

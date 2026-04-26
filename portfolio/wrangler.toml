@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 
 [vars]
 GITHUB_OWNER = "ross0nline"
-GITHUB_REPO = "compliance-portfolio"
+GITHUB_REPO = "acis"
 GITHUB_BRANCH = "master"
 
 [[kv_namespaces]]
