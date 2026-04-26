@@ -63,19 +63,13 @@ async function fetchMarkdown(env: Env, path: string): Promise<string | null> {
   const url = `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/contents/${path}?ref=${env.GITHUB_BRANCH}`;
   const headers: Record<string, string> = {
     'User-Agent': 'ACIS-Portfolio/1.0',
-    'Accept': 'application/vnd.github.v3+json',
+    'Accept': 'application/vnd.github.v3.raw',
   };
   if (env.GITHUB_TOKEN) headers['Authorization'] = `Bearer ${env.GITHUB_TOKEN}`;
 
   const resp = await fetch(url, { headers });
   if (!resp.ok) return null;
-
-  const data = await resp.json() as { content?: string; encoding?: string };
-  if (!data.content || data.encoding !== 'base64') return null;
-
-  const cleaned = data.content.replace(/\n/g, '');
-  const bytes = atob(cleaned);
-  return bytes;
+  return resp.text();
 }
 
 // ── HTML templates ───────────────────────────────────────────────────────────

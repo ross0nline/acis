@@ -205,7 +205,8 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
           <div className="text-sm text-slate-500">No log entries found.</div>
         ) : (
           <div className="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
-            <table className="w-full text-xs">
+            <div className="overflow-x-auto">
+            <table className="w-full text-xs min-w-[560px]">
               <thead>
                 <tr className="border-b border-slate-800 text-slate-500">
                   <th className="text-left px-4 py-3 font-medium">Time</th>
@@ -243,6 +244,7 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )}
       </section>
