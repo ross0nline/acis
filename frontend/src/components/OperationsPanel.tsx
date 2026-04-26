@@ -13,7 +13,6 @@ const STATUS_COLOR = {
   Red:    'text-red-400 bg-red-500/10 border-red-500/30',
 };
 const STATUS_DOT = { Green: 'bg-emerald-400', Yellow: 'bg-amber-400', Red: 'bg-red-400' };
-
 const MODULE_LABELS: Record<string, string> = {
   regulatory_pulse:  'Regulatory Pulse',
   attestation_vault: 'Attestation Vault',
@@ -35,8 +34,9 @@ interface OperationsPanelProps {
 }
 
 export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
-  const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY) ?? '');
+  const [token, setToken]           = useState(() => localStorage.getItem(TOKEN_KEY) ?? '');
   const [tokenVisible, setTokenVisible] = useState(false);
+  const [adminExpanded, setAdminExpanded] = useState(false);
 
   const [scraperState,   setScraperState]   = useState<TriggerState>({ status: 'idle' });
   const [heartbeatState, setHeartbeatState] = useState<TriggerState>({ status: 'idle' });
@@ -45,9 +45,9 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
   const [heartbeat, setHeartbeat] = useState<HeartbeatReport | null>(null);
   const [hbLoading, setHbLoading] = useState(true);
 
-  const [logs, setLogs] = useState<GatewayLog[]>([]);
+  const [logs, setLogs]                   = useState<GatewayLog[]>([]);
   const [logsConfigured, setLogsConfigured] = useState<boolean | null>(null);
-  const [logsLoading, setLogsLoading] = useState(true);
+  const [logsLoading, setLogsLoading]     = useState(true);
 
   const saveToken = (val: string) => {
     setToken(val);
@@ -103,101 +103,25 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
     }
   };
 
-  const runScraper = () => trigger(
-    '/api/scraper/run',
-    setScraperState,
-    (d) => { const x = d as { ingested?: number; skipped?: number }; return `Ingested ${x.ingested ?? 0}, skipped ${x.skipped ?? 0}`; },
-  );
-
-  const runHeartbeat = () => trigger(
-    '/api/heartbeat/run',
-    setHeartbeatState,
-    (d) => { const x = d as { overall_status?: string }; return `${x.overall_status ?? 'Done'}`; },
-  );
-
-  const scanAll = () => trigger(
-    '/api/vendors/scan-all',
-    setScanState,
-    (d) => { const x = d as { scanned?: number }; return `Scanned ${x.scanned ?? 0} vendors`; },
-  );
+  const runScraper   = () => trigger('/api/scraper/run',      setScraperState,
+    (d) => { const x = d as { ingested?: number; skipped?: number }; return `Ingested ${x.ingested ?? 0}, skipped ${x.skipped ?? 0}`; });
+  const runHeartbeat = () => trigger('/api/heartbeat/run',    setHeartbeatState,
+    (d) => { const x = d as { overall_status?: string }; return `${x.overall_status ?? 'Done'}`; });
+  const scanAll      = () => trigger('/api/vendors/scan-all', setScanState,
+    (d) => { const x = d as { scanned?: number }; return `Scanned ${x.scanned ?? 0} vendors`; });
 
   const tokenSet = token.trim().length > 0;
 
   return (
     <div className="space-y-8">
 
-      {/* Admin Token */}
-      <section className="bg-slate-900 border border-slate-800 rounded-lg p-5">
-        <div className="flex items-center gap-3 mb-3">
-          <span className="text-slate-400 text-sm font-medium">Admin Token</span>
-          {tokenSet
-            ? <span className="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full">Set</span>
-            : <span className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full">Required for triggers</span>
-          }
-        </div>
-        <div className="flex gap-2">
-          <input
-            type={tokenVisible ? 'text' : 'password'}
-            value={token}
-            onChange={e => saveToken(e.target.value)}
-            placeholder="Paste ADMIN_TOKEN…"
-            className="flex-1 bg-slate-950 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-600"
-          />
-          <button
-            onClick={() => setTokenVisible(v => !v)}
-            className="px-3 py-2 text-xs border border-slate-700 rounded text-slate-400 hover:text-slate-200 transition-colors"
-          >
-            {tokenVisible ? 'Hide' : 'Show'}
-          </button>
-        </div>
-      </section>
-
-      {/* Manual Triggers */}
-      <section>
-        <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Manual Triggers</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {([
-            { label: 'Run Scraper', desc: 'Ingest today\'s regulatory events from all 5 sources', state: scraperState, run: runScraper },
-            { label: 'Run Heartbeat', desc: 'Audit all four modules — updates Last Heartbeat below', state: heartbeatState, run: runHeartbeat },
-            { label: 'Scan All Vendors', desc: 'TLS + header scan for all 6 vendors via claude-opus-4-7', state: scanState, run: scanAll },
-          ] as const).map(({ label, desc, state, run }) => (
-            <div key={label} className="bg-slate-900 border border-slate-800 rounded-lg p-5 flex flex-col gap-3">
-              <div>
-                <div className="text-sm font-medium text-slate-200">{label}</div>
-                <div className="text-xs text-slate-500 mt-0.5">{desc}</div>
-              </div>
-              <button
-                onClick={run}
-                disabled={!tokenSet || state.status === 'loading'}
-                className={`w-full py-2 rounded text-sm font-medium transition-colors ${
-                  !tokenSet
-                    ? 'bg-slate-800 text-slate-600 cursor-not-allowed'
-                    : state.status === 'loading'
-                    ? 'bg-cyan-900/40 text-cyan-600 cursor-wait'
-                    : 'bg-cyan-600/20 text-cyan-400 border border-cyan-600/40 hover:bg-cyan-600/30'
-                }`}
-              >
-                {state.status === 'loading' ? 'Running…' : 'Run'}
-              </button>
-              {state.status === 'success' && (
-                <div className="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded px-3 py-2">
-                  ✓ {state.message}
-                </div>
-              )}
-              {state.status === 'error' && (
-                <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded px-3 py-2">
-                  ✕ {state.message}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Last Heartbeat */}
+      {/* ── Last Heartbeat ──────────────────────────────────────────── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Last Heartbeat</h2>
+          <div>
+            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">System Health</h2>
+            <p className="text-xs text-slate-600 mt-0.5">Daily self-audit — runs automatically at 08:00 UTC</p>
+          </div>
           {heartbeat && (
             <span className="text-xs text-slate-500">
               {new Date(heartbeat.timestamp).toLocaleString()}
@@ -209,23 +133,24 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
           <div className="text-sm text-slate-500 animate-pulse">Loading…</div>
         ) : !heartbeat ? (
           <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 text-center">
-            <p className="text-slate-500 text-sm">No heartbeat on record yet.</p>
-            <p className="text-slate-600 text-xs mt-1">Run the heartbeat above to generate the first report.</p>
+            <div className="text-slate-400 text-sm font-medium mb-1">No heartbeat on record</div>
+            <p className="text-slate-600 text-xs">
+              The system audits itself daily at 08:00 UTC and produces a Green / Yellow / Red health report.
+              Use Admin Controls below to trigger one manually.
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {/* Overall */}
             <div className={`rounded-lg border p-4 flex items-start gap-4 ${STATUS_COLOR[heartbeat.overall_status]}`}>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <StatusBadge status={heartbeat.overall_status} />
-                  <span className="text-xs text-slate-400">System Health</span>
+                  <span className="text-xs text-slate-400">Overall System Health</span>
                 </div>
                 <p className="text-sm text-slate-300">{heartbeat.summary}</p>
               </div>
             </div>
 
-            {/* Module cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {(Object.entries(heartbeat.modules) as [string, { status: 'Green' | 'Yellow' | 'Red'; summary: string }][]).map(([key, mod]) => (
                 <div key={key} className="bg-slate-900 border border-slate-800 rounded-lg p-4">
@@ -238,7 +163,6 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
               ))}
             </div>
 
-            {/* Action items */}
             {heartbeat.action_items.length > 0 && (
               <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-4">
                 <div className="text-xs font-medium text-amber-400 mb-2">Action Items</div>
@@ -256,14 +180,14 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
         )}
       </section>
 
-      {/* Agent Logs */}
+      {/* ── Agent Logs ──────────────────────────────────────────────── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Agent Logs</h2>
-          <button
-            onClick={() => void fetchLogs()}
-            className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
-          >
+          <div>
+            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Agent Logs</h2>
+            <p className="text-xs text-slate-600 mt-0.5">Every Claude inference call — model, tokens, latency, status</p>
+          </div>
+          <button onClick={() => void fetchLogs()} className="text-xs text-slate-500 hover:text-slate-300 transition-colors">
             Refresh
           </button>
         </div>
@@ -272,16 +196,13 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
           <div className="text-sm text-slate-500 animate-pulse">Loading…</div>
         ) : logsConfigured === false ? (
           <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 text-center">
-            <p className="text-slate-400 text-sm font-medium mb-1">CF_API_TOKEN not configured</p>
-            <p className="text-slate-600 text-xs">
-              Set <code className="text-slate-500">CF_API_TOKEN</code> as a Wrangler secret to enable AI Gateway log streaming.
+            <div className="text-slate-400 text-sm font-medium mb-1">Log streaming not yet active</div>
+            <p className="text-slate-500 text-xs max-w-sm mx-auto">
+              AI inference logs are routed through Cloudflare AI Gateway. Full log streaming requires a backend configuration token with AI Gateway read access.
             </p>
-            <code className="block mt-3 text-xs text-cyan-600 bg-slate-950 px-4 py-2 rounded">
-              wrangler secret put CF_API_TOKEN
-            </code>
           </div>
         ) : logs.length === 0 ? (
-          <div className="text-sm text-slate-500">No logs available.</div>
+          <div className="text-sm text-slate-500">No log entries found.</div>
         ) : (
           <div className="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
             <table className="w-full text-xs">
@@ -289,8 +210,8 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
                 <tr className="border-b border-slate-800 text-slate-500">
                   <th className="text-left px-4 py-3 font-medium">Time</th>
                   <th className="text-left px-4 py-3 font-medium">Model</th>
-                  <th className="text-right px-4 py-3 font-medium">Tokens In</th>
-                  <th className="text-right px-4 py-3 font-medium">Tokens Out</th>
+                  <th className="text-right px-4 py-3 font-medium">In</th>
+                  <th className="text-right px-4 py-3 font-medium">Out</th>
                   <th className="text-right px-4 py-3 font-medium">Duration</th>
                   <th className="text-center px-4 py-3 font-medium">Status</th>
                 </tr>
@@ -301,9 +222,7 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
                     <td className="px-4 py-3 text-slate-400 whitespace-nowrap">
                       {new Date(log.created_at).toLocaleTimeString()}
                     </td>
-                    <td className="px-4 py-3 text-cyan-400 font-mono">
-                      {log.model}
-                    </td>
+                    <td className="px-4 py-3 text-cyan-400 font-mono">{log.model}</td>
                     <td className="px-4 py-3 text-slate-300 text-right tabular-nums">
                       {log.tokens_in?.toLocaleString() ?? '—'}
                     </td>
@@ -315,9 +234,7 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
                     </td>
                     <td className="px-4 py-3 text-center">
                       <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
-                        log.success
-                          ? 'bg-emerald-500/10 text-emerald-400'
-                          : 'bg-red-500/10 text-red-400'
+                        log.success ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
                       }`}>
                         {log.status_code ?? (log.success ? '200' : 'ERR')}
                       </span>
@@ -326,6 +243,101 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+      </section>
+
+      {/* ── Admin Controls ──────────────────────────────────────────── */}
+      <section className="border border-slate-800 rounded-lg overflow-hidden">
+        <button
+          onClick={() => setAdminExpanded(v => !v)}
+          className="w-full flex items-center justify-between px-5 py-4 bg-slate-900 hover:bg-slate-800/60 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-slate-500 text-sm">🔒</span>
+            <span className="text-sm font-medium text-slate-400">Admin Controls</span>
+            {tokenSet && (
+              <span className="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                Unlocked
+              </span>
+            )}
+          </div>
+          <span className="text-slate-600 text-xs">{adminExpanded ? '▲' : '▼'}</span>
+        </button>
+
+        {adminExpanded && (
+          <div className="p-5 bg-slate-900/50 border-t border-slate-800 space-y-6">
+
+            {/* Token input */}
+            <div>
+              <div className="text-xs text-slate-500 mb-2">Admin Token</div>
+              <div className="flex gap-2">
+                <input
+                  type={tokenVisible ? 'text' : 'password'}
+                  value={token}
+                  onChange={e => saveToken(e.target.value)}
+                  placeholder="Paste admin token…"
+                  className="flex-1 bg-slate-950 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-600"
+                />
+                <button
+                  onClick={() => setTokenVisible(v => !v)}
+                  className="px-3 py-2 text-xs border border-slate-700 rounded text-slate-400 hover:text-slate-200 transition-colors"
+                >
+                  {tokenVisible ? 'Hide' : 'Show'}
+                </button>
+                {tokenSet && (
+                  <button
+                    onClick={() => saveToken('')}
+                    className="px-3 py-2 text-xs border border-slate-700 rounded text-slate-500 hover:text-red-400 transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Triggers */}
+            <div>
+              <div className="text-xs text-slate-500 mb-3">Manual Triggers</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {([
+                  { label: 'Run Scraper',      desc: 'Ingest today\'s regulatory events from all 5 sources', state: scraperState,   run: runScraper },
+                  { label: 'Run Heartbeat',    desc: 'Audit all four modules and update System Health above', state: heartbeatState, run: runHeartbeat },
+                  { label: 'Scan All Vendors', desc: 'TLS + security header scan via claude-opus-4-7',       state: scanState,      run: scanAll },
+                ] as const).map(({ label, desc, state, run }) => (
+                  <div key={label} className="bg-slate-950 border border-slate-800 rounded-lg p-4 flex flex-col gap-3">
+                    <div>
+                      <div className="text-xs font-medium text-slate-300">{label}</div>
+                      <div className="text-xs text-slate-600 mt-0.5">{desc}</div>
+                    </div>
+                    <button
+                      onClick={run}
+                      disabled={!tokenSet || state.status === 'loading'}
+                      className={`w-full py-2 rounded text-xs font-medium transition-colors ${
+                        !tokenSet
+                          ? 'bg-slate-800 text-slate-600 cursor-not-allowed'
+                          : state.status === 'loading'
+                          ? 'bg-cyan-900/40 text-cyan-600 cursor-wait'
+                          : 'bg-cyan-600/20 text-cyan-400 border border-cyan-600/40 hover:bg-cyan-600/30'
+                      }`}
+                    >
+                      {state.status === 'loading' ? 'Running…' : !tokenSet ? '🔒 Token required' : 'Run'}
+                    </button>
+                    {state.status === 'success' && (
+                      <div className="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded px-3 py-2">
+                        ✓ {state.message}
+                      </div>
+                    )}
+                    {state.status === 'error' && (
+                      <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded px-3 py-2">
+                        ✕ {state.message}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
         )}
       </section>
