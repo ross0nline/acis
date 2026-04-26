@@ -149,6 +149,13 @@ export async function getIncidents(db: D1Database): Promise<Incident[]> {
   return result.results;
 }
 
+export async function getStaleIncidents(db: D1Database, days = 7): Promise<Incident[]> {
+  const result = await db
+    .prepare(`SELECT * FROM incidents WHERE status = 'Open' AND opened_at < datetime('now', '-${days} days') ORDER BY opened_at ASC`)
+    .all<Incident>();
+  return result.results;
+}
+
 export async function createIncident(
   db: D1Database,
   incident: Omit<Incident, 'id' | 'opened_at' | 'closed_at'>

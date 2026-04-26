@@ -10,6 +10,7 @@ import { runScraper } from './agents/scraper';
 import { runHeartbeat } from './agents/heartbeat';
 import { runVendorScan } from './agents/vendor-scanner';
 import { runAttestationReminders } from './agents/attestation-reminder';
+import { runIncidentEscalation } from './agents/incident-escalation';
 import { getMemory } from './db/queries';
 
 interface GatewayLog {
@@ -112,6 +113,7 @@ const scheduled: ExportedHandlerScheduledHandler<Env> = async (_event, env) => {
   await runScraper(env);
   await runVendorScan(env);
   await runAttestationReminders(env);
+  await runIncidentEscalation(env);
   await runHeartbeat(env);
 };
 
