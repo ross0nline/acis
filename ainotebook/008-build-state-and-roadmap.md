@@ -108,7 +108,15 @@ runScraper → runVendorScan → runAttestationReminders → runIncidentEscalati
 
 ## Remaining Build Queue
 
-1. **Portfolio PWA** — serve `manifest.json`, `icon.svg`, `sw.js` as Worker routes; enables home-screen install
-2. **System narrative** — `docs/brms/05-system-narrative.md`; non-technical story arc for the BRMS director audience
-3. **GitHub PR automation** — high-risk regulatory event → auto PR via GitHub MCP
-4. **CCC Admin `/api/status` endpoint** — ACIS exposes structural state; CCC Admin polls it for dynamic build tracking
+1. **CCC Admin `/api/status` endpoint** — ACIS exposes structural state; CCC Admin polls it for dynamic build tracking
+2. **Admin subdomain data explorer** — `admin.rossonlineservices.com`; AppSheets-style table CRUD for D1 modules (regulatory_events, attestation, vendors, incidents); first feature of the private admin panel
+
+## GitHub PR Automation — Complete (2026-04-27)
+
+- `src/services/github.ts` — `createCompliancePR(env, event, scored)` fires after any new ingestion with `risk_score ≥ 8`
+- Branch naming: `compliance/alert-{date}-{event_id}` — idempotent (422 = already exists, skips)
+- Alert file written to `docs/compliance-alerts/{date}-{slug}.md` in `ross0nline/acis`
+- PR body: event title, source, risk score, HIPAA impact area, Claude summary, required action, source URL
+- `GITHUB_TOKEN` Worker secret set — fine-grained PAT, Contents + PRs R/W on `ross0nline/acis`
+- `POST /api/scraper/demo-pr` — admin endpoint to trigger PR for highest-risk existing D1 event
+- Demo PR #1 open: ACA HHS Notice of Benefit and Payment Parameters for 2027 (Risk: 9/10)

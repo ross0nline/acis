@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
-import type { Env, RiskScoreOutput } from '../types';
+import type { Env, RegulatoryEvent, RiskScoreOutput } from '../types';
 import { insertRegulatoryEvent } from '../db/queries';
+import { createCompliancePR } from '../services/github';
 
 // ── Federal Register sources ───────────────────────────────────────────────
 
@@ -281,7 +282,7 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
         null
       );
 
-      await insertRegulatoryEvent(env.ACIS_DB, {
+      const eventData = {
         source: feed.source,
         title: article.title,
         url: article.html_url,
@@ -290,7 +291,12 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
         summary: scored?.summary ?? null,
         tags: scored?.impacted_field ?? null,
         remediation_steps: scored ? JSON.stringify(scored) : null,
-      });
+      };
+      const rowId = await insertRegulatoryEvent(env.ACIS_DB, eventData);
+      if (eventData.risk_score >= 8 && rowId) {
+        const event = { id: rowId, ingested_at: new Date().toISOString(), ...eventData } as RegulatoryEvent;
+        createCompliancePR(env, event, scored).catch(() => undefined);
+      }
       ingested++;
     }
   }
@@ -346,7 +352,7 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
       const baseScore = scored ? riskLevelToScore(scored.risk_level) : 0;
       const finalScore = hasDeadline ? Math.max(baseScore, 5) : baseScore;
 
-      await insertRegulatoryEvent(env.ACIS_DB, {
+      const regEventData = {
         source: `REG-GOV/${doc.attributes.agencyId}`,
         title: doc.attributes.title,
         url: docUrl,
@@ -358,7 +364,12 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
           ...scored,
           deadline: deadlineStr ?? scored.deadline,
         }) : null,
-      });
+      };
+      const regRowId = await insertRegulatoryEvent(env.ACIS_DB, regEventData);
+      if (regEventData.risk_score >= 8 && regRowId) {
+        const event = { id: regRowId, ingested_at: new Date().toISOString(), ...regEventData } as RegulatoryEvent;
+        createCompliancePR(env, event, scored).catch(() => undefined);
+      }
       ingested++;
     }
   }
@@ -414,7 +425,7 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
           null
         );
 
-        await insertRegulatoryEvent(env.ACIS_DB, {
+        const fcEventData = {
           source: feed.source,
           title: article.title,
           url: article.url,
@@ -423,7 +434,12 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
           summary: scored?.summary ?? article.summary,
           tags: scored?.impacted_field ?? null,
           remediation_steps: scored ? JSON.stringify(scored) : null,
-        });
+        };
+        const fcRowId = await insertRegulatoryEvent(env.ACIS_DB, fcEventData);
+        if (fcEventData.risk_score >= 8 && fcRowId) {
+          const event = { id: fcRowId, ingested_at: new Date().toISOString(), ...fcEventData } as RegulatoryEvent;
+          createCompliancePR(env, event, scored).catch(() => undefined);
+        }
         ingested++;
       }
     }

@@ -13,8 +13,8 @@ export async function getRegulatoryEvents(db: D1Database, limit = 50): Promise<R
 export async function insertRegulatoryEvent(
   db: D1Database,
   event: Omit<RegulatoryEvent, 'id' | 'ingested_at'>
-): Promise<void> {
-  await db
+): Promise<number> {
+  const result = await db
     .prepare(
       `INSERT OR IGNORE INTO regulatory_events
         (source, title, url, published_date, risk_score, summary, tags, remediation_steps)
@@ -31,6 +31,7 @@ export async function insertRegulatoryEvent(
       event.remediation_steps
     )
     .run();
+  return result.meta.last_row_id;
 }
 
 // ── Attestation Vault ──────────────────────────────────────────────────────

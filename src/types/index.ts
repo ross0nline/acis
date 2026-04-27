@@ -9,6 +9,7 @@ export interface Env {
   FIRECRAWL_API_KEY: string;
   CF_API_TOKEN?: string;
   RESEND_API_KEY?: string;
+  GITHUB_TOKEN?: string;
   ENVIRONMENT: string;
 }
 
