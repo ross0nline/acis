@@ -55,6 +55,45 @@ const DOCS: Doc[] = [
 
 const DEFAULT_PUBLISHED = new Set(['letter', 'overview', 'alignment', 'roadmap']);
 
+// ── PWA static assets ─────────────────────────────────────────────────────────
+
+const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="12" fill="#0f172a"/>
+  <path d="M32 8 L52 18 L52 34 C52 45 43 54 32 57 C21 54 12 45 12 34 L12 18 Z" fill="#7c3aed" opacity="0.25"/>
+  <path d="M32 10 L50 19.5 L50 34 C50 44 42 52.5 32 55.5 C22 52.5 14 44 14 34 L14 19.5 Z" stroke="#a78bfa" stroke-width="1.5" fill="none"/>
+  <text x="32" y="40" font-family="system-ui,-apple-system,sans-serif" font-size="22" font-weight="700" fill="#a78bfa" text-anchor="middle">P</text>
+</svg>`;
+
+const MANIFEST = JSON.stringify({
+  name: 'ACIS Portfolio — Ross',
+  short_name: 'Portfolio',
+  description: 'HIPAA compliance operations portfolio for William Hardison, Director of IT at BRMS',
+  start_url: '/',
+  display: 'standalone',
+  background_color: '#0f172a',
+  theme_color: '#0f172a',
+  icons: [{ src: '/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' }],
+});
+
+const SERVICE_WORKER = `
+const CACHE='portfolio-v1';
+self.addEventListener('install',e=>{
+  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/'])));
+  self.skipWaiting();
+});
+self.addEventListener('activate',e=>{e.waitUntil(clients.claim());});
+self.addEventListener('fetch',e=>{
+  if(e.request.method!=='GET')return;
+  const url=new URL(e.request.url);
+  if(url.pathname.startsWith('/admin'))return;
+  e.respondWith(
+    fetch(e.request).then(resp=>{
+      if(resp.ok){const c=resp.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c));}
+      return resp;
+    }).catch(()=>caches.match(e.request).then(c=>c||caches.match('/')))
+  );
+});`;
+
 // ── KV helpers ───────────────────────────────────────────────────────────────
 
 async function isPublished(kv: KVNamespace, slug: string): Promise<boolean> {
@@ -210,6 +249,12 @@ function shell(title: string, body: string, opts: { docTitle?: string; mermaid?:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${title} — ACIS</title>
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Portfolio">
 ${DARK_MODE_SCRIPT}
 <style>${CSS}</style>
 ${opts.mermaid ? `<script type="module">
@@ -228,6 +273,7 @@ mermaid.initialize({startOnLoad:true,theme:'base',themeVariables:{primaryColor:'
 </nav>
 <div class="page">${body}</div>
 ${THEME_TOGGLE_SCRIPT}
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>`;
 }
@@ -329,6 +375,13 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const pathname = url.pathname.replace(/\/$/, '') || '/';
+
+    if (pathname === '/icon.svg')
+      return new Response(ICON_SVG, { headers: { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public,max-age=86400' } });
+    if (pathname === '/manifest.json')
+      return new Response(MANIFEST, { headers: { 'Content-Type': 'application/manifest+json', 'Cache-Control': 'public,max-age=3600' } });
+    if (pathname === '/sw.js')
+      return new Response(SERVICE_WORKER, { headers: { 'Content-Type': 'application/javascript', 'Cache-Control': 'no-cache' } });
 
     if (pathname === '/' && request.method === 'GET') {
       const withState = await Promise.all(
