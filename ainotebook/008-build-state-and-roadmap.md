@@ -1,6 +1,6 @@
 # 008 — Current Build State & Remaining Roadmap
 
-**Date:** 2026-04-25 (updated 2026-04-25 — email agents live, full cron sequence complete)  
+**Date:** 2026-04-25 (updated 2026-04-26 — portfolio viewer live, ADRs 016–017 written, IMPACT.md + CHECKLIST.md added)  
 **Status:** Reference — updated as phases complete
 
 ---
@@ -91,8 +91,24 @@ runScraper → runVendorScan → runAttestationReminders → runIncidentEscalati
 
 ---
 
+## Portfolio Viewer — Complete (see ADR 017)
+
+- Live at `portfolio.rossonlineservices.com`
+- Separate Cloudflare Worker (`portfolio/`) — independent from ACIS, no shared DB
+- Fetches Markdown from `raw.githubusercontent.com` at request time (no build step, no rate limits)
+- `marked` v15 renders to HTML; Mermaid diagrams auto-initialize via CDN
+- KV-backed document visibility toggles — admin sets per-doc visibility via `/admin?token=...`
+- Dark/light mode with CSS custom properties (no flash — inline `<head>` script)
+- Per-document accent colors; prev/next navigation by doc index
+- No social media plugins (privacy-first design)
+- PWA support pending: manifest.json + icon.svg + service worker routes (see `CHECKLIST.md`)
+- `portfolio-deploy` script enforces push-before-deploy (content fetched from GitHub at runtime)
+
+---
+
 ## Remaining Build Queue
 
-1. **Portfolio viewer** — `portfolio.rossonlineservices.com`; curated doc viewer; KV-backed toggle controls; GitHub API for private repo content retrieval
-2. **GitHub PR automation** — high-risk regulatory event → auto PR via GitHub MCP; references ADR 003 roadmap item
-3. **CCC Admin `/api/status` endpoint** — ACIS exposes structural state (modules, agents, cron sequence); CCC Admin polls it for dynamic build tracking
+1. **Portfolio PWA** — serve `manifest.json`, `icon.svg`, `sw.js` as Worker routes; enables home-screen install
+2. **System narrative** — `docs/brms/05-system-narrative.md`; non-technical story arc for the BRMS director audience
+3. **GitHub PR automation** — high-risk regulatory event → auto PR via GitHub MCP
+4. **CCC Admin `/api/status` endpoint** — ACIS exposes structural state; CCC Admin polls it for dynamic build tracking
