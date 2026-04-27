@@ -36,7 +36,7 @@ Each document is scored by Claude: `risk_level` (High/Medium/Low), `impacted_fie
 ### Conduct internal risk assessments and compliance audits
 
 **Demonstrated by:** Heartbeat Agent. Every morning, after the scraper runs, a 13-query D1 audit checks:
-- Regulatory events ingested in the last 24 hours
+- Regulatory events ingested in the last 72 hours (weekend-aware window)
 - High-risk events (score ≥ 8)
 - Overdue attestation clients
 - High Risk vendors

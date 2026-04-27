@@ -10,6 +10,9 @@
 | Attestation Vault | Live | RxDC + Gag Clause tracking for 8 client plans |
 | Vendor Risk | Live | Real TLS/header scanning + Claude HIPAA risk assessment |
 | Incident Response | Live | NIST 800-61 playbooks auto-generated on every incident |
+| Attestation Reminders | Live | Daily email when any client attestation is Overdue |
+| Incident Escalation | Live | Daily email for Open incidents 7+ days; HIPAA OCR countdown |
+| GitHub PR Automation | Live | High-risk event (score ≥ 8) → auto branch + compliance alert PR |
 | Executive Hub | Live | Single dashboard at acis.rossonlineservices.com |
 | Operations Tab | Live | Manual triggers, heartbeat view, AI Gateway log streaming |
 | Heartbeat Agent | Live | Daily self-audit → Green/Yellow/Red → CCC Admin report |
@@ -17,19 +20,19 @@
 
 ---
 
-## Near-Term Roadmap (Next 30 Days)
+## Completed Features
 
 ### ✅ Playbook Agent Upgrade — Complete (2026-04-25)
-The NIST playbook generator has been upgraded from `claude-sonnet-4-6` to `claude-opus-4-7`. CFR citation precision and phase-level specificity for complex incident types (supply chain compromise, insider threat) are measurably improved. Every new incident now receives an Opus-quality playbook.
+Upgraded from `claude-sonnet-4-6` to `claude-opus-4-7`. CFR citation precision and phase-level specificity measurably improved. Every new incident receives an Opus-quality playbook.
 
-### 1. Attestation Email Reminders
-Automated outbound reminders to client plans with approaching or overdue RxDC and Gag Clause deadlines. Triggered by the daily cron when `rxdc_status` or `gag_clause_status` reaches a threshold. Sent via Resend API with HIPAA-appropriate templating. This closes the loop between tracking and action — the system doesn't just surface overdue records, it contacts the responsible parties.
+### ✅ Attestation Email Reminders — Complete (2026-04-26)
+Daily cron checks for `rxdc_status = 'Overdue'` or `gag_clause_status = 'Overdue'`. When found, sends an HTML summary table to the compliance administrator via Resend. No-op on clean days — no spam.
 
-### 2. Incident Escalation Notifications
-When the Heartbeat Agent detects an incident open longer than 7 days, send a targeted alert to the compliance administrator and log an escalation event to the admin layer. Ensures incidents don't silently age past the HIPAA Breach Notification Rule's 60-day OCR reporting window.
+### ✅ Incident Escalation Notifications — Complete (2026-04-26)
+Daily cron checks for incidents open longer than 7 days. Email includes days-open count and HIPAA OCR window countdown per incident. Subject line escalates to `⚠️ URGENT` when any incident hits 45+ days. Cites 45 CFR § 164.404.
 
-### 3. GitHub PR Automation
-When the Regulatory Pulse detects a new High-risk event (e.g., a CMS bulletin changing an RxDC submission deadline), the system opens a GitHub pull request automatically — updating the organization's policy documentation with the new requirement, citing the source regulatory document, and tagging the change for review. This is the feature that demonstrates ACIS is not just monitoring but *acting*: the compliance administrator reviews a PR rather than manually researching a bulletin.
+### ✅ GitHub PR Automation — Complete (2026-04-27)
+When the Regulatory Pulse ingests a High-risk event (score ≥ 8), ACIS opens a GitHub pull request automatically — creating a compliance alert file with Claude's full risk assessment, required action, and source citation. The compliance administrator reviews and merges. Demo PR #1 is open: HHS Notice of Benefit and Payment Parameters for 2027 (Risk: 9/10).
 
 ---
 

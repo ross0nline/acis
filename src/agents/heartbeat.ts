@@ -21,7 +21,7 @@ export async function runHeartbeat(env: Env): Promise<HeartbeatReport | null> {
   // Collect metrics across all four modules in one D1 batch
   const results = await db.batch<{ v: number }>([
     db.prepare('SELECT COUNT(*) as v FROM regulatory_events'),
-    db.prepare("SELECT COUNT(*) as v FROM regulatory_events WHERE ingested_at >= datetime('now', '-1 day')"),
+    db.prepare("SELECT COUNT(*) as v FROM regulatory_events WHERE ingested_at >= datetime('now', '-3 days')"),
     db.prepare('SELECT COUNT(*) as v FROM regulatory_events WHERE risk_score >= 8'),
     db.prepare('SELECT COUNT(*) as v FROM attestation_vault'),
     db.prepare("SELECT COUNT(*) as v FROM attestation_vault WHERE rxdc_status = 'Overdue' OR gag_clause_status = 'Overdue'"),
@@ -38,7 +38,7 @@ export async function runHeartbeat(env: Env): Promise<HeartbeatReport | null> {
   const n = (i: number): number => results[i].results[0]?.v ?? 0;
 
   const metrics = {
-    regulatory: { total: n(0), recent_24h: n(1), high_risk: n(2) },
+    regulatory: { total: n(0), recent_72h: n(1), high_risk: n(2) },
     attestation: { total: n(3), overdue: n(4), compliant: n(5) },
     vendors:     { total: n(6), high_risk: n(7), stale_30d: n(8), avg_score: n(9) },
     incidents:   { total: n(10), open: n(11), stale_open_7d: n(12) },
@@ -60,14 +60,14 @@ Respond with valid JSON only — no markdown, no text outside the JSON.`,
         content: `Assess ACIS system health based on today's metrics. Date: ${new Date().toISOString().slice(0, 10)}.
 
 METRICS:
-Regulatory Pulse:   ${metrics.regulatory.total} total events | ${metrics.regulatory.recent_24h} ingested last 24h | ${metrics.regulatory.high_risk} high-risk (score ≥ 8)
+Regulatory Pulse:   ${metrics.regulatory.total} total events | ${metrics.regulatory.recent_72h} ingested last 72h | ${metrics.regulatory.high_risk} high-risk (score ≥ 8)
 Attestation Vault:  ${metrics.attestation.total} clients | ${metrics.attestation.overdue} overdue | ${metrics.attestation.compliant} fully compliant
 Vendor Risk:        ${metrics.vendors.total} vendors | ${metrics.vendors.high_risk} High Risk | ${metrics.vendors.stale_30d} not scanned in 30+ days | avg headers score ${metrics.vendors.avg_score}/100
 Incident Response:  ${metrics.incidents.total} total | ${metrics.incidents.open} open | ${metrics.incidents.stale_open_7d} open 7+ days
 
 STATUS RULES:
 - Green:  all nominal — no overdue attestations, stale incidents, or unaddressed High Risk vendors
-- Yellow: minor issues — 1-2 overdue records, low vendor scores, or no new regulatory events today
+- Yellow: minor issues — 1-2 overdue records, low vendor scores, or no new regulatory events in 72h
 - Red:    critical — multiple overdue, High Risk vendors unaddressed, or incidents stale 7+ days
 
 Return exactly:

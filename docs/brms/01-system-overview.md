@@ -83,7 +83,7 @@ Runs automatically        ──────▶  ↳ Green / Yellow / Red per mo
 
 Every Claude call is routed through the Cloudflare AI Gateway, which logs every request and response. The Executive Hub's Operations tab renders this log — a hiring manager can see the exact input and output for every risk scoring decision, vendor assessment, and incident playbook generation. This is not a black box. The reasoning is visible.
 
-Four distinct AI agents are deployed:
+Six distinct AI agents are deployed:
 
 | Agent | Model | Trigger | Purpose |
 |---|---|---|---|
@@ -91,6 +91,8 @@ Four distinct AI agents are deployed:
 | NIST Playbook Generator | claude-opus-4-7 | On incident creation | NIST 800-61 playbook with HIPAA-specific obligations |
 | Vendor Security Assessor | claude-opus-4-7 | On demand | HIPAA Business Associate risk classification |
 | System Health Auditor | claude-opus-4-7 | Daily cron (after scraper) | Green/Yellow/Red module health report |
+| Attestation Reminder | Resend (no AI) | Daily cron | Email alert when any client attestation is Overdue |
+| Incident Escalation | Resend (no AI) | Daily cron | Email with OCR countdown when incident open 7+ days |
 
 ---
 
@@ -102,5 +104,7 @@ Most compliance tools require a human to initiate every action. ACIS initiates a
 - Every morning after that, it audits itself — checking for overdue attestations, stale incidents, unscanned vendors, and new high-risk regulatory activity
 - When a new incident is opened, it generates a complete response playbook before the screen loads
 - When a vendor is scanned, it provides a compliance-specific risk assessment, not just a port scan
+- When a High-risk regulatory event is ingested, it opens a GitHub pull request with a compliance alert file — Claude's assessment, required action, and CFR citations — for the administrator to review and merge
+- When an attestation goes Overdue or an incident ages past 7 days, it sends an email — not a dashboard notification that requires a login, but an outbound alert that finds the administrator
 
 The compliance administrator's job shifts from *doing* compliance work to *reviewing* what the system surfaces and *acting* on what it escalates.
