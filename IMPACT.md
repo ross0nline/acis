@@ -36,6 +36,7 @@ flowchart TD
   Worker -->|regulatory feed| FedReg
   Worker -->|regulatory feed| RegGov
   Worker -->|send emails| Resend
+  Worker -->|compliance alert PRs| GitHub
   Portfolio -->|raw content| GitHub
   Portfolio -->|toggle state| KV_P
 ```
@@ -66,11 +67,10 @@ flowchart TD
 
 ## CCC Admin Touch Points
 
-CCC Admin currently receives heartbeat reports via service binding. Future `/api/status` endpoint
-will expose structural state. Changes that affect CCC Admin:
+CCC Admin receives heartbeat reports via service binding and polls `/api/status` for live module counts. Changes that affect CCC Admin:
 
 - Heartbeat report shape (`HeartbeatReport` type in `src/types/index.ts`)
-- `/api/status` route output (once built)
+- `/api/status` route output shape — CCC Admin dashboard `AcisStatusCard` depends on it
 - Service binding name `CCC_ADMIN` in `wrangler.toml`
 
 ## Deploy Sequence Reminders
@@ -79,5 +79,5 @@ will expose structural state. Changes that affect CCC Admin:
 ACIS full deploy:     acis-deploy
 Portfolio deploy:     portfolio-deploy   ← push to GitHub FIRST (content fetched at runtime)
 Secrets audit:        acis-secrets-check
-Manual agent trigger: acis-trigger <scraper|heartbeat|vendors>
+Manual agent trigger: acis-trigger <scraper|heartbeat|vendors|demo-pr>
 ```

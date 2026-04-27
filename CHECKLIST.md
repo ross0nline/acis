@@ -31,8 +31,9 @@ Open this alongside IMPACT.md before any significant change.
 | `013` – R2 Vault | New file storage patterns |
 | `014` – CCC Admin | Service binding changes, new outbound calls |
 | `015` – Resend Email | Email template changes, new email agent added |
-| `016` – Email Agents *(pending)* | Attestation or incident email logic changes |
-| `017` – Portfolio Viewer *(pending)* | Portfolio Worker architecture changes |
+| `016` – Email Agents | Attestation or incident email logic changes |
+| `017` – Portfolio Viewer | Portfolio Worker architecture changes |
+| `018` – GitHub PR Automation | PR threshold changes, branch naming changes, alert file format changes |
 
 ## Memory Files (`memory/`)
 

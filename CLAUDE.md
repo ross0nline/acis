@@ -26,24 +26,27 @@ This project builds ACIS (Autonomous Compliance Intelligence System) — a produ
 - **AI Observability:** Cloudflare AI Gateway (`acis-gateway`) — all inference logged; visible in Operations tab
 - **Scraping:** Firecrawl API — bypasses CMS/HHS bot protection
 - **Regulatory Data:** Federal Register API, Regulations.gov API
-- **Email:** Resend API (ADR 015) — key in `.dev.vars`; `RESEND_API_KEY` Worker secret not yet set
+- **Email:** Resend API (ADR 015) — `RESEND_API_KEY` Worker secret set; domain `rossonlineservices.com` verified
+- **GitHub:** REST API (`ross0nline/acis`) — compliance alert PRs auto-opened on High-risk events (ADR 018)
 - **Portfolio Admin:** CCC Admin — separate Worker + D1, connected via Cloudflare Service Binding
 - **CI/CD:** GitHub → Wrangler deploy (manual; `acis-deploy` script handles full deploy sequence)
 
-## Current System State (Updated: 2026-04-25)
+## Current System State (Updated: 2026-04-27)
 
-All four compliance modules and all five AI agents are live. The original 4-project structure merged into a single integrated system — ACIS — with modules as sub-systems of one Worker.
+All four compliance modules and six AI agents are live.
 
 | Module / Agent | Status | Notes |
 |---|---|---|
-| Regulatory Pulse | **Live** | 5-source scraper, Claude sonnet-4-6 scoring, 64 events, daily 08:00 UTC cron |
+| Regulatory Pulse | **Live** | 5-source scraper, Claude sonnet-4-6 scoring, daily 08:00 UTC cron |
 | Attestation Vault | **Live** | RxDC + Gag Clause lifecycle, 8 client plans |
 | Vendor Risk | **Live** | Real TLS + 6-header scoring, claude-opus-4-7 HIPAA assessment, 6 vendors |
 | Incident Response | **Live** | NIST 800-61 playbooks auto-generated on creation, claude-opus-4-7 |
+| Attestation Reminders | **Live** | Daily Resend email when any record is Overdue |
+| Incident Escalation | **Live** | Daily Resend email for Open incidents 7+ days; HIPAA OCR countdown |
 | Heartbeat Agent | **Live** | Daily self-audit (13-query D1 batch), Green/Yellow/Red, reports to CCC Admin |
+| GitHub PR Automation | **Live** | risk_score ≥ 8 → auto branch + file + PR in ross0nline/acis (ADR 018) |
 | Executive Hub | **Live** | 5 tabs: Live Pulse, Attestation, Vendor Risk, Incidents, Operations |
-| Operations Tab | **Live** | System Health first, Agent Logs (AI Gateway streaming), Admin Controls collapsed |
-| Agent Logs | **Live** | CF_API_TOKEN set — `ccc-admin-regenerated` token with AI Gateway:Edit |
+| `/api/status` | **Live** | Public GET — D1 batch counts + heartbeat; consumed by CCC Admin dashboard |
 
 ## Active Worker Secrets
 
@@ -55,24 +58,21 @@ All four compliance modules and all five AI agents are live. The original 4-proj
 | `FIRECRAWL_API_KEY` | ✅ Set |
 | `REGULATIONS_GOV_API_KEY` | ✅ Set |
 | `RESEND_API_KEY` | ✅ Set |
+| `GITHUB_TOKEN` | ✅ Set |
 
 ## Scripts (C:\Scripts, on PATH, .PS1 in PATHEXT)
 
 - `acis-deploy` — build frontend → deploy Pages (acis-executive-hub) → deploy Worker
-- `acis-trigger <scraper|heartbeat|vendors>` — manual API trigger; reads `$env:ACIS_ADMIN_TOKEN`
+- `acis-trigger <scraper|heartbeat|vendors|demo-pr>` — manual API trigger; reads `$env:ACIS_ADMIN_TOKEN`
 - `acis-secrets-check` — compare `.dev.vars` keys vs deployed Wrangler secrets
 
 ## Next Build Queue
 
-1. **Vendor scanner in daily cron** — wire `scanVendor()` for stale vendors in `scheduled()` handler (~10 lines in `src/index.ts`)
-2. **Attestation email reminders** — Resend; set `RESEND_API_KEY` secret first; new `src/services/email.ts` abstraction
-3. **Incident escalation notifications** — reuses Resend; heartbeat already detects `stale_open_7d > 0`
-4. **Portfolio viewer** — `portfolio.rossonlineservices.com`; curated doc viewer with KV-backed toggle controls
-5. **GitHub PR automation** — high-risk regulatory event → auto PR via GitHub MCP
+1. **Admin subdomain data explorer** — `admin.rossonlineservices.com`; AppSheets-style table CRUD for D1 modules; first feature of the private admin panel (deferred — not required for BRMS application)
 
 ## ADR Notebook
 
-`ainotebook/` is the source of truth for all architectural decisions. 15 entries (001–015). CHARTER.md files in `projects/` are historical planning artifacts — do not treat as current state.
+`ainotebook/` is the source of truth for all architectural decisions. 18 entries (001–018). CHARTER.md files in `projects/` are historical planning artifacts — do not treat as current state.
 
 ## Working Conventions
 

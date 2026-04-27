@@ -23,3 +23,4 @@ Each entry documents a decision made during design or development: what was deci
 | [015](015-email-provider-decision.md) | Email Provider: Resend Now, Cloudflare Email Service Later | Decided |
 | [016](016-email-notification-agents.md) | Email Notification Agents: Attestation Reminders & Incident Escalation | Decided & Implemented |
 | [017](017-portfolio-viewer.md) | Portfolio Viewer: Worker-Rendered Markdown with KV Toggle Controls | Decided & Implemented |
+| [018](018-github-pr-automation.md) | GitHub PR Automation: High-Risk Regulatory Events → Pull Requests | Decided & Implemented |
