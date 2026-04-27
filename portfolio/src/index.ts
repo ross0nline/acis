@@ -51,9 +51,17 @@ const DOCS: Doc[] = [
     accent: '#d97706',
     accentDark: '#fbbf24',
   },
+  {
+    slug: 'narrative',
+    title: 'The Build Story',
+    path: 'docs/brms/05-system-narrative.md',
+    description: 'Architecture decisions, build sequence, and what the system demonstrates',
+    accent: '#0f766e',
+    accentDark: '#2dd4bf',
+  },
 ];
 
-const DEFAULT_PUBLISHED = new Set(['letter', 'overview', 'alignment', 'roadmap']);
+const DEFAULT_PUBLISHED = new Set(['letter', 'overview', 'alignment', 'roadmap', 'narrative']);
 
 // ── PWA static assets ─────────────────────────────────────────────────────────
 
