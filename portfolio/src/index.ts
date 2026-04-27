@@ -306,7 +306,7 @@ function indexPage(docs: (Doc & { published: boolean })[]): string {
       </div>
     </div>
     <div class="doc-grid">${cards}</div>
-    <div class="footer">Ross — rossonlineservices.com</div>`;
+    <div class="footer">Ross — <a href="mailto:rossonlineservices@gmail.com">rossonlineservices@gmail.com</a></div>`;
 
   return shell('Portfolio', body);
 }

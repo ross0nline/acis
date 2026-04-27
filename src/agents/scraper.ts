@@ -131,6 +131,57 @@ async function isUrlLive(url: string): Promise<boolean> {
   }
 }
 
+// Stronger check for CMS/HHS newsroom URLs: fetches the first 8KB and confirms
+// that significant words from the article title appear in the page body.
+// Catches soft-redirects that return 200 but serve a generic homepage.
+async function verifyUrlContent(url: string, title: string): Promise<boolean> {
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return false;
+  try {
+    const resp = await fetch(url, {
+      redirect: 'follow',
+      signal: AbortSignal.timeout(7000),
+    });
+    if (!resp.ok) return false;
+
+    // Stream only the first 8KB — enough for title/headline in the HTML head
+    const reader = resp.body?.getReader();
+    if (!reader) return true; // can't stream, assume ok
+    const chunks: Uint8Array[] = [];
+    let read = 0;
+    while (read < 8192) {
+      const { done, value } = await reader.read();
+      if (done || !value) break;
+      chunks.push(value);
+      read += value.length;
+    }
+    await reader.cancel().catch(() => undefined);
+
+    const body = new TextDecoder().decode(
+      chunks.reduce((acc, chunk) => {
+        const merged = new Uint8Array(acc.length + chunk.length);
+        merged.set(acc);
+        merged.set(chunk, acc.length);
+        return merged;
+      }, new Uint8Array())
+    ).toLowerCase();
+
+    // Extract meaningful keywords (≥5 chars, skip common stop words)
+    const stop = new Set(['about','after','before','between','during','their','there','these','those','would','could','should','which','where','while','other','under','until','above','across','against','along','increase','reduce','patient','access']);
+    const keywords = title.toLowerCase()
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .split(/\s+/)
+      .filter(w => w.length >= 5 && !stop.has(w))
+      .slice(0, 6);
+
+    if (keywords.length === 0) return true;
+    const hits = keywords.filter(k => body.includes(k)).length;
+    // Require at least 40% of keywords to appear — tolerant of paraphrased headlines
+    return hits >= Math.ceil(keywords.length * 0.4);
+  } catch {
+    return false;
+  }
+}
+
 // ── Claude scoring ─────────────────────────────────────────────────────────
 
 async function scoreWithClaude(
@@ -340,9 +391,10 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
       const articles = await parseNewsroomMarkdown(client, markdown, feed.label);
       if (articles.length === 0) continue;
 
-      // Filter malformed entries, then validate URLs in parallel
+      // Filter malformed entries, then verify content in parallel
+      // Uses GET + keyword check (not HEAD) to catch CMS/HHS soft-redirects
       const candidates = articles.filter(a => a.url && a.title);
-      const liveArticleFlags = await Promise.all(candidates.map(a => isUrlLive(a.url)));
+      const liveArticleFlags = await Promise.all(candidates.map(a => verifyUrlContent(a.url, a.title)));
       const liveArticles = candidates.filter((_, i) => liveArticleFlags[i]);
 
       for (const article of liveArticles) {
