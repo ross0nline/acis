@@ -57,12 +57,9 @@ You assess module-level health metrics and produce a structured daily heartbeat 
 Respond with valid JSON only — no markdown, no text outside the JSON.`,
       messages: [{
         role: 'user',
-        content: `Assess ACIS system health based on today's metrics.
+        content: `Assess ACIS system health based on today's metrics. Date: ${new Date().toISOString().slice(0, 10)}.
 
-Date: ${new Date().toISOString().slice(0, 10)} (${new Date().toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })})
-
-PUBLISHING CALENDAR CONTEXT:
-Federal agencies (CMS, HHS, EBSA, OCR, Federal Register) do not publish regulatory documents on weekends or US federal holidays. If today is Monday or Tuesday, or follows a federal holiday, zero new regulatory events in the last 72h is expected behavior — do not flag this as Yellow. Only flag Regulatory Pulse as Yellow or Red if the ingestion gap cannot be explained by the publishing calendar.
+Note: Federal agencies (CMS, HHS, EBSA, OCR, Federal Register) do not publish on weekends or US federal holidays. Account for the publishing calendar before treating any gap in regulatory ingestion as an issue.
 
 METRICS:
 Regulatory Pulse:   ${metrics.regulatory.total} total events | ${metrics.regulatory.recent_72h} ingested last 72h | ${metrics.regulatory.high_risk} high-risk (score ≥ 8)
