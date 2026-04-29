@@ -22,7 +22,7 @@ Federal Register (CMS/EBSA/HHS) ──▶ Regulatory Pulse
 Regulations.gov (CMS/HHS/OCR)   ──▶   ↳ Claude scores each document
 CMS Newsroom                     ──▶   ↳ Risk level, impacted field,
 HHS Press Room                   ──▶     deadline, remediation step
-                                         50 most recent events displayed
+                                         50 of {{REGULATORY_EVENT_COUNT}} events displayed
                                   
 Client Plan Data                  Attestation Vault
 ─────────────────                   ↳ RxDC submission status

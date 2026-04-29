@@ -9,6 +9,7 @@ import { OperationsPanel } from './components/OperationsPanel';
 const API = 'https://acis.rossonlineservices.workers.dev';
 
 type Tab = 'pulse' | 'attestation' | 'vendors' | 'incidents' | 'operations';
+export type RiskFilter = 'all' | 'high' | 'medium' | 'low';
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'pulse',       label: 'Live Pulse',    icon: '⚡' },
@@ -20,6 +21,7 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('pulse');
+  const [riskFilter, setRiskFilter] = useState<RiskFilter>('all');
 
   const [events, setEvents] = useState<RegulatoryEvent[]>([]);
   const [attestation, setAttestation] = useState<AttestationResponse | null>(null);
@@ -84,7 +86,12 @@ export default function App() {
             <div className="text-2xl font-bold text-slate-100">{events.length}</div>
             <div className="text-xs text-slate-500 mt-0.5">Regulatory Events</div>
             {highRiskEvents > 0 && (
-              <div className="text-xs text-red-400 mt-1">{highRiskEvents} high risk</div>
+              <button
+                onClick={() => { setTab('pulse'); setRiskFilter('high'); }}
+                className="text-xs text-red-400 mt-1 hover:text-red-300 transition-colors block"
+              >
+                {highRiskEvents} high risk →
+              </button>
             )}
           </div>
           <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
@@ -137,7 +144,7 @@ export default function App() {
 
         {/* Panel */}
         <div>
-          {tab === 'pulse'       && <LivePulse events={events} loading={loading.pulse} />}
+          {tab === 'pulse'       && <LivePulse events={events} loading={loading.pulse} riskFilter={riskFilter} onFilterChange={setRiskFilter} />}
           {tab === 'attestation' && <AttestationPanel data={attestation} loading={loading.attestation} />}
           {tab === 'vendors'     && <VendorBoard vendors={vendors} loading={loading.vendors} />}
           {tab === 'incidents'   && <IncidentTracker incidents={incidents} loading={loading.incidents} />}

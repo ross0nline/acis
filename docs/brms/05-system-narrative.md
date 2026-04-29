@@ -70,7 +70,7 @@ Every morning at 08:00 UTC, without any human initiating it:
 
 5. The heartbeat agent runs 13 D1 queries in a single batch, passes the results to Claude, and receives a structured Green/Yellow/Red assessment for each of the four compliance modules. The overall status, module-level summaries, and action items are stored in the database and forwarded to the administrative layer via a Cloudflare Service Binding.
 
-The Live Pulse panel displays the 50 most recent real federal regulatory events ingested from federal sources, alongside 8 client attestation records, 6 vendor assessments, and 7 incidents with AI-generated NIST playbooks.
+The Live Pulse panel displays the 50 most recent of {{REGULATORY_EVENT_COUNT}} real federal regulatory events ingested from federal sources, alongside 8 client attestation records, 6 vendor assessments, and 7 incidents with AI-generated NIST playbooks.
 
 ---
 

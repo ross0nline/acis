@@ -426,10 +426,19 @@ export default {
       const published = await isPublished(env.PORTFOLIO_KV, doc.slug);
       if (!published) return html(errorPage('Not found', 'This document is not currently available.'), 404);
 
-      const fetched = await fetchMarkdown(env, doc.path);
+      const [fetched, acisStatus] = await Promise.all([
+        fetchMarkdown(env, doc.path),
+        fetch('https://acis.rossonlineservices.workers.dev/api/status')
+          .then(r => r.json() as Promise<{ regulatory_events?: number }>)
+          .catch(() => null),
+      ]);
       if ('error' in fetched) return html(errorPage('Content unavailable', fetched.error), 503);
 
-      const preprocessed = fetched.content.replace(/```mermaid\n([\s\S]*?)```/g, '<div class="mermaid">$1</div>');
+      const totalEvents = acisStatus?.regulatory_events ?? 65;
+      const withSubstitutions = fetched.content
+        .replace(/\{\{REGULATORY_EVENT_COUNT\}\}/g, String(totalEvents));
+
+      const preprocessed = withSubstitutions.replace(/```mermaid\n([\s\S]*?)```/g, '<div class="mermaid">$1</div>');
       const result = marked(preprocessed, { gfm: true });
       const htmlContent = result instanceof Promise ? await result : result;
 
