@@ -122,11 +122,34 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
             <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">System Health</h2>
             <p className="text-xs text-slate-600 mt-0.5">Daily self-audit — runs automatically at 08:00 UTC</p>
           </div>
-          {heartbeat && (
-            <span className="text-xs text-slate-500">
-              {new Date(heartbeat.timestamp).toLocaleString()}
-            </span>
-          )}
+          <div className="flex items-center gap-3">
+            {heartbeat && (
+              <span className="text-xs text-slate-600">
+                {new Date(heartbeat.timestamp).toLocaleString()}
+              </span>
+            )}
+            <button
+              onClick={() => tokenSet ? runHeartbeat() : setAdminExpanded(true)}
+              disabled={heartbeatState.status === 'loading'}
+              title={tokenSet ? 'Re-run system health audit' : 'Set admin token in Admin Controls to recheck'}
+              className={`text-xs transition-colors ${
+                heartbeatState.status === 'loading'
+                  ? 'text-cyan-600 cursor-wait'
+                  : heartbeatState.status === 'success'
+                  ? 'text-emerald-400'
+                  : heartbeatState.status === 'error'
+                  ? 'text-red-400 hover:text-red-300'
+                  : tokenSet
+                  ? 'text-slate-500 hover:text-slate-300'
+                  : 'text-slate-700 hover:text-slate-500'
+              }`}
+            >
+              {heartbeatState.status === 'loading' ? 'Checking…'
+                : heartbeatState.status === 'success' ? `✓ ${heartbeatState.message}`
+                : heartbeatState.status === 'error' ? '✕ Failed'
+                : tokenSet ? 'Recheck' : 'Recheck ↓'}
+            </button>
+          </div>
         </div>
 
         {hbLoading ? (
@@ -136,7 +159,7 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
             <div className="text-slate-400 text-sm font-medium mb-1">No heartbeat on record</div>
             <p className="text-slate-600 text-xs">
               The system audits itself daily at 08:00 UTC and produces a Green / Yellow / Red health report.
-              Use Admin Controls below to trigger one manually.
+              Set a token in Admin Controls and use Recheck above to trigger one manually.
             </p>
           </div>
         ) : (

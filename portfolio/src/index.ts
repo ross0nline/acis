@@ -2,7 +2,6 @@ import { marked } from 'marked';
 
 interface Env {
   PORTFOLIO_KV: KVNamespace;
-  PORTFOLIO_ADMIN_TOKEN: string;
   GITHUB_TOKEN?: string;
   GITHUB_OWNER: string;
   GITHUB_REPO: string;
@@ -399,8 +398,6 @@ export default {
     }
 
     if (pathname === '/admin' && request.method === 'GET') {
-      const token = url.searchParams.get('token');
-      if (token !== env.PORTFOLIO_ADMIN_TOKEN) return authPrompt();
       const withState = await Promise.all(
         DOCS.map(async d => ({ ...d, published: await isPublished(env.PORTFOLIO_KV, d.slug) }))
       );
@@ -411,14 +408,11 @@ export default {
       const form = await request.formData();
       const slug = form.get('slug') as string;
       const published = form.get('published') === 'true';
-      const token = url.searchParams.get('token')
-        ?? new URL(request.headers.get('Referer') ?? request.url).searchParams.get('token');
-      if (token !== env.PORTFOLIO_ADMIN_TOKEN) return authPrompt();
       if (!DOCS.find(d => d.slug === slug)) return html('<p>Not found</p>', 404);
       await setPublished(env.PORTFOLIO_KV, slug, published);
       const doc = DOCS.find(d => d.slug === slug)!;
       return Response.redirect(
-        `${url.origin}/admin?token=${token}&msg=${encodeURIComponent(`${doc.title} is now ${published ? 'published' : 'hidden'}.`)}`,
+        `${url.origin}/admin?msg=${encodeURIComponent(`${doc.title} is now ${published ? 'published' : 'hidden'}.`)}`,
         303
       );
     }
@@ -457,22 +451,3 @@ function errorPage(title: string, detail: string): string {
     <p style="margin-top:20px"><a href="/">← Back to index</a></p>`);
 }
 
-function authPrompt(): Response {
-  return new Response(
-    `<!DOCTYPE html><html><head><meta charset="utf-8">
-    <style>body{font-family:system-ui,sans-serif;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
-    .box{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:36px;width:340px}
-    h2{font-size:1.1rem;font-weight:600;margin-bottom:20px;color:#f1f5f9}
-    input{width:100%;padding:10px 14px;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#f8fafc;font-size:14px;margin-bottom:12px;outline:none}
-    input:focus{border-color:#60a5fa}
-    button{width:100%;padding:10px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer}
-    button:hover{background:#1d4ed8}</style>
-    </head><body><div class="box">
-    <h2>Admin Access</h2>
-    <form method="GET" action="/admin">
-      <input name="token" type="password" placeholder="Token" autofocus>
-      <button type="submit">Sign in</button>
-    </form></div></body></html>`,
-    { status: 401, headers: { 'Content-Type': 'text/html;charset=utf-8' } }
-  );
-}

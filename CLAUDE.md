@@ -72,7 +72,17 @@ All four compliance modules and six AI agents are live.
 
 ## ADR Notebook
 
-`ainotebook/` is the source of truth for all architectural decisions. 18 entries (001–018). CHARTER.md files in `projects/` are historical planning artifacts — do not treat as current state.
+`ainotebook/` is the source of truth for all architectural decisions. 19 entries (001–019). CHARTER.md files in `projects/` are historical planning artifacts — do not treat as current state.
+
+## Agent Architecture (ADR 019)
+
+Claude Code is the **primary orchestrator** for all development work. It carries persistent memory, full project context, and ADR awareness across sessions — this continuity is worth more than any IDE-native integration.
+
+**Cursor's agent** is a future delegate for scoped UI tasks (visual layout iteration, component inspection, Design Mode work). The delegation pattern: Claude Code writes a brief with exact file paths and acceptance criteria → Cursor agent executes → returns diff → Claude Code verifies via Playwright MCP.
+
+**Playwright MCP** is the verification layer for Claude Code — enables live navigation and assertion against `acis.rossonlineservices.com` without requiring Cursor delegation.
+
+Do not treat Cursor's agent as an alternative to Claude Code. It is a downstream executor for well-defined, visually-scoped tasks. All architectural decisions remain in the ADR notebook.
 
 ## Working Conventions
 

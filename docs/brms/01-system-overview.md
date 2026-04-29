@@ -22,7 +22,7 @@ Federal Register (CMS/EBSA/HHS) ──▶ Regulatory Pulse
 Regulations.gov (CMS/HHS/OCR)   ──▶   ↳ Claude scores each document
 CMS Newsroom                     ──▶   ↳ Risk level, impacted field,
 HHS Press Room                   ──▶     deadline, remediation step
-                                         64 live events in database
+                                         50 most recent events displayed
                                   
 Client Plan Data                  Attestation Vault
 ─────────────────                   ↳ RxDC submission status
@@ -81,7 +81,7 @@ Runs automatically        ──────▶  ↳ Green / Yellow / Red per mo
 
 ## The AI Layer
 
-Every Claude call is routed through the Cloudflare AI Gateway, which logs every request and response. The Executive Hub's Operations tab renders this log — a hiring manager can see the exact input and output for every risk scoring decision, vendor assessment, and incident playbook generation. This is not a black box. The reasoning is visible.
+Every Claude call is routed through the Cloudflare AI Gateway, which logs every request and response. The Executive Hub's Operations tab renders this log — the exact input and output for every risk scoring decision, vendor assessment, and incident playbook generation is visible to anyone reviewing the system. This is not a black box. The reasoning is auditable.
 
 Six distinct AI agents are deployed:
 

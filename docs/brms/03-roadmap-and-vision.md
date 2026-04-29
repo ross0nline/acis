@@ -6,7 +6,7 @@
 
 | Module | Status | What It Does |
 |---|---|---|
-| Regulatory Pulse | Live | 5-source federal feed, daily Claude scoring, 64 events |
+| Regulatory Pulse | Live | 5-source federal feed, daily Claude scoring, 50 most recent events |
 | Attestation Vault | Live | RxDC + Gag Clause tracking for 8 client plans |
 | Vendor Risk | Live | Real TLS/header scanning + Claude HIPAA risk assessment |
 | Incident Response | Live | NIST 800-61 playbooks auto-generated on every incident |

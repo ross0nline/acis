@@ -171,11 +171,22 @@ app.post('/internal/event', async (c) => {
 
 // Scheduled handler — runs daily at 08:00 UTC
 const scheduled: ExportedHandlerScheduledHandler<Env> = async (_event, env) => {
-  await runScraper(env);
-  await runVendorScan(env);
-  await runAttestationReminders(env);
-  await runIncidentEscalation(env);
-  await runHeartbeat(env);
+  const steps: Array<[string, () => Promise<unknown>]> = [
+    ['scraper',               () => runScraper(env)],
+    ['vendor-scan',           () => runVendorScan(env)],
+    ['attestation-reminders', () => runAttestationReminders(env)],
+    ['incident-escalation',   () => runIncidentEscalation(env)],
+    ['heartbeat',             () => runHeartbeat(env)],
+  ];
+
+  for (const [name, fn] of steps) {
+    try {
+      await fn();
+      console.log(`[scheduled] ${name} completed`);
+    } catch (err) {
+      console.error(`[scheduled] ${name} failed:`, err instanceof Error ? err.message : String(err));
+    }
+  }
 };
 
 export default {

@@ -29,7 +29,7 @@ Every essential duty and knowledge requirement from the Security Compliance Admi
 - CMS Newsroom (Firecrawl — bypasses bot protection)
 - HHS Press Room (Firecrawl — bypasses bot protection)
 
-Each document is scored by Claude: `risk_level` (High/Medium/Low), `impacted_field` (RxDC/GagClause/HIPAA/GeneralSecurity), `summary`, `remediation_step`, and `deadline`. 64 real federal documents in the live database.
+Each document is scored by Claude: `risk_level` (High/Medium/Low), `impacted_field` (RxDC/GagClause/HIPAA/GeneralSecurity), `summary`, `remediation_step`, and `deadline`. The Live Pulse panel surfaces the 50 most recent scored documents from a continuously growing database.
 
 ---
 
