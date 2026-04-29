@@ -118,6 +118,34 @@ app.post('/api/scraper/demo-pr', async (c) => {
   return c.json({ ok: true, event_id: event.id, title: event.title, risk_score: event.risk_score });
 });
 
+// Demo PR + email — creates a synthetic high-risk event to test the full email notification path
+app.post('/api/scraper/demo-pr-email', async (c) => {
+  const token = c.req.header('Authorization')?.replace('Bearer ', '');
+  if (token !== c.env.ADMIN_TOKEN) return c.json({ error: 'Unauthorized' }, 401);
+  const syntheticId = Date.now();
+  const syntheticEvent: import('./types').RegulatoryEvent = {
+    id: syntheticId,
+    title: `[TEST] ACIS Compliance Alert Email Verification — ${new Date().toISOString()}`,
+    source: 'ACIS-TEST',
+    url: 'https://acis.rossonlineservices.com',
+    published_date: new Date().toISOString().split('T')[0],
+    risk_score: 9,
+    summary: 'Synthetic event generated to verify the compliance alert email notification path. Not a real regulatory event.',
+    tags: 'test',
+    remediation_steps: null,
+    ingested_at: new Date().toISOString(),
+  };
+  const scored = {
+    risk_level: 'High' as const,
+    impacted_field: 'HIPAA' as const,
+    summary: 'Synthetic test event — verifying that the email notification fires correctly on PR creation.',
+    remediation_step: 'No action required. This is a test.',
+    deadline: '',
+  };
+  await createCompliancePR(c.env, syntheticEvent, scored);
+  return c.json({ ok: true, test_event_id: syntheticId, message: 'Synthetic PR + email triggered — check your inbox.' });
+});
+
 // Heartbeat — last stored report and manual trigger
 app.get('/api/heartbeat/last', async (c) => {
   const raw = await getMemory(c.env.ACIS_DB, 'last_heartbeat');

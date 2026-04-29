@@ -41,6 +41,7 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
   const [scraperState,   setScraperState]   = useState<TriggerState>({ status: 'idle' });
   const [heartbeatState, setHeartbeatState] = useState<TriggerState>({ status: 'idle' });
   const [scanState,      setScanState]      = useState<TriggerState>({ status: 'idle' });
+  const [emailState,     setEmailState]     = useState<TriggerState>({ status: 'idle' });
 
   const [heartbeat, setHeartbeat] = useState<HeartbeatReport | null>(null);
   const [hbLoading, setHbLoading] = useState(true);
@@ -103,12 +104,14 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
     }
   };
 
-  const runScraper   = () => trigger('/api/scraper/run',      setScraperState,
+  const runScraper   = () => trigger('/api/scraper/run',          setScraperState,
     (d) => { const x = d as { ingested?: number; skipped?: number }; return `Ingested ${x.ingested ?? 0}, skipped ${x.skipped ?? 0}`; });
-  const runHeartbeat = () => trigger('/api/heartbeat/run',    setHeartbeatState,
+  const runHeartbeat = () => trigger('/api/heartbeat/run',        setHeartbeatState,
     (d) => { const x = d as { overall_status?: string }; return `${x.overall_status ?? 'Done'}`; });
-  const scanAll      = () => trigger('/api/vendors/scan-all', setScanState,
+  const scanAll      = () => trigger('/api/vendors/scan-all',     setScanState,
     (d) => { const x = d as { scanned?: number }; return `Scanned ${x.scanned ?? 0} vendors`; });
+  const testEmail    = () => trigger('/api/scraper/demo-pr-email', setEmailState,
+    () => 'PR created — check inbox');
 
   const tokenSet = token.trim().length > 0;
 
@@ -326,9 +329,10 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
               <div className="text-xs text-slate-500 mb-3">Manual Triggers</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {([
-                  { label: 'Run Scraper',      desc: 'Ingest today\'s regulatory events from all 5 sources', state: scraperState,   run: runScraper },
-                  { label: 'Run Heartbeat',    desc: 'Audit all four modules and update System Health above', state: heartbeatState, run: runHeartbeat },
-                  { label: 'Scan All Vendors', desc: 'TLS + security header scan via claude-opus-4-7',       state: scanState,      run: scanAll },
+                  { label: 'Run Scraper',      desc: 'Ingest today\'s regulatory events from all 5 sources',    state: scraperState,   run: runScraper },
+                  { label: 'Run Heartbeat',    desc: 'Audit all four modules and update System Health above',  state: heartbeatState, run: runHeartbeat },
+                  { label: 'Scan All Vendors', desc: 'TLS + security header scan via claude-opus-4-7',        state: scanState,      run: scanAll },
+                  { label: 'Test Alert Email', desc: 'Send a synthetic compliance alert PR + email to inbox', state: emailState,     run: testEmail },
                 ] as const).map(({ label, desc, state, run }) => (
                   <div key={label} className="bg-slate-950 border border-slate-800 rounded-lg p-4 flex flex-col gap-3">
                     <div>
