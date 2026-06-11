@@ -9,7 +9,7 @@ created: 2026-06-10
 created_model: claude-sonnet-4-6
 created_session: 78e6e2b4-34df-4c73-852c-d71397a90c55
 updated: 2026-06-11
-sweep_count: 14
+sweep_count: 15
 tags: [turn-algorithm, protocol, per-turn, pseudo-code, standing-orders]
 qoq_item_id: 487
 touches:
@@ -27,6 +27,7 @@ touches:
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction, date: 2026-06-11, action: updated, notes: "Moved skill check before queue scan. Removed stale MCP item 519 comment. Added global skill fallback and /partner-check to skill map." }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Updated global skill fallback to reference ~/.claude/skill-index.md (item #595)" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Fixed sweep_count rule: sweep_count = total touch count, not swept-action counter. Removed stale DB comment." }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added sequence-surface step to RESPOND block (#606) — tierAndRank pending queue when 3+ items, replaces single-next." }
 ---
 
 # Turn Algorithm
@@ -276,7 +277,15 @@ fn turn(userMessage):
     // Do NOT write a reflection just because work happened or an observation sounds insightful.
 
   // ── RESPOND ───────────────────────────────────────────────────────────────
-  next   = identifyNextStep(result)    // specific, not generic
+  // Surface proposed sequence when closing a tier or entering a multi-item phase.
+  // A tiered list keeps the user able to redirect before execution begins.
+  pending = scanPendingQueue(currentFocus)
+  if pending.hasTiers or pending.count > 2:
+    sequence = tierAndRank(pending)     // "Tier 1: X | Tier 2: Y, Z | Tier 3: research"
+    next = sequence                     // replaces single-next with ordered sequence
+  else:
+    next = identifyNextStep(result)     // specific, not generic — names the item ID + title
+
   voice  = surfaceInsight(result)      // non-obvious pattern, risk, or observation
 
   if filesCreated:
