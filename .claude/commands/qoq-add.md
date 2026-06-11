@@ -1,103 +1,114 @@
 ---
-title: "qoq-add"
+description: Bulk queue item creation via qoq-add.ps1. Use whenever queuing 2 or more items in the same turn, or any batch of related items. Bypasses the 900-byte PowerShell command limit.
+disable-model-invocation: true
+shell: powershell
+argument-hint: [post-compaction]
+title: "QOQ-Add Skill"
+domain: ccc-qoq
+status: APPROVED
+source_of_truth: Studio
+type: skill
+version: "0.1.1"
+created: 2026-06-09
 created_model: claude-sonnet-4-6
-created_session: 78e6e2b4-34df-4c73-852c-d71397a90c55
-sweep_count: 0
+created_session: 97461d8c-a6fc-433f-8294-baa47fb406e7
+updated: 2026-06-09
+sweep_count: 1
+tags: [skill, qoq, queue, batch, qoq-add]
+qoq_item_id: null
+touches:
+  - { model: claude-sonnet-4-6, session: 97461d8c-a6fc-433f-8294-baa47fb406e7, date: 2026-06-09, action: created, notes: "Migrated from .claude/commands/qoq-add.md" }
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: swept, notes: "Added hybrid DNA frontmatter; version 1.1.0 marks first sweep" }
 ---
 
 # /qoq-add — Bulk Queue Item Creation
 
-Use whenever you have 2+ items to queue in the same turn. Writes a JSON array to a
-temp file and runs `qoq-add.ps1`, which bypasses the 965-byte PowerShell command limit.
+Use for any batch of 2+ items. Writes a JSON file and runs qoq-add.ps1 — no inline
+JSON size limits, full field support, optional dry-run and KV regeneration.
 
-## When to use
-
-- Queuing 2 or more items in the same turn
-- Queuing a batch of related items with a shared parent
-- Any time you would have made multiple separate `Invoke-RestMethod POST /items` calls
+---
 
 ## Steps
 
 ### 1. Write the JSON file
 
-Only `title` is required per item. All other fields are optional.
-
 ```powershell
 $items = @'
 [
-  { "title": "First item" },
-  { "title": "Second item", "description": "extra detail" },
-  { "title": "Child with explicit parent", "parent_id": 95 }
+  {
+    "title": "First item title",
+    "stage": "idea",
+    "domain": "ccc-qoq",
+    "parent_id": null,
+    "description": "optional detail"
+  },
+  {
+    "title": "Second item title",
+    "stage": "queued",
+    "domain": "ccc-qoq",
+    "parent_id": 95,
+    "target_date": "2026-07-01"
+  }
 ]
 '@
 $items | Out-File "$env:TEMP\qoq-batch.json" -Encoding utf8
 ```
 
-### 2. Run with defaults (recommended for related batches)
-
-Use `-Parent`, `-Domain`, `-Stage` to apply shared values to every item that doesn't
-already set those fields. Per-item values always win over defaults.
+### 2. Dry run (optional — recommended for large batches)
 
 ```powershell
-# All items get parent_id=50, domain=ccc-qoq, stage=queued — unless item overrides
-& "C:\Scripts\qoq-add.ps1" "$env:TEMP\qoq-batch.json" -Parent 50 -Domain ccc-qoq -Stage queued
+& "C:\Scripts\qoq-add.ps1" "$env:TEMP\qoq-batch.json" -DryRun
 ```
 
-### 3. Dry run first (optional)
+### 3. Execute
 
 ```powershell
-& "C:\Scripts\qoq-add.ps1" "$env:TEMP\qoq-batch.json" -Parent 50 -Domain ccc-qoq -DryRun
+& "C:\Scripts\qoq-add.ps1" "$env:TEMP\qoq-batch.json"
 ```
 
-Dry run prints each item's title and resolved JSON — confirm before committing.
-
-### 4. With KV regeneration (end-of-session batches)
+### 4. Execute with KV regeneration (use for last batch of a session)
 
 ```powershell
-& "C:\Scripts\qoq-add.ps1" "$env:TEMP\qoq-batch.json" -Parent 50 -Domain ccc-qoq -Stage queued -Regenerate
+& "C:\Scripts\qoq-add.ps1" "$env:TEMP\qoq-batch.json" -Regenerate
 ```
 
-`-Regenerate` calls `POST /admin/regenerate` after all items are created. Use for the
-last batch of a session. Omit for mid-session batches (preserves server-side debounce).
+`-Regenerate` forces a fresh KV artifact build. Use at session end. Omit mid-session
+to preserve the server-side 60-second debounce.
 
-## All supported item fields
+---
+
+## All Available Fields
 
 | Field | Type | Notes |
 |---|---|---|
 | `title` | string | **Required** |
 | `stage` | string | `idea` `queued` `active` `blocked` `done` `dropped` |
 | `domain` | string | `ccc-qoq` `acis` `nba-neutral` `ccc-admin` `personal` |
-| `parent_id` | number | parent queue node ID |
+| `parent_id` | number or null | parent queue node ID |
 | `description` | string | detail, context, or rationale |
-| `target_date` | string | `"YYYY-MM-DD"` |
-| `title_short` | string | abbreviated label (25 chars max) |
+| `target_date` | string | `"YYYY-MM-DD"` — surfaces in urgent artifact |
+| `title_short` | string | abbreviated label for compact views |
 | `priority` | number | float — lower = higher priority |
-| `linked_paths` | string | pre-stringified JSON array: `"[\"src/foo.ts\"]"` |
-| `git_ref` | string | commit SHA or branch |
-| `completion_note` | string | what was shipped |
-| `last_verified_at` | string | `"YYYY-MM-DD"` |
+| `linked_paths` | string | JSON array string: `"[\"src/foo.ts\"]"` |
+| `git_ref` | string | commit SHA or branch when item was completed |
+| `completion_note` | string | what was actually shipped |
+| `last_verified_at` | string | `"YYYY-MM-DD"` — last accuracy review |
 | `created_by` | string | defaults to `AIBuddy` |
 
-## Root-level convention
+---
 
-Root items = major projects (NBA-NEUTRAL=1, ACIS=35, CCC-QOQ=50, CCC-ADMIN=149, IDEAS=150).
-New items should have a parent. If unclear, use IDEAS=150 as a staging area.
-The script warns on parentless items — treat it as a prompt, not a hard block.
+## Root-Level Convention
 
-## Key parents
+Root items = major projects: NBA-NEUTRAL=1, ACIS=35, CCC-QOQ=50, CCC-ADMIN=149, IDEAS=150.
 
-| Area | ID |
-|---|---|
-| CCC-QOQ root | 50 |
-| IDEAS (staging) | 150 |
-| CCC-ADMIN | 149 |
-| ACIS | 35 |
-| NBA-NEUTRAL | 1 |
-| LEAD MAGNETS root | 554 |
+New items should always have a parent. If the right parent is unclear, default to IDEAS (150).
+IDEAS is the staging area for parent-worthy ideas that haven't found their permanent home yet.
+
+---
 
 ## Tips
 
-- `$env:TEMP\qoq-batch.json` — no cleanup needed, temp files are ephemeral
-- Two-pass for hierarchy: first pass creates parents, capture IDs, second pass sets `parent_id`
-- Script prints `id=NNN` per item — use those IDs for follow-up PATCH calls
-- Split very large batches into groups of 10–20 items per file
+- Use `$env:TEMP\qoq-batch.json` — no cleanup needed, temp files are ephemeral
+- Build hierarchy in two passes: first creates parents, second uses returned IDs as `parent_id`
+- Script reports `id=NNN` per created item — use those for follow-up PATCH calls
+- Split very large batches into logical groups of 10–20 items per file
