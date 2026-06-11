@@ -50,8 +50,9 @@ export async function runHeartbeat(env: Env): Promise<HeartbeatReport | null> {
 
   try {
     const msg = await client.messages.create({
-      model: 'claude-opus-4-7',
+      model: 'claude-opus-4-8',
       max_tokens: 1024,
+      output_config: { effort: 'xhigh' },
       system: `You are the ACIS system health monitor for a HIPAA compliance operations platform.
 You assess module-level health metrics and produce a structured daily heartbeat report.
 Respond with valid JSON only — no markdown, no text outside the JSON.`,

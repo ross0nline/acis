@@ -25,8 +25,9 @@ export async function generatePlaybook(
 ): Promise<IncidentPlaybook | null> {
   try {
     const msg = await client.messages.create({
-      model: 'claude-opus-4-7',
+      model: 'claude-opus-4-8',
       max_tokens: 2048,
+      output_config: { effort: 'xhigh' },
       system: `You are a HIPAA Privacy and Security Officer with 15 years of healthcare compliance experience.
 You generate incident response playbooks aligned to NIST SP 800-61 Rev 2 and 45 CFR Parts 160 and 164.
 Always respond with valid JSON only — no markdown, no explanation outside the JSON.`,

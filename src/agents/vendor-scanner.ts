@@ -58,8 +58,9 @@ export async function scanVendor(
 
   try {
     const msg = await client.messages.create({
-      model: 'claude-opus-4-7',
+      model: 'claude-opus-4-8',
       max_tokens: 512,
+      output_config: { effort: 'xhigh' },
       system: `You are a HIPAA Business Associate security analyst. Evaluate vendor security posture based on TLS configuration and HTTP security headers. Respond with valid JSON only — no markdown, no text outside the JSON.`,
       messages: [{
         role: 'user',

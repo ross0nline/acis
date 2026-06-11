@@ -12,9 +12,9 @@ All Claude calls go through the Cloudflare AI Gateway (`acis-gateway`) via the `
 ```mermaid
 flowchart LR
     scraper["scraper.ts\nclaude-sonnet-4-6"]
-    playbook["playbook.ts\nclaude-opus-4-7"]
-    scanner["vendor-scanner.ts\nclaude-opus-4-7"]
-    heartbeat["heartbeat.ts\nclaude-opus-4-7"]
+    playbook["playbook.ts\nclaude-opus-4-8"]
+    scanner["vendor-scanner.ts\nclaude-opus-4-8"]
+    heartbeat["heartbeat.ts\nclaude-opus-4-8"]
 
     scraper -->|scoreWithClaude| GW["AI Gateway\nacis-gateway"]
     scraper -->|parseNewsroomMarkdown| GW
@@ -46,7 +46,7 @@ Extracts structured article objects from raw Firecrawl markdown dumps of CMS and
 
 ---
 
-### `src/agents/playbook.ts` — `claude-opus-4-7`
+### `src/agents/playbook.ts` — `claude-opus-4-8`
 
 **Call — `generatePlaybook()`**  
 Generates a structured NIST SP 800-61 Rev 2 incident response playbook.  
@@ -58,7 +58,7 @@ Generates a structured NIST SP 800-61 Rev 2 incident response playbook.
 
 ---
 
-### `src/agents/heartbeat.ts` — `claude-opus-4-7`
+### `src/agents/heartbeat.ts` — `claude-opus-4-8`
 
 **Call — `runHeartbeat()`**  
 Audits all four compliance modules and produces a system health report.  
@@ -70,7 +70,7 @@ Audits all four compliance modules and produces a system health report.
 
 ---
 
-### `src/agents/vendor-scanner.ts` — `claude-opus-4-7`
+### `src/agents/vendor-scanner.ts` — `claude-opus-4-8`
 
 **Call — `scanVendor()`**  
 Assesses vendor security posture as a HIPAA Business Associate.  
@@ -88,9 +88,9 @@ Assesses vendor security posture as a HIPAA Business Associate.
 |---|---|---|
 | scraper — scoreWithClaude | claude-sonnet-4-6 | Appropriate — high-volume classification; cost-efficient |
 | scraper — parseNewsroomMarkdown | claude-sonnet-4-6 | Appropriate — structured extraction; `max_tokens` bumped 1024→2048 on 2026-04-25 to prevent JSON truncation |
-| playbook — generatePlaybook | claude-opus-4-7 | Upgraded 2026-04-25 — improved CFR citation precision |
-| vendor-scanner — scanVendor | claude-opus-4-7 | Current |
-| heartbeat — runHeartbeat | claude-opus-4-7 | Current |
+| playbook — generatePlaybook | claude-opus-4-8 | Upgraded 2026-06-11 — 4.7→4.8 drop-in, effort: xhigh |
+| vendor-scanner — scanVendor | claude-opus-4-8 | Upgraded 2026-06-11 — 4.7→4.8 drop-in, effort: xhigh |
+| heartbeat — runHeartbeat | claude-opus-4-8 | Upgraded 2026-06-11 — 4.7→4.8 drop-in, effort: xhigh |
 
 ---
 
@@ -100,8 +100,8 @@ Assesses vendor security posture as a HIPAA Business Associate.
 |---|---|---|---|---|
 | scoreWithClaude | ~20 | Sonnet 4.6 | ~15K tokens | ~5K tokens |
 | parseNewsroomMarkdown | 2 | Sonnet 4.6 | ~16K tokens | ~4K tokens |
-| runHeartbeat | 1 | Opus 4.7 | ~2K tokens | ~1K tokens |
-| generatePlaybook | on incident creation (rare) | Opus 4.7 | ~1K tokens | ~2K tokens |
-| scanVendor | on demand / stale-vendor cron | Opus 4.7 | ~0.5K tokens | ~0.2K tokens |
+| runHeartbeat | 1 | Opus 4.8 | ~2K tokens | ~1K tokens |
+| generatePlaybook | on incident creation (rare) | Opus 4.8 | ~1K tokens | ~2K tokens |
+| scanVendor | on demand / stale-vendor cron | Opus 4.8 | ~0.5K tokens | ~0.2K tokens |
 
 Daily cron cost is dominated by the scraper (~$0.11/day at current volume). Heartbeat adds ~$0.03/day. Playbook and vendor scan are negligible at demo scale.
