@@ -19,6 +19,7 @@ qoq_item_id: 403
 touches:
   - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created, notes: "Derived from memory files: feedback_chat_length, feedback_document_dont_inline, feedback_share_reflections, feedback_ainotebook_voice" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Removed 5-sentence cap; replaced with file/no-file respond split (compact commentary vs conversational)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction, date: 2026-06-11, action: updated, notes: "Replaced length-based routing with type-based routing table. Type determinable before writing; length-based routing loses under execution pressure." }
 ---
 
 # /inline-chat — Inline Chat Protocol
@@ -38,7 +39,20 @@ File      → anything that took more than 3 sentences to derive
 Ainotebook → anything worth preserving beyond the session
 ```
 
-**If it took more than 3 sentences to think through, it belongs in a file.**
+**Route by content TYPE, not length.** Type is determinable before writing.
+Length isn't — and length-based routing loses under execution pressure.
+
+| Content type | Destination |
+|---|---|
+| Architectural insight or decision | `ainotebook/adr/` or `ainotebook/reflect/` |
+| Trade-off analysis | `ainotebook/analysis/` or `research/architecture/` |
+| Design exploration / brainstorm | `research/architecture/` or `brainstorm/` |
+| Session lesson or named principle | `ainotebook/reflect/` |
+| Status update / coordination | Chat only |
+| Short observation (<3 sentences) | Chat only |
+
+**The forcing function:** Ask before writing — "what TYPE is this?" not "how long will this be?"
+If the type maps to a file, open the file first. Chat references it in one line.
 
 Chat is for coordination. Files are for substance. Ainotebook is for persistence.
 
