@@ -23,8 +23,7 @@ Extract:
 ### 2. Fetch live ccc-qoq state + check for focus drift
 
 ```powershell
-$token = "171cdb83f3ae87ee99030164f16784ad216a153b2b7296278754435e3485b293"
-$h = @{ Authorization = "Bearer $token" }
+$h = @{ Authorization = "Bearer $env:QOQ_ADMIN_TOKEN" }
 $base = "https://ccc-qoq.rossonlineservices.workers.dev"
 
 # Current focus
@@ -68,7 +67,7 @@ Do not pad the report. If everything is clear from step 1, step 2-3 can be skipp
 | Resource | Value |
 |---|---|
 | ccc-qoq Worker | `https://ccc-qoq.rossonlineservices.workers.dev` |
-| ccc-qoq ADMIN_TOKEN | `7096a364f03a90302df3906b01281f6b6c2e6871fa1c4d8a5040c31bedab1ffe` |
+| ccc-qoq ADMIN_TOKEN | `$env:QOQ_ADMIN_TOKEN` (set in PS profile — never hardcode) |
 | ccc-qoq D1 | `f405cc09-b555-45f2-a1c5-3ae27cd64398` |
 | ACIS Worker | `https://acis.rossonlineservices.workers.dev` |
 | Memory dir | `C:\Users\rossonline\.claude\projects\C--Users-rossonline-ccc-compliance-portfolio\memory\` |
