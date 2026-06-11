@@ -12,8 +12,8 @@ version: "0.1.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09
-updated: 2026-06-09
-sweep_count: 0
+updated: 2026-06-11
+sweep_count: 3
 tags: [skill, inline-chat, protocol, meta, standing-orders, voice]
 qoq_item_id: 403
 touches:
