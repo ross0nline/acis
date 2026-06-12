@@ -13,6 +13,7 @@ import { runAttestationReminders } from './agents/attestation-reminder';
 import { runIncidentEscalation } from './agents/incident-escalation';
 import { getMemory } from './db/queries';
 import { createCompliancePR } from './services/github';
+import { createAcisMcpHandler } from './mcp';
 
 interface GatewayLog {
   id: string;
@@ -218,6 +219,19 @@ const scheduled: ExportedHandlerScheduledHandler<Env> = async (_event, env) => {
 };
 
 export default {
-  fetch: app.fetch.bind(app),
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const url = new URL(request.url);
+
+    // MCP server — exposed at /mcp, requires ADMIN_TOKEN bearer auth
+    if (url.pathname === '/mcp' || url.pathname.startsWith('/mcp/')) {
+      const token = request.headers.get('Authorization')?.replace('Bearer ', '');
+      if (!token || token !== env.ADMIN_TOKEN) {
+        return new Response('Unauthorized', { status: 401 });
+      }
+      return createAcisMcpHandler(env)(request, env, ctx);
+    }
+
+    return app.fetch(request, env, ctx);
+  },
   scheduled,
 };
