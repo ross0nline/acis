@@ -18,7 +18,7 @@ flowchart TD
   end
 
   subgraph External["External"]
-    Anthropic["Anthropic Claude\nclaudesonnet-4-6 / opus-4-7"]
+    Anthropic["Anthropic Claude\nsonnet-4-6 / opus-4-8 — src/config/models.ts"]
     Firecrawl["Firecrawl API"]
     FedReg["Federal Register API"]
     RegGov["Regulations.gov API"]
