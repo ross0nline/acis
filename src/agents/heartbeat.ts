@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { Env } from '../types';
 import { setMemory } from '../db/queries';
+import { OPUS_MODEL } from '../config/models';
 
 export interface HeartbeatReport {
   timestamp: string;
@@ -50,7 +51,7 @@ export async function runHeartbeat(env: Env): Promise<HeartbeatReport | null> {
 
   try {
     const msg = await client.messages.create({
-      model: 'claude-opus-4-8',
+      model: OPUS_MODEL,
       max_tokens: 1024,
       output_config: { effort: 'xhigh' },
       system: `You are the ACIS system health monitor for a HIPAA compliance operations platform.

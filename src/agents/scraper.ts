@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import type { Env, RegulatoryEvent, RiskScoreOutput } from '../types';
 import { insertRegulatoryEvent } from '../db/queries';
 import { createCompliancePR } from '../services/github';
+import { SONNET_MODEL } from '../config/models';
 
 // ── Federal Register sources ───────────────────────────────────────────────
 
@@ -87,7 +88,7 @@ async function parseNewsroomMarkdown(
 ): Promise<ParsedNewsItem[]> {
   try {
     const msg = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: SONNET_MODEL,
       max_tokens: 2048,
       system: 'Extract structured article data from government newsroom markdown. Return only valid JSON array.',
       messages: [{
@@ -110,7 +111,8 @@ ${markdown.slice(0, 4000)}`,
     const text = msg.content[0].type === 'text' ? msg.content[0].text : '[]';
     const cleaned = text.replace(/```json\n?|\n?```/g, '').trim();
     return JSON.parse(cleaned) as ParsedNewsItem[];
-  } catch {
+  } catch (err) {
+    console.error('[scraper:parseNewsroom] Claude parse failed:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
@@ -128,6 +130,7 @@ async function isUrlLive(url: string): Promise<boolean> {
     // 405 = HEAD not allowed but the resource exists; treat as live
     return resp.ok || resp.status === 405;
   } catch {
+    // fetch failed (timeout, DNS, TLS) — treat as dead link
     return false;
   }
 }
@@ -179,6 +182,7 @@ async function verifyUrlContent(url: string, title: string): Promise<boolean> {
     // Require at least 40% of keywords to appear — tolerant of paraphrased headlines
     return hits >= Math.ceil(keywords.length * 0.4);
   } catch {
+    // fetch failed (timeout, DNS, TLS) — treat as unverified
     return false;
   }
 }
@@ -199,7 +203,7 @@ async function scoreWithClaude(
       : 'No specific deadline mentioned';
 
     const msg = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: SONNET_MODEL,
       max_tokens: 512,
       system: `You are a HIPAA and healthcare compliance analyst for a health insurance administrator.
 Analyze regulatory documents and assess their compliance impact.
@@ -226,7 +230,8 @@ Return exactly this JSON:
     const text = msg.content[0].type === 'text' ? msg.content[0].text : '';
     const cleaned = text.replace(/```json\n?|\n?```/g, '').trim();
     return JSON.parse(cleaned) as RiskScoreOutput;
-  } catch {
+  } catch (err) {
+    console.error('[scraper:score] Claude scoring failed:', err instanceof Error ? err.message : String(err));
     return null;
   }
 }
@@ -255,7 +260,8 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
       const resp = await fetch(feed.url);
       if (!resp.ok) continue;
       data = await resp.json() as FedRegResponse;
-    } catch {
+    } catch (err) {
+      console.warn('[scraper:FedReg] fetch failed for', feed.source, ':', err instanceof Error ? err.message : String(err));
       continue;
     }
 
@@ -311,7 +317,8 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
       });
       if (!resp.ok) continue;
       data = await resp.json() as RegGovResponse;
-    } catch {
+    } catch (err) {
+      console.warn('[scraper:RegGov] fetch failed for', agencyId, ':', err instanceof Error ? err.message : String(err));
       continue;
     }
 
@@ -395,7 +402,8 @@ export async function runScraper(env: Env): Promise<{ ingested: number; skipped:
         const fcData = await resp.json() as FirecrawlResponse;
         if (!fcData.success || !fcData.data?.markdown) continue;
         markdown = fcData.data.markdown;
-      } catch {
+      } catch (err) {
+        console.warn('[scraper:Firecrawl] fetch failed for', feed.source, ':', err instanceof Error ? err.message : String(err));
         continue;
       }
 

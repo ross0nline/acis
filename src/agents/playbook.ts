@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { OPUS_MODEL } from '../config/models';
 
 export interface IncidentPlaybook {
   incident_class: string;
@@ -25,7 +26,7 @@ export async function generatePlaybook(
 ): Promise<IncidentPlaybook | null> {
   try {
     const msg = await client.messages.create({
-      model: 'claude-opus-4-8',
+      model: OPUS_MODEL,
       max_tokens: 2048,
       output_config: { effort: 'xhigh' },
       system: `You are a HIPAA Privacy and Security Officer with 15 years of healthcare compliance experience.

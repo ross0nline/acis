@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { Env, VendorRisk } from '../types';
 import { getStaleVendors, updateVendorScan } from '../db/queries';
+import { OPUS_MODEL } from '../config/models';
 
 export interface VendorScanResult {
   tls_valid: number;
@@ -71,7 +72,7 @@ export async function scanVendor(
     const overall_status = computeOverallStatus(tls_valid, headers_score);
 
     const msg = await client.messages.create({
-      model: 'claude-opus-4-8',
+      model: OPUS_MODEL,
       max_tokens: 512,
       output_config: { effort: 'xhigh' },
       system: `You are a HIPAA Business Associate security analyst. Evaluate vendor security posture based on TLS configuration and HTTP security headers. Respond with valid JSON only — no markdown, no text outside the JSON.`,
