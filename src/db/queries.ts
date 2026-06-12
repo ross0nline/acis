@@ -2,7 +2,7 @@ import type { RegulatoryEvent, AttestationRecord, VendorRisk, Incident, AgentMem
 
 // ── Regulatory Events ──────────────────────────────────────────────────────
 
-export async function getRegulatoryEvents(db: D1Database, limit = 50): Promise<RegulatoryEvent[]> {
+export async function getRegulatoryEvents(db: D1Database, limit = 200): Promise<RegulatoryEvent[]> {
   const result = await db
     .prepare('SELECT * FROM regulatory_events ORDER BY ingested_at DESC LIMIT ?')
     .bind(limit)

@@ -4,9 +4,9 @@ import { getRegulatoryEvents, insertRegulatoryEvent } from '../db/queries';
 
 export const regulatoryRoutes = new Hono<{ Bindings: Env }>();
 
-// GET /api/regulatory — list all regulatory events
+// GET /api/regulatory — list all regulatory events (default 200; pass ?limit=N to override)
 regulatoryRoutes.get('/', async (c) => {
-  const limit = Number(c.req.query('limit') ?? 50);
+  const limit = Number(c.req.query('limit') ?? 200);
   const events = await getRegulatoryEvents(c.env.ACIS_DB, limit);
   return c.json(events);
 });
