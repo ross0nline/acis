@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { RiskBadge } from './RiskBadge';
 import type { RegulatoryEvent } from '../types';
 import type { RiskFilter } from '../App';
@@ -33,6 +34,8 @@ interface Props {
 }
 
 export function LivePulse({ events, loading, riskFilter, onFilterChange }: Props) {
+  const [search, setSearch] = useState('');
+
   if (loading) return <div className="text-slate-500 text-sm">Loading regulatory feed...</div>;
 
   if (events.length === 0) {
@@ -44,7 +47,11 @@ export function LivePulse({ events, loading, riskFilter, onFilterChange }: Props
     );
   }
 
-  const filtered = events.filter(e => matchesFilter(e, riskFilter));
+  const searchLower = search.toLowerCase();
+  const filtered = events.filter(e =>
+    matchesFilter(e, riskFilter) &&
+    (!search || e.title.toLowerCase().includes(searchLower) || (e.summary ?? '').toLowerCase().includes(searchLower))
+  );
   const counts: Record<RiskFilter, number> = {
     all:    events.length,
     high:   events.filter(e => e.risk_score >= 8).length,
@@ -54,8 +61,16 @@ export function LivePulse({ events, loading, riskFilter, onFilterChange }: Props
 
   return (
     <div className="space-y-4">
-      {/* Filter chips */}
-      <div className="flex items-center gap-2">
+      {/* Search + Filter row */}
+      <div className="flex items-center gap-3 flex-wrap">
+        <input
+          type="search"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search events…"
+          className="flex-1 min-w-[200px] bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-600 transition-colors"
+        />
+        <div className="flex items-center gap-2">
         {FILTERS.map(f => (
           <button
             key={f.id}
@@ -68,6 +83,7 @@ export function LivePulse({ events, loading, riskFilter, onFilterChange }: Props
             <span className="ml-1.5 opacity-70">{counts[f.id]}</span>
           </button>
         ))}
+        </div>
       </div>
 
       {filtered.length === 0 && (
