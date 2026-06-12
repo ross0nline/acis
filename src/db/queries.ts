@@ -145,7 +145,10 @@ export async function updateVendorScan(
 
 export async function getIncidents(db: D1Database): Promise<Incident[]> {
   const result = await db
-    .prepare('SELECT * FROM incidents ORDER BY opened_at DESC')
+    .prepare(`SELECT * FROM incidents
+      ORDER BY
+        CASE status WHEN 'Open' THEN 0 WHEN 'Contained' THEN 1 WHEN 'Remediated' THEN 2 ELSE 3 END ASC,
+        opened_at ASC`)
     .all<Incident>();
   return result.results;
 }
