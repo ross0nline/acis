@@ -1,9 +1,10 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
-sweep_count: 2
+sweep_count: 3
 touches:
   - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
   - { session: post-78e6e2b4-compaction-4, action: updated, model: claude-sonnet-4-6 }
+  - { session: post-78e6e2b4-compaction-6, action: updated, model: claude-sonnet-4-6 }
 ---
 # 008 — Current Build State & Remaining Roadmap
 
@@ -112,6 +113,28 @@ runScraper → runVendorScan → runAttestationReminders → runIncidentEscalati
 - `portfolio-deploy` script enforces push-before-deploy (content fetched from GitHub at runtime)
 
 ---
+
+## MCP Server — Built (2026-06-12, #482)
+
+**ACIS MCP server** (`src/mcp.ts`) — exposes all four compliance modules as named tools at `/mcp`:
+
+| Tool | Description |
+|---|---|
+| `list_regulatory_events` | D1 regulatory events with optional risk_level filter (high/medium/low/all) and limit |
+| `list_incidents` | D1 incidents with optional status filter; urgency-sorted (Open first) |
+| `list_vendors` | D1 vendor risk records with optional status filter |
+| `list_attestations` | D1 attestation records with optional overdue_only flag |
+| `get_system_status` | Batch counts across all four modules in a single call |
+| `get_heartbeat_report` | Latest Heartbeat Agent audit from agent_memory |
+
+- Stateless pattern (`createMcpHandler`) — no Durable Object migration required
+- Auth: `Authorization: Bearer <ADMIN_TOKEN>` checked in fetch handler before MCP delegation
+- MCP client config: `mcp-remote https://acis.rossonlineservices.com/mcp --header "Authorization: Bearer TOKEN"`
+- `wrangler.toml` unchanged — `nodejs_compat` flag already present, no new bindings required
+
+**Incidents PATCH endpoint** (`src/modules/incidents.ts`)
+- `PATCH /api/incidents/:id` — update description and/or reporter fields after incident creation
+- Complements existing `PATCH /api/incidents/:id/status` for status-only changes
 
 ## Remaining Build Queue
 
