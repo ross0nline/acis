@@ -16,24 +16,25 @@ Open this alongside IMPACT.md before any significant change.
 
 | ADR | Update When |
 |---|---|
-| `001` – D1 schema | Schema migrations |
-| `002` – Regulatory Pulse | Scraper sources added/removed, scoring model changes |
-| `003` – Vendor Risk | Scanner logic changes, new scan fields |
-| `004` – Attestation Vault | New attestation types, status lifecycle changes |
-| `005` – Incident Response | Playbook prompt changes, new severity tiers |
-| `006` – Executive Hub | New tabs, major UI architecture changes |
-| `007` – Heartbeat | Self-audit query changes, new modules being evaluated |
-| `008` – Build State | **Every session that adds a feature** |
-| `009` – AI Gateway | Gateway config changes, log streaming changes |
-| `010` – Claude API Inventory | New AI calls added to any agent |
-| `011` – AI Notebook | New ADR added |
-| `012` – Scraper Sources | New source added, Firecrawl integration changes |
-| `013` – R2 Vault | New file storage patterns |
-| `014` – CCC Admin | Service binding changes, new outbound calls |
-| `015` – Resend Email | Email template changes, new email agent added |
-| `016` – Email Agents | Attestation or incident email logic changes |
-| `017` – Portfolio Viewer | Portfolio Worker architecture changes |
-| `018` – GitHub PR Automation | PR threshold changes, branch naming changes, alert file format changes |
+| `001` – Four Projects → One System | Project architecture changes fundamentally |
+| `002` – Unified Worker vs Microservices | Worker/routing architecture changes |
+| `003` – D1 Schema: Five-Table Design | Schema migrations, new tables |
+| `004` – Cloudflare Agents SDK | Agent SDK usage or memory patterns change |
+| `005` – AI Gateway as Observability Layer | Gateway routing, logging config changes |
+| `006` – Regulatory Ingestion: Three-Source Architecture | Scraper sources added/removed, scoring model changes |
+| `007` – Bypassing Bot Protection (CMS/HHS) | Firecrawl integration changes, bot bypass strategy changes |
+| `008` – Build State & Remaining Roadmap | **Every session that adds a feature** |
+| `009` – NIST 800-61 Incident Playbook Agent | Playbook prompt changes, new severity tiers, CFR citation updates |
+| `010` – Vendor Security Scanner Agent | Scanner logic changes, new scan fields, status classification changes |
+| `011` – Claude API Usage Inventory | New AI calls added to any agent |
+| `012` – Heartbeat Agent: Daily Self-Audit Loop | Self-audit query changes, new modules being evaluated |
+| `013` – Operations Tab: Admin Controls | Admin panel changes, new manual triggers |
+| `014` – Service Binding Patterns | Service binding calling conventions change |
+| `015` – Email Provider: Resend | Email service changes, from-address changes |
+| `016` – Email Notification Agents | Attestation or incident email logic changes, new email agent |
+| `017` – Portfolio Viewer | Portfolio Worker architecture, KV toggle logic changes |
+| `018` – GitHub PR Automation | PR threshold changes, branch naming, alert file format changes |
+| `019` – Multi-Agent Development Architecture | Agent delegation model, Claude Code/Cursor/Playwright roles change |
 
 ## Memory Files (`memory/`)
 
