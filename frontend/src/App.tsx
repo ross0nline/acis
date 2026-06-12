@@ -80,41 +80,48 @@ export default function App() {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
-        {/* Stats Row */}
+        {/* Stats Row — each card navigates to its module */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
-            <div className="text-2xl font-bold text-slate-100">{events.length}</div>
+          <button
+            onClick={() => { setTab('pulse'); setRiskFilter(highRiskEvents > 0 ? 'high' : 'all'); }}
+            className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-left hover:border-slate-600 transition-colors group"
+          >
+            <div className="text-2xl font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">{events.length}</div>
             <div className="text-xs text-slate-500 mt-0.5">Regulatory Events</div>
             {highRiskEvents > 0 && (
-              <button
-                onClick={() => { setTab('pulse'); setRiskFilter('high'); }}
-                className="text-xs text-red-400 mt-1 hover:text-red-300 transition-colors block"
-              >
-                {highRiskEvents} high risk →
-              </button>
+              <div className="text-xs text-red-400 mt-1">{highRiskEvents} high risk</div>
             )}
-          </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
-            <div className="text-2xl font-bold text-slate-100">
+          </button>
+          <button
+            onClick={() => setTab('attestation')}
+            className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-left hover:border-slate-600 transition-colors group"
+          >
+            <div className="text-2xl font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
               {attestation ? `${attestation.summary.rxdc_completion_pct}%` : '—'}
             </div>
             <div className="text-xs text-slate-500 mt-0.5">RxDC Completion</div>
-          </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
-            <div className="text-2xl font-bold text-slate-100">{vendors.length}</div>
+          </button>
+          <button
+            onClick={() => setTab('vendors')}
+            className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-left hover:border-slate-600 transition-colors group"
+          >
+            <div className="text-2xl font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">{vendors.length}</div>
             <div className="text-xs text-slate-500 mt-0.5">Vendors Assessed</div>
             {vendors.filter(v => v.overall_status === 'High Risk').length > 0 && (
               <div className="text-xs text-red-400 mt-1">
                 {vendors.filter(v => v.overall_status === 'High Risk').length} high risk
               </div>
             )}
-          </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
-            <div className={`text-2xl font-bold ${openIncidents > 0 ? 'text-red-400' : 'text-slate-100'}`}>
+          </button>
+          <button
+            onClick={() => setTab('incidents')}
+            className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-left hover:border-slate-600 transition-colors group"
+          >
+            <div className={`text-2xl font-bold group-hover:text-cyan-300 transition-colors ${openIncidents > 0 ? 'text-red-400' : 'text-slate-100'}`}>
               {openIncidents}
             </div>
             <div className="text-xs text-slate-500 mt-0.5">Open Incidents</div>
-          </div>
+          </button>
         </div>
 
         {/* Tabs */}
