@@ -84,6 +84,19 @@ incidentRoutes.post('/:id/playbook', async (c) => {
   return c.json({ ok: true, playbook });
 });
 
+// PATCH /api/incidents/:id — update description and/or reporter
+incidentRoutes.patch('/:id', async (c) => {
+  const body = await c.req.json();
+  const updates: string[] = [];
+  const values: unknown[] = [];
+  if (body.description !== undefined) { updates.push('description = ?'); values.push(body.description); }
+  if (body.reporter !== undefined) { updates.push('reporter = ?'); values.push(body.reporter); }
+  if (updates.length === 0) return c.json({ error: 'No updatable fields provided' }, 400);
+  values.push(Number(c.req.param('id')));
+  await c.env.ACIS_DB.prepare(`UPDATE incidents SET ${updates.join(', ')} WHERE id = ?`).bind(...values).run();
+  return c.json({ ok: true });
+});
+
 // PATCH /api/incidents/:id/status — update incident status
 incidentRoutes.patch('/:id/status', async (c) => {
   const body = await c.req.json();
