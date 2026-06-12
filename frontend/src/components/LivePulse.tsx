@@ -78,10 +78,15 @@ export function LivePulse({ events, loading, riskFilter, onFilterChange }: Props
         <div key={event.id} className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4 hover:border-slate-600/50 transition-colors">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="text-xs text-slate-500 uppercase tracking-wide">{event.source}</span>
                 <span className="text-slate-600">·</span>
                 <span className="text-xs text-slate-500">{timeAgo(event.ingested_at)}</span>
+                {event.tags && (
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                    {event.tags}
+                  </span>
+                )}
               </div>
               <a
                 href={event.url}
@@ -95,11 +100,18 @@ export function LivePulse({ events, loading, riskFilter, onFilterChange }: Props
                 <p className="text-slate-400 text-sm mt-1 line-clamp-2">{event.summary}</p>
               )}
               {event.remediation_steps && (
-                <div className="mt-2 p-2 bg-slate-900/50 rounded text-xs text-slate-400 border-l-2 border-cyan-500/50">
+                <div className="mt-2 p-2 bg-slate-900/50 rounded text-xs text-slate-400 border-l-2 border-cyan-500/50 space-y-0.5">
                   {(() => {
                     try {
                       const parsed = JSON.parse(event.remediation_steps!);
-                      return <span><strong className="text-cyan-400">Action:</strong> {parsed.remediation_step}</span>;
+                      return (
+                        <>
+                          <span className="block"><strong className="text-cyan-400">Action:</strong> {parsed.remediation_step}</span>
+                          {parsed.deadline && (
+                            <span className="block"><strong className="text-amber-400">Deadline:</strong> {parsed.deadline}</span>
+                          )}
+                        </>
+                      );
                     } catch {
                       return event.remediation_steps;
                     }
