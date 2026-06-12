@@ -1,3 +1,9 @@
+﻿---
+created_session: post-78e6e2b4-compaction-4
+sweep_count: 1
+touches:
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+---
 # ACIS AINotebook
 
 Architecture Decision Records for the Autonomous Compliance Intelligence System.
