@@ -57,7 +57,15 @@ Runs automatically        ──────▶  ↳ Green / Yellow / Red per mo
                                     ↳ Operations tab
                                         ↳ System Health (Green/Yellow/Red)
                                         ↳ Agent Logs (AI Gateway inference log)
+                                        ↳ API Tools (MCP server, Public Status API)
                                         ↳ Admin Controls (manual triggers)
+
+                                  MCP Server (Model Context Protocol)
+                                  ──────────────────────────────────
+                                  acis.rossonlineservices.com/mcp
+                                    ↳ 6 named tools for AI agents
+                                    ↳ Bearer token auth
+                                    ↳ Reads D1 directly — zero latency hop
 ```
 
 ---
@@ -93,6 +101,17 @@ Six distinct AI agents are deployed:
 | System Health Auditor | claude-opus-4-8 | Daily cron (after scraper) | Green/Yellow/Red module health report |
 | Attestation Reminder | Resend (no AI) | Daily cron | Email alert when any client attestation is Overdue |
 | Incident Escalation | Resend (no AI) | Daily cron | Email with OCR countdown when incident open 7+ days |
+
+**MCP Server** — beyond the dashboard UI, ACIS exposes all four compliance modules as named tools on a Model Context Protocol (MCP) server at `/mcp`. An AI assistant with the MCP client configured can query compliance data directly — "list all high-risk regulatory events from the past 30 days" returns structured D1 data in one tool call. This makes ACIS composable with any MCP-aware workflow or AI agent stack. Auth: Bearer token (same ADMIN_TOKEN as the admin panel).
+
+| MCP Tool | Returns |
+|---|---|
+| `list_regulatory_events` | Events with optional risk_level and limit filters |
+| `list_incidents` | Incidents with optional status filter, urgency-sorted |
+| `list_vendors` | Vendor records with optional status filter |
+| `list_attestations` | Attestation records with optional overdue_only flag |
+| `get_system_status` | Batch counts across all four modules |
+| `get_heartbeat_report` | Latest Heartbeat Agent audit report |
 
 ---
 

@@ -86,6 +86,7 @@ Claude produces a Green/Yellow/Red assessment per module and a list of specific 
 - Heartbeat Agent: structured Green/Yellow/Red report forwarded to CCC Admin (the portfolio-level admin layer) daily
 - Operations tab: System Health section provides a board-ready module status view at a glance
 - Agent Logs: every Claude inference call is logged and rendered in the Operations tab — model used, tokens, latency, pass/fail. The reasoning behind every risk scoring decision, vendor assessment, and incident playbook is visible and auditable. This is not a black box.
+- **MCP Server** at `/mcp`: all four compliance modules are exposed as named tools on a Model Context Protocol server. Any MCP-aware AI assistant can query ACIS data directly without touching the dashboard — composable with enterprise AI stacks. The same compliance data that drives the Executive Hub is machine-queryable in a single tool call.
 
 ---
 
