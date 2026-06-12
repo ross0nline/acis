@@ -6,6 +6,10 @@ status: DRAFT
 created: 2026-06-12
 created_model: claude-sonnet-4-6
 qoq_item_id: 622
+created_session: post-78e6e2b4-compaction-3
+sweep_count: 1
+touches:
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # AWS Bedrock HIPAA Reference Architecture
