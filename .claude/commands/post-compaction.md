@@ -8,16 +8,17 @@ domain: ccc-qoq
 status: APPROVED
 source_of_truth: Studio
 type: skill
-version: "0.1.0"
+version: "0.2.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09-b
-sweep_count: 0
+sweep_count: 3
 tags: [skill, compaction, context, cold-start, orientation, standing-orders]
 qoq_item_id: null
 touches:
   - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09-b, date: 2026-06-09, action: created }
   - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Step 5 now references shared standing-orders.md (fix item 393 — silo problem)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added stale-check for post_compaction_review.md, compaction summary note, agent routing table, new pitfalls, end-of-session update reminder" }
 ---
 
 # /post-compaction — Re-Orientation Protocol
@@ -41,15 +42,26 @@ infrastructure IDs. It's written specifically to survive compaction. Read it in 
 
 Then read `memory/focus_state.md` to get the last recorded focus node.
 
+**Stale-check**: Look at the `originSessionId` in the frontmatter. If it doesn't match
+the current session's context (i.e., it's from a previous session), the file is stale
+background context — not current state. Use it for infrastructure constants and key file
+paths, but don't trust its "In-Flight" section as authoritative. Plan to update it at the
+end of this protocol (Step 6).
+
 ---
 
 ## Step 1 — Read Transcript Turns (Non-Negotiable)
 
 **Minimum: last 3 turns. Target: last 10 turns. Hard cap: 10.**
 
-Summaries capture stable state but compress or omit the last few turns. In-flight
-decisions, user corrections, and new agreements made right before compaction are
-the most likely to be missing. Reading the actual turns catches:
+**Compaction summary shortcut**: Anthropic's auto-compact design preserves the most
+recent turns verbatim (or near-verbatim) in the compaction summary message. If you have
+a detailed compaction summary in your current context window, reading it carefully IS
+reading the transcript — the JSONL provides the same content. Use the JSONL read as a
+verification step when something in the summary feels incomplete or ambiguous, not as a
+required first pass.
+
+What the transcript catches that summaries often miss:
 - User corrections that contradict the summary
 - Partially completed tasks (do not restart from scratch)
 - Pending items the user named that the summary dropped
@@ -128,6 +140,28 @@ Pick up from Step 4's in-progress task. State one sentence: what you're about to
 Do not re-introduce yourself. Do not summarize the project. Do not ask what to work on
 if the transcript makes it clear. Act.
 
+**End-of-session**: Update `memory/post_compaction_review.md` before closing out any
+significant session. The next agent starts cold — leave a state that lets them act, not
+orient.
+
+---
+
+## Agent Routing
+
+When work arises that might need a specialist, route correctly:
+
+| Work type | Right agent |
+|---|---|
+| ccc-qoq system dev (schema, routes, generation engine) | Ricci (`ricci-qoq`) |
+| Live system quality audit (endpoints, crons, outputs) | QA Auditor (`acis-qa-auditor`) |
+| Protocol guidance (sweep_count, DNA frontmatter, skill conventions) | Protocol Specialist (#657 — not yet built) |
+| Script writing / C:\Scripts\ inventory | Script Specialist (#658 — not yet built) |
+| Proposal / compliance-portfolio / personal project work | Inline — no agent needed |
+| Broad codebase search | Explore agent |
+
+Do not enlist Ricci for non-ccc-qoq work. Do not enlist QA Auditor for development tasks.
+When the specialist agents are not yet built, handle protocol questions inline.
+
 ---
 
 ## Cloudflare Operations Routing
@@ -157,3 +191,6 @@ use it — it's faster, scriptable, and doesn't require browser state.
 | Asking what to work on when transcript is clear | Act on what was in-flight |
 | Missing the DNA registration for files just created | Check every file touched this session |
 | Using `&&` to chain Bash commands | Use `;` — `&&` fails in this environment |
+| Trusting stale `post_compaction_review.md` as current | Check `originSessionId` — if prior session, use for constants only |
+| Enlisting Ricci for non-ccc-qoq work | Ricci = ccc-qoq system dev only; proposal/personal work is inline |
+| Touch note claiming additions not yet in the body | Touch record must describe what was done, not what was planned |

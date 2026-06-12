@@ -13,13 +13,14 @@ created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09
 updated: 2026-06-11
-sweep_count: 3
+sweep_count: 4
 tags: [skill, inline-chat, protocol, meta, standing-orders, voice]
 qoq_item_id: 403
 touches:
   - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created, notes: "Derived from memory files: feedback_chat_length, feedback_document_dont_inline, feedback_share_reflections, feedback_ainotebook_voice" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Removed 5-sentence cap; replaced with file/no-file respond split (compact commentary vs conversational)" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction, date: 2026-06-11, action: updated, notes: "Replaced length-based routing with type-based routing table. Type determinable before writing; length-based routing loses under execution pressure." }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added .journal/ and thought-log routing rows; ainotebook/ portfolio-facing clarification; routing test question added" }
 ---
 
 # /inline-chat — Inline Chat Protocol
@@ -48,8 +49,15 @@ Length isn't — and length-based routing loses under execution pressure.
 | Trade-off analysis | `ainotebook/analysis/` or `research/architecture/` |
 | Design exploration / brainstorm | `research/architecture/` or `brainstorm/` |
 | Session lesson or named principle | `ainotebook/reflect/` |
+| AIBuddy personal voice / internal ops reflection | `.journal/YYYY-MM-DD-slug.md` — private, not git-tracked |
+| Per-session AI reasoning (why decisions were made) | `ccc-qoq/thought-log/` — session-scoped, not portfolio-facing |
 | Status update / coordination | Chat only |
 | Short observation (<3 sentences) | Chat only |
+
+**The ainotebook/ is portfolio-facing.** Anything that reads as internal ops voice, agent
+routing decisions, personal reflection, or session debrief does NOT go there. Ask: "Would
+a hiring manager reading this repo understand why it's here?" If no — `.journal/` or
+thought-log.
 
 **The forcing function:** Ask before writing — "what TYPE is this?" not "how long will this be?"
 If the type maps to a file, open the file first. Chat references it in one line.
@@ -210,7 +218,9 @@ improve, and compound. One-off prompts evaporate.
 | Content type | Where it goes |
 |---|---|
 | Architecture decision | `ainotebook/adr/adr-NNN-slug.md` |
-| Session insight / lesson | `ainotebook/reflect/reflect-NNN-slug.md` |
+| Session insight / lesson (portfolio-safe) | `ainotebook/reflect/reflect-NNN-slug.md` |
+| Per-session AI reasoning / decision rationale | `ccc-qoq/thought-log/YYYY-MM-DD-slug.md` |
+| AIBuddy personal voice / internal ops reflection | `.journal/YYYY-MM-DD-slug.md` |
 | Design exploration | `research/architecture/slug.md` |
 | Trade-off analysis | `research/architecture/slug.md` or `ainotebook/analysis/` |
 | Brainstorm dump | `C:\Users\rossonline\ccc\brainstorm\slug.md` |
