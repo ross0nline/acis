@@ -275,6 +275,49 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
         )}
       </section>
 
+      {/* ── API Tools ───────────────────────────────────────────────── */}
+      <section>
+        <div className="mb-4">
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">API Tools</h2>
+          <p className="text-xs text-slate-600 mt-0.5">Machine-readable interfaces for ACIS compliance data</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-xs font-medium text-slate-300 mb-1">MCP Server</div>
+                <div className="text-xs text-slate-500 mb-2">
+                  6 named tools for AI agents — list events, incidents, vendors, attestations, system status, heartbeat.
+                  Requires Bearer token.
+                </div>
+                <code className="text-xs text-cyan-400/80 bg-slate-950 px-2 py-1 rounded font-mono">
+                  /mcp
+                </code>
+              </div>
+              <span className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                Live
+              </span>
+            </div>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-xs font-medium text-slate-300 mb-1">Public Status API</div>
+                <div className="text-xs text-slate-500 mb-2">
+                  JSON summary of all module counts and heartbeat status. Consumed by CCC Admin dashboard.
+                </div>
+                <code className="text-xs text-cyan-400/80 bg-slate-950 px-2 py-1 rounded font-mono">
+                  GET /api/status
+                </code>
+              </div>
+              <span className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                Live
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Admin Controls ──────────────────────────────────────────── */}
       <section className="border border-slate-800 rounded-lg overflow-hidden">
         <button

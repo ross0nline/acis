@@ -50,7 +50,7 @@ export function VendorBoard({ vendors, loading }: Props) {
               )}
             </div>
             <div className="text-xs text-slate-500 shrink-0">
-              {new Date(v.scanned_at).toLocaleDateString()}
+              {v.scanned_at ? new Date(v.scanned_at).toLocaleDateString() : 'Never scanned'}
             </div>
           </div>
         </div>
