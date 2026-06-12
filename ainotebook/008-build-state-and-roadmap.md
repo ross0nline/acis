@@ -13,8 +13,8 @@ flowchart LR
         RP["Regulatory Pulse\nReal scraper + Claude scoring\n5 sources, daily cron\n64 events in DB"]
         AV["Attestation Vault\nFull CRUD + status lifecycle\nRxDC + Gag Clause tracking\n8 client records seeded"]
         IR["Incident Response\nDB + API + status lifecycle: done\nNIST 800-61 playbook agent: LIVE\nAuto-generates on every new incident"]
-        VR["Vendor Risk\nDB + API + scanner agent: LIVE\nReal TLS + 6-header scoring (0–100)\nclaude-opus-4-7 risk summary\nDaily cron rescans stale vendors"]
-        HB["Heartbeat Agent\nDaily cron after all agents\n13-query D1 batch, claude-opus-4-7\nGreen/Yellow/Red per module\nPOST /api/heartbeat/run"]
+        VR["Vendor Risk\nDB + API + scanner agent: LIVE\nReal TLS + 6-header scoring (0–100)\nclaude-opus-4-8 risk summary\nDaily cron rescans stale vendors"]
+        HB["Heartbeat Agent\nDaily cron after all agents\n13-query D1 batch, claude-opus-4-8\nGreen/Yellow/Red per module\nPOST /api/heartbeat/run"]
         OT["Operations Tab\nSystem Health (Green/Yellow/Red)\nAgent Logs (AI Gateway streaming)\nAdmin Controls (token-gated triggers)"]
         AR["Attestation Reminders\nDaily cron — Resend email\nFires when rxdc or gag_clause = Overdue"]
         IE["Incident Escalation\nDaily cron — Resend email\n7-day stale trigger\nHIPAA OCR countdown in subject line"]
@@ -54,7 +54,7 @@ flowchart LR
 - **Daily cron:** `runVendorScan(env)` queries `getStaleVendors()` — vendors where `scanned_at IS NULL OR scanned_at < datetime('now', '-30 days')`
 - Scanner: HEAD-fetches vendor URL with 10s timeout, inspects 6 security headers, computes 0–100 `headers_score`
 - Headers scored: HSTS (20), CSP (20), X-Frame-Options (15), X-Content-Type-Options (15), Referrer-Policy (15), Permissions-Policy (15)
-- `claude-opus-4-7` produces HIPAA-framed `ai_risk_summary` and `overall_status` (Approved / Requires Review / High Risk / Pending Review)
+- `claude-opus-4-8` produces HIPAA-framed `ai_risk_summary` and `overall_status` (Approved / Requires Review / High Risk / Pending Review)
 - `updateVendorScan()` writes computed results + refreshes `scanned_at`
 
 ## Email Agents — Complete

@@ -7,7 +7,7 @@
 
 ## Decision
 
-ACIS computes real vendor security posture on demand rather than storing static seed values. A scanner agent (`src/agents/vendor-scanner.ts`) HEAD-fetches each vendor URL, inspects HTTP security headers for a 0–100 score, then passes findings to `claude-opus-4-7` for a HIPAA-framed risk summary and `overall_status` classification. Results are written back to D1 with a refreshed `scanned_at` timestamp.
+ACIS computes real vendor security posture on demand rather than storing static seed values. A scanner agent (`src/agents/vendor-scanner.ts`) HEAD-fetches each vendor URL, inspects HTTP security headers for a 0–100 score, then passes findings to `claude-opus-4-8` for a HIPAA-framed risk summary and `overall_status` classification. Results are written back to D1 with a refreshed `scanned_at` timestamp.
 
 Two endpoints expose the scanner: `POST /api/vendors/:id/scan` (single vendor) and `POST /api/vendors/scan-all` (parallel batch), both admin-auth gated.
 
@@ -47,7 +47,7 @@ These are the six headers in OWASP's Secure Headers Project that consistently ap
 
 TLS is checked separately: if the URL protocol is `https:` and the fetch succeeds, `tls_valid = 1`. TLS failure counts heavily against the vendor in Claude's assessment logic regardless of `headers_score`.
 
-### claude-opus-4-7 for narrative + classification
+### claude-opus-4-8 for narrative + classification
 
 The Claude call receives TLS status, `headers_score`, and the explicit list of present/missing headers. It returns two fields:
 
@@ -63,7 +63,7 @@ The prompt includes explicit status-determination logic so Claude applies consis
 | No TLS OR score < 40 | High Risk |
 | Fetch failed entirely | Pending Review |
 
-Using `claude-opus-4-7` (rather than Sonnet) here matters: the HIPAA-specific framing of risk — naming which missing header creates what attack surface for a covered entity — benefits from the stronger model's regulatory depth.
+Using `claude-opus-4-8` (rather than Sonnet) here matters: the HIPAA-specific framing of risk — naming which missing header creates what attack surface for a covered entity — benefits from the stronger model's regulatory depth.
 
 ### On-demand scanning, not cron
 

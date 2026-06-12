@@ -114,7 +114,7 @@ Each magnet's `metadata` JSON may contain:
 
 ```json
 {
-  "recommended_model": "claude-opus-4-7",
+  "recommended_model": "claude-opus-4-8",
   "urls": ["https://..."],
   "key_turns": ["session:78e6e2b4 turn:42 — ADR-005 written"],
   "tags": ["architecture", "watch", "esp32"],

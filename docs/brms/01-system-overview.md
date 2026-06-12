@@ -70,7 +70,7 @@ Runs automatically        ──────▶  ↳ Green / Yellow / Red per mo
 | Database | Cloudflare D1 (SQLite at the edge) |
 | File Storage | Cloudflare R2 (document vault) |
 | Frontend | Cloudflare Pages (React + Tailwind) |
-| AI | Anthropic Claude (claude-opus-4-7, claude-sonnet-4-6) |
+| AI | Anthropic Claude (claude-opus-4-8, claude-sonnet-4-6) |
 | AI Observability | Cloudflare AI Gateway (all inference logged) |
 | Scraping | Firecrawl API (bypasses CMS/HHS bot protection) |
 | Regulatory Data | Federal Register API, Regulations.gov API |
@@ -88,9 +88,9 @@ Six distinct AI agents are deployed:
 | Agent | Model | Trigger | Purpose |
 |---|---|---|---|
 | Regulatory Risk Scorer | claude-sonnet-4-6 | Daily cron (per document) | Risk level, impacted field, remediation step, deadline |
-| NIST Playbook Generator | claude-opus-4-7 | On incident creation | NIST 800-61 playbook with HIPAA-specific obligations |
-| Vendor Security Assessor | claude-opus-4-7 | On demand | HIPAA Business Associate risk classification |
-| System Health Auditor | claude-opus-4-7 | Daily cron (after scraper) | Green/Yellow/Red module health report |
+| NIST Playbook Generator | claude-opus-4-8 | On incident creation | NIST 800-61 playbook with HIPAA-specific obligations |
+| Vendor Security Assessor | claude-opus-4-8 | On demand | HIPAA Business Associate risk classification |
+| System Health Auditor | claude-opus-4-8 | Daily cron (after scraper) | Green/Yellow/Red module health report |
 | Attestation Reminder | Resend (no AI) | Daily cron | Email alert when any client attestation is Overdue |
 | Incident Escalation | Resend (no AI) | Daily cron | Email with OCR countdown when incident open 7+ days |
 

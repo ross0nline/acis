@@ -7,7 +7,7 @@
 
 ## Decision
 
-ACIS runs a daily self-audit after the regulatory scraper completes. The Heartbeat agent queries all four compliance modules in a single D1 batch, passes the metrics to `claude-opus-4-7` for a structured Green/Yellow/Red health assessment, persists the report to `agent_memory`, and forwards a summary to CCC Admin via Service Binding. This is the "autonomous" in ACIS — the system monitors itself and reports up without human initiation.
+ACIS runs a daily self-audit after the regulatory scraper completes. The Heartbeat agent queries all four compliance modules in a single D1 batch, passes the metrics to `claude-opus-4-8` for a structured Green/Yellow/Red health assessment, persists the report to `agent_memory`, and forwards a summary to CCC Admin via Service Binding. This is the "autonomous" in ACIS — the system monitors itself and reports up without human initiation.
 
 ---
 
@@ -64,7 +64,7 @@ A pure rule-based approach (`if overdue > 0 → Yellow`) would work for the clas
 - Produce 0–3 `action_items` that a compliance administrator can act on today
 - Produce an `overall_status` that synthesizes across all four modules
 
-Using `claude-opus-4-7` here (rather than Sonnet) is deliberate: the summary text may be read directly by a hiring manager viewing the CCC Admin dashboard. The regulatory framing ("RxDC submission", "HIPAA breach notification window") should be accurate and specific, not generic.
+Using `claude-opus-4-8` here (rather than Sonnet) is deliberate: the summary text may be read directly by a hiring manager viewing the CCC Admin dashboard. The regulatory framing ("RxDC submission", "HIPAA breach notification window") should be accurate and specific, not generic.
 
 ### HeartbeatReport schema
 
