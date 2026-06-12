@@ -22,7 +22,7 @@ This project builds ACIS (Autonomous Compliance Intelligence System) — a produ
 - **Frontend:** Cloudflare Pages — React + Tailwind, deployed as `acis-executive-hub`
 - **Database:** Cloudflare D1 — `acis-db` (SQLite at the edge)
 - **File Storage:** Cloudflare R2 — `acis-vault`
-- **AI:** Anthropic Claude — `claude-opus-4-7` (vendor scanner, heartbeat, playbook); `claude-sonnet-4-6` (regulatory scraper)
+- **AI:** Anthropic Claude — `claude-opus-4-8` (vendor scanner, heartbeat, playbook); `claude-sonnet-4-6` (regulatory scraper)
 - **AI Observability:** Cloudflare AI Gateway (`acis-gateway`) — all inference logged; visible in Operations tab
 - **Scraping:** Firecrawl API — bypasses CMS/HHS bot protection
 - **Regulatory Data:** Federal Register API, Regulations.gov API
@@ -39,8 +39,8 @@ All four compliance modules and six AI agents are live.
 |---|---|---|
 | Regulatory Pulse | **Live** | 5-source scraper, Claude sonnet-4-6 scoring, daily 08:00 UTC cron |
 | Attestation Vault | **Live** | RxDC + Gag Clause lifecycle, 8 client plans |
-| Vendor Risk | **Live** | Real TLS + 6-header scoring, claude-opus-4-7 HIPAA assessment, 6 vendors |
-| Incident Response | **Live** | NIST 800-61 playbooks auto-generated on creation, claude-opus-4-7 |
+| Vendor Risk | **Live** | Real TLS + 6-header scoring, claude-opus-4-8 HIPAA assessment, 6 vendors |
+| Incident Response | **Live** | NIST 800-61 playbooks auto-generated on creation, claude-opus-4-8 |
 | Attestation Reminders | **Live** | Daily Resend email when any record is Overdue |
 | Incident Escalation | **Live** | Daily Resend email for Open incidents 7+ days; HIPAA OCR countdown |
 | Heartbeat Agent | **Live** | Daily self-audit (13-query D1 batch), Green/Yellow/Red, reports to CCC Admin |
