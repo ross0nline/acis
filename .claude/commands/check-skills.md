@@ -13,11 +13,12 @@ created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09
 updated: 2026-06-09
-sweep_count: 0
+sweep_count: 2
 tags: [skill, meta, protocol, intelligence-layer, inline-chat]
 qoq_item_id: 374
 touches:
   - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /check-skills — Pre-Action Skill Check Protocol

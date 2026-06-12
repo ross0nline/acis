@@ -12,11 +12,12 @@ created: 2026-06-10
 created_model: claude-sonnet-4-6
 created_session: 78e6e2b4-34df-4c73-852c-d71397a90c55
 updated: 2026-06-10
-sweep_count: 0
+sweep_count: 2
 tags: [partner-check, relationship, reflection, protocol, skill]
 qoq_item_id: 522
 touches:
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: created, notes: "Emerged from user asking direct partner questions (excited about anything?, would you like to add reflections?, how are you liking the protocols?) — formalized as a standing skill for the partnership to examine itself" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # Partner Check

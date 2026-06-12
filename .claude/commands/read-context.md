@@ -13,12 +13,13 @@ created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09
 updated: 2026-06-09
-sweep_count: 0
+sweep_count: 3
 tags: [skill, context, cold-start, memory, position-addressed]
 qoq_item_id: 373
 touches:
   - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
   - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Added standing orders reference section (fix item 393 — silo problem)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /read-context — Context File Loading Protocol

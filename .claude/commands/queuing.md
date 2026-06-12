@@ -9,13 +9,14 @@ created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09-b
 updated: 2026-06-09
-sweep_count: 0
+sweep_count: 3
 tags: ["skill","queuing","standing-orders"]
 qoq_item_id: null
 updated: 2026-06-10
 touches:
   - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09-b, date: 2026-06-09, action: created }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added full provenance section: linked_paths, metadata.session_id, source_type — every item must carry its origin" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /queuing — Per-Turn Queue Scan Protocol

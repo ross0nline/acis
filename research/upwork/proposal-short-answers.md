@@ -22,6 +22,8 @@ qoq_item_id: 625
 > - **Vendor scanner** (Opus 4.8): combines live TLS + security-header scoring with a HIPAA Business Associate risk narrative.
 >
 > Every agent has bounded `max_tokens`, structured output parsing with error fallback, and routes through an AI Gateway that logs request metadata without capturing PHI payload content. This is the same architecture PreClear Intake and Scan need — rubric-based AI evaluation of clinical documentation against payer-specific criteria is the same mechanic as regulatory scoring, different domain.
+>
+> I also built a standalone prior authorization rubric scorer specifically for this engagement, deployed on AWS Lambda + API Gateway via Amazon Bedrock. It scores clinical notes against three payer criteria (medical necessity, ICD-10 specificity, conservative treatment documentation) and returns a structured JSON response with per-criterion status and fix language. PHI-safe CloudWatch logging is enforced at the function level — the note field is structurally excluded from all log calls. Live endpoint: `https://h3fv5e1t4k.execute-api.us-east-1.amazonaws.com/score`
 
 ---
 
