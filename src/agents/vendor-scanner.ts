@@ -9,6 +9,17 @@ export interface VendorScanResult {
   overall_status: VendorRisk['overall_status'];
 }
 
+function computeOverallStatus(
+  tls_valid: number,
+  headers_score: number,
+): VendorRisk['overall_status'] {
+  if (tls_valid === 0 && headers_score === 0) return 'Pending Review';
+  if (tls_valid === 0) return 'High Risk';
+  if (headers_score >= 70) return 'Approved';
+  if (headers_score >= 40) return 'Requires Review';
+  return 'High Risk';
+}
+
 const SCORED_HEADERS: Array<{ name: string; points: number }> = [
   { name: 'strict-transport-security', points: 20 },
   { name: 'content-security-policy', points: 20 },
@@ -57,6 +68,8 @@ export async function scanVendor(
   }
 
   try {
+    const overall_status = computeOverallStatus(tls_valid, headers_score);
+
     const msg = await client.messages.create({
       model: 'claude-opus-4-8',
       max_tokens: 512,
@@ -70,30 +83,24 @@ TLS Valid: ${tls_valid ? 'Yes' : 'No'}
 Security Headers Score: ${headers_score}/100
 Headers Present: ${headers_found.length ? headers_found.join(', ') : 'None'}
 Headers Missing: ${headers_missing.length ? headers_missing.join(', ') : 'None'}
+Status: ${overall_status}
 
 Return exactly this JSON:
 {
-  "ai_risk_summary": "2-3 sentences assessing this vendor's security posture and HIPAA Business Associate risk",
-  "overall_status": "Approved" | "Pending Review" | "Requires Review" | "High Risk"
-}
-
-Status determination:
-- Approved: TLS valid AND headers_score >= 70
-- Requires Review: TLS valid AND headers_score 40–69, OR no TLS AND headers_score >= 60
-- High Risk: no TLS OR headers_score < 40
-- Pending Review: fetch failed entirely (tls_valid=0 and headers_score=0)`,
+  "ai_risk_summary": "2-3 sentences assessing this vendor's security posture and HIPAA Business Associate risk, explaining the specific gaps and why they matter for a covered entity"
+}`,
       }],
     });
 
     const text = msg.content[0].type === 'text' ? msg.content[0].text : '';
     const cleaned = text.replace(/```json\n?|\n?```/g, '').trim();
-    const parsed = JSON.parse(cleaned) as Pick<VendorScanResult, 'ai_risk_summary' | 'overall_status'>;
+    const parsed = JSON.parse(cleaned) as Pick<VendorScanResult, 'ai_risk_summary'>;
 
     return {
       tls_valid,
       headers_score,
       ai_risk_summary: parsed.ai_risk_summary,
-      overall_status: parsed.overall_status,
+      overall_status,
     };
   } catch (err) {
     console.error('[vendor-scanner] Claude assessment failed:', err instanceof Error ? err.message : String(err));
