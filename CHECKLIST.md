@@ -35,6 +35,8 @@ Open this alongside IMPACT.md before any significant change.
 | `017` – Portfolio Viewer | Portfolio Worker architecture, KV toggle logic changes |
 | `018` – GitHub PR Automation | PR threshold changes, branch naming, alert file format changes |
 | `019` – Multi-Agent Development Architecture | Agent delegation model, Claude Code/Cursor/Playwright roles change |
+| `020` – Cloudflare Workers MCP SDK Reference | MCP implementation patterns, auth strategy, DO vs. stateless choice changes |
+| `021` – Model Constants Centralization | Model string assignments change, new agents added, model upgrades |
 
 ## Memory Files (`memory/`)
 
