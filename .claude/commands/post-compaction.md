@@ -12,13 +12,14 @@ version: "0.2.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09-b
-sweep_count: 3
+sweep_count: 4
 tags: [skill, compaction, context, cold-start, orientation, standing-orders]
 qoq_item_id: null
 touches:
   - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09-b, date: 2026-06-09, action: created }
-  - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Step 5 now references shared standing-orders.md (fix item 393 — silo problem)" }
+  - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Step 5 now references shared standing-orders.md (fix item 393 -- silo problem)" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added stale-check for post_compaction_review.md, compaction summary note, agent routing table, new pitfalls, end-of-session update reminder" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-6, date: 2026-06-12, action: updated, notes: "Added Step 3.5 -- event log check to identify work already done before compaction (#513)" }
 ---
 
 # /post-compaction — Re-Orientation Protocol
@@ -107,6 +108,37 @@ Compare live focus to `memory/focus_state.md`. If they differ:
 - User changed focus manually between sessions
 - Update `memory/focus_state.md` to match live
 - Proceed with the live focus node, not the stale memory
+
+---
+
+## Step 3.5 — Check Event Log for Work Already Done This Session
+
+Before surfacing pending work, read the session-context artifact to see if any work
+has already been done in this session (e.g., files touched, items closed). This prevents
+re-doing work that happened before compaction.
+
+```powershell
+$env:QOQ_ADMIN_TOKEN = "171cdb83f3ae87ee99030164f16784ad216a153b2b7296278754435e3485b293"
+$h = @{ Authorization = "Bearer $env:QOQ_ADMIN_TOKEN" }
+$ctx = Invoke-RestMethod "https://ccc-qoq.rossonlineservices.workers.dev/generated/session-context" -Headers $h
+Write-Host $ctx.data
+```
+
+The **DNA Activity Today** section shows sessions and file touches logged today. If
+`sessions today > 0`, work has already happened — scan the event log for what was done:
+
+```powershell
+$env:QOQ_ADMIN_TOKEN = "171cdb83f3ae87ee99030164f16784ad216a153b2b7296278754435e3485b293"
+$h = @{ Authorization = "Bearer $env:QOQ_ADMIN_TOKEN" }
+$base = "https://ccc-qoq.rossonlineservices.workers.dev"
+$evts = Invoke-RestMethod "$base/events?limit=20" -Headers $h
+$evts.data | Select-Object event_type, entity_id, summary, created_at | Format-Table -AutoSize
+```
+
+Use these results to:
+- Identify queue items already closed this session (skip re-closing)
+- Identify files already DNA-registered this session (skip re-registering)
+- Identify any in-flight mutation that may have 1101'd (verify before retrying)
 
 ---
 
