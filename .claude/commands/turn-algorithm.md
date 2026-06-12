@@ -8,8 +8,7 @@ version: "0.1.0"
 created: 2026-06-10
 created_model: claude-sonnet-4-6
 created_session: 78e6e2b4-34df-4c73-852c-d71397a90c55
-updated: 2026-06-11
-sweep_count: 15
+updated: 2026-06-12
 tags: [turn-algorithm, protocol, per-turn, pseudo-code, standing-orders]
 qoq_item_id: 487
 touches:
@@ -28,6 +27,8 @@ touches:
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Updated global skill fallback to reference ~/.claude/skill-index.md (item #595)" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Fixed sweep_count rule: sweep_count = total touch count, not swept-action counter. Removed stale DB comment." }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added sequence-surface step to RESPOND block (#606) — tierAndRank pending queue when 3+ items, replaces single-next." }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-12, action: updated, notes: "Added version bump trigger to POST-WORK: SKILL/ALGORITHM REVIEW block (#532). Bump minor when behavior changes; bump patch when fixing errors." }
+sweep_count: 16
 ---
 
 # Turn Algorithm
@@ -265,6 +266,18 @@ fn turn(userMessage):
       update turn-algorithm.md         // e.g. new routing rule, new phase, new gate
     // Skills encode prior pain. Wins that aren't encoded evaporate between sessions.
     // One check per turn. Skills compound; one-off prompts do not.
+
+    // VERSION BUMP TRIGGERS — required when editing any skill or algorithm file
+    // Bump MINOR (0.1.0 → 0.2.0) when:
+    //   - New section added to a skill
+    //   - Protocol behavior changes (new step, changed gate, new routing rule)
+    //   - Any change that would alter how the skill governs future turns
+    // Bump PATCH (0.1.0 → 0.1.1) when:
+    //   - Fixing incorrect information, outdated fields, stale references
+    //   - Correcting sweep_count, typos, touch record gaps
+    //   - No behavioral change — documentation accuracy only
+    // The version field must update in the SAME edit call as the sweep_count/touch update
+    // (same-edit rule — never split frontmatter updates across separate Edit calls)
 
   // ── POST-WORK: REFLECTION GATE ────────────────────────────────────────────
   // Did this turn surface something worth framing persistently in its own voice?
