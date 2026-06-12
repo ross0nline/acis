@@ -81,6 +81,12 @@ High-risk regulatory findings (score ≥ 8) automatically open GitHub pull reque
 
 ---
 
+## Related Work
+
+**Prior-Auth Readiness Scorer** — a companion proof of concept applying the same compliance-first patterns on AWS: CDK-defined Lambda + API Gateway scoring clinical prior-authorization notes against a payer rubric via Amazon Bedrock, with PHI-safe structured logging (the clinical note never reaches CloudWatch). Live at `POST https://h3fv5e1t4k.execute-api.us-east-1.amazonaws.com/score`.
+
+---
+
 ## Built By
 
 Solo-built by [ross0nline](https://github.com/ross0nline) with [AIBuddy](https://github.com/apps/claude) as co-author on all commits.
