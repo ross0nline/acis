@@ -1,8 +1,9 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
-sweep_count: 1
+sweep_count: 2
 touches:
   - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+  - { session: post-78e6e2b4-compaction-4, action: updated, model: claude-sonnet-4-6 }
 ---
 # 008 — Current Build State & Remaining Roadmap
 
@@ -116,6 +117,30 @@ runScraper → runVendorScan → runAttestationReminders → runIncidentEscalati
 
 1. **CCC Admin `/api/status` endpoint** — ACIS exposes structural state; CCC Admin polls it for dynamic build tracking
 2. **Admin subdomain data explorer** — `admin.rossonlineservices.com`; AppSheets-style table CRUD for D1 modules (regulatory_events, attestation, vendors, incidents); first feature of the private admin panel
+
+## Code Quality Improvements (2026-06-12)
+
+**Model constants centralization** (`src/config/models.ts`)
+- `OPUS_MODEL = 'claude-opus-4-8'` and `SONNET_MODEL = 'claude-sonnet-4-6'` exported from one file
+- All 4 agents (vendor-scanner, heartbeat, playbook, scraper) import from constants — future model upgrades are a one-file change
+
+**Vendor scanner deterministic status** (`src/agents/vendor-scanner.ts`)
+- `computeOverallStatus()` replaces Claude-generated `overall_status` — logic is deterministic TypeScript
+- Claude now only generates `ai_risk_summary`; status classification never depends on LLM variance
+- Rules: `tls_valid=0 && score=0 → Pending Review` | `tls_valid=0 → High Risk` | `score≥70 → Approved` | `score≥40 → Requires Review`
+
+**Scraper structured error logging** (`src/agents/scraper.ts`)
+- 7 silent `catch {}` blocks replaced with `console.error`/`console.warn` calls
+- Claude failures (parse, score) log at `error` level; network failures log at `warn` with source context
+- URL probe failures (isUrlLive, verifyUrlContent) remain silent with explanatory comments — expected behavior
+
+**Executive Hub UI enhancements** (`frontend/src/`)
+- All 4 stat cards are now clickable navigation shortcuts (pulse → high-risk filter, attestation, vendors, incidents)
+- Regulatory event cards surface `tags` (RxDC, HIPAA, etc.) as cyan badge and `deadline` in amber when present
+- Admin Controls trigger grid fixed to responsive 2-col/4-col layout; model name corrected to `claude-opus-4-8`
+- VendorBoard: dead JSON.parse on `ai_risk_summary` removed (field is stored as plain string)
+
+---
 
 ## GitHub PR Automation — Complete (2026-04-27)
 
