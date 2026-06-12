@@ -45,14 +45,7 @@ export function VendorBoard({ vendors, loading }: Props) {
               </div>
               {v.ai_risk_summary && (
                 <div className="mt-2 p-2 bg-slate-900/50 rounded text-xs text-slate-400 border-l-2 border-cyan-500/50">
-                  {(() => {
-                    try {
-                      const parsed = JSON.parse(v.ai_risk_summary!);
-                      return parsed.summary ?? v.ai_risk_summary;
-                    } catch {
-                      return v.ai_risk_summary;
-                    }
-                  })()}
+                  {v.ai_risk_summary}
                 </div>
               )}
             </div>

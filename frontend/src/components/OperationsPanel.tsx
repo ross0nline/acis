@@ -327,11 +327,11 @@ export function OperationsPanel({ onDataRefresh }: OperationsPanelProps) {
             {/* Triggers */}
             <div>
               <div className="text-xs text-slate-500 mb-3">Manual Triggers</div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {([
                   { label: 'Run Scraper',      desc: 'Ingest today\'s regulatory events from all 5 sources',    state: scraperState,   run: runScraper },
                   { label: 'Run Heartbeat',    desc: 'Audit all four modules and update System Health above',  state: heartbeatState, run: runHeartbeat },
-                  { label: 'Scan All Vendors', desc: 'TLS + security header scan via claude-opus-4-7',        state: scanState,      run: scanAll },
+                  { label: 'Scan All Vendors', desc: 'TLS + security header scan via claude-opus-4-8',        state: scanState,      run: scanAll },
                   { label: 'Test Alert Email', desc: 'Send a synthetic compliance alert PR + email to inbox', state: emailState,     run: testEmail },
                 ] as const).map(({ label, desc, state, run }) => (
                   <div key={label} className="bg-slate-950 border border-slate-800 rounded-lg p-4 flex flex-col gap-3">
