@@ -19,9 +19,20 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'operations',  label: 'Operations',    icon: '⚙️' },
 ];
 
+function tabFromHash(): Tab {
+  const hash = window.location.hash.replace('#', '') as Tab;
+  const valid: Tab[] = ['pulse', 'attestation', 'vendors', 'incidents', 'operations'];
+  return valid.includes(hash) ? hash : 'pulse';
+}
+
 export default function App() {
-  const [tab, setTab] = useState<Tab>('pulse');
+  const [tab, setTab] = useState<Tab>(tabFromHash);
   const [riskFilter, setRiskFilter] = useState<RiskFilter>('all');
+
+  const navigateTab = useCallback((t: Tab) => {
+    setTab(t);
+    window.location.hash = t;
+  }, []);
 
   const [events, setEvents] = useState<RegulatoryEvent[]>([]);
   const [attestation, setAttestation] = useState<AttestationResponse | null>(null);
@@ -83,7 +94,7 @@ export default function App() {
         {/* Stats Row — each card navigates to its module */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <button
-            onClick={() => { setTab('pulse'); setRiskFilter(highRiskEvents > 0 ? 'high' : 'all'); }}
+            onClick={() => { navigateTab('pulse'); setRiskFilter(highRiskEvents > 0 ? 'high' : 'all'); }}
             className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-left hover:border-slate-600 transition-colors group"
           >
             <div className="text-2xl font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">{events.length}</div>
@@ -93,7 +104,7 @@ export default function App() {
             )}
           </button>
           <button
-            onClick={() => setTab('attestation')}
+            onClick={() => navigateTab('attestation')}
             className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-left hover:border-slate-600 transition-colors group"
           >
             <div className="text-2xl font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
@@ -102,7 +113,7 @@ export default function App() {
             <div className="text-xs text-slate-500 mt-0.5">RxDC Completion</div>
           </button>
           <button
-            onClick={() => setTab('vendors')}
+            onClick={() => navigateTab('vendors')}
             className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-left hover:border-slate-600 transition-colors group"
           >
             <div className="text-2xl font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">{vendors.length}</div>
@@ -114,7 +125,7 @@ export default function App() {
             )}
           </button>
           <button
-            onClick={() => setTab('incidents')}
+            onClick={() => navigateTab('incidents')}
             className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-left hover:border-slate-600 transition-colors group"
           >
             <div className={`text-2xl font-bold group-hover:text-cyan-300 transition-colors ${openIncidents > 0 ? 'text-red-400' : 'text-slate-100'}`}>
@@ -130,7 +141,7 @@ export default function App() {
             {TABS.map(t => (
               <button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => navigateTab(t.id)}
                 className={`shrink-0 whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                   tab === t.id
                     ? 'border-cyan-500 text-cyan-400'
@@ -142,6 +153,11 @@ export default function App() {
                 {t.id === 'incidents' && openIncidents > 0 && (
                   <span className="ml-1.5 px-1.5 py-0.5 text-xs bg-red-500/20 text-red-400 rounded-full">
                     {openIncidents}
+                  </span>
+                )}
+                {t.id === 'pulse' && highRiskEvents > 0 && (
+                  <span className="ml-1.5 px-1.5 py-0.5 text-xs bg-red-500/20 text-red-400 rounded-full">
+                    {highRiskEvents}
                   </span>
                 )}
               </button>
