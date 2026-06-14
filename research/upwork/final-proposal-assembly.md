@@ -2,7 +2,7 @@
 title: "Final Proposal Assembly — PreClear MD (Upwork)"
 type: research
 domain: personal
-status: READY_FOR_REVIEW
+status: READY_FOR_SUBMISSION
 created: 2026-06-12
 created_model: claude-sonnet-4-6
 created_session: post-78e6e2b4-compaction-4
@@ -17,16 +17,18 @@ touches:
 
 # Final Proposal — PreClear MD (Upwork)
 
-**Status: READY FOR USER REVIEW — all 7 required elements complete**  
-**Bid rate: $95/hr** | **Estimated hours: ~420 (12 weeks at 35 hrs/wk)** | **Total estimate: ~$39,900**
+**Status: SUBMITTED 2026-06-14**  
+**Bid rate: $95/hr** | **Estimated hours: ~420 (12 weeks at 35 hrs/wk)** | **Total estimate: ~$39,900**  
+**Proposal ID: 2066027671572688897** | **Connects spent: 26** | **Remaining: 173**
 
-Before submitting:
-- [ ] Verify #635 — Upwork profile title, rate, ACIS entry, and skills list updated
-- [ ] Verify acis.rossonlineservices.com is live and responsive
-- [ ] Verify github.com/ross0nline/acis is public and pinned on profile
-- [ ] Update GitHub profile bio + website per `research/upwork/github-profile-readme.md`
-- [ ] Push GitHub profile README to ross0nline/ross0nline
-- [ ] Replace `[YOUR_UPWORK_PROFILE_LINK]` below with actual URL
+Pre-submission checklist:
+- [x] Verify #635 — Upwork profile title ("HIPAA Full-Stack Engineer | Claude / Bedrock / AWS / Cloudflare"), rate ($95/hr), skills updated (done 2026-06-14)
+- [x] Verify acis.rossonlineservices.com is live and responsive (heartbeat triggered 2026-06-13)
+- [x] Verify github.com/ross0nline/acis is public and pinned on profile (pinned first as of 2026-06-13)
+- [x] Update GitHub profile bio + website per `research/upwork/github-profile-readme.md` (done 2026-06-13)
+- [x] Push GitHub profile README to ross0nline/ross0nline (done 2026-06-13)
+- [x] Upwork profile URL: https://www.upwork.com/freelancers/~01541720cafa19e839
+- [x] Proposal submitted (done 2026-06-14)
 
 ---
 
@@ -127,9 +129,9 @@ All Claude/Bedrock API calls route through a purpose-built logging proxy (API Ga
 - [ ] #635: Hourly rate set to $95
 - [ ] #635: ACIS description added to portfolio section
 - [ ] #635: Skills include: TypeScript, AWS Lambda, Amazon Bedrock, HIPAA, Claude API, PostgreSQL, React, Tailwind, Node.js, CDK
-- [ ] GitHub profile: bio and website updated (see `research/upwork/github-profile-readme.md`)
-- [ ] GitHub profile README pushed to ross0nline/ross0nline
-- [ ] acis repo pinned first on GitHub profile
+- [x] GitHub profile: bio and website updated (done 2026-06-13)
+- [x] GitHub profile README pushed to ross0nline/ross0nline (done 2026-06-13)
+- [x] acis repo pinned first on GitHub profile (done 2026-06-13)
 - [ ] acis.rossonlineservices.com loads correctly
 - [ ] Bedrock PoC endpoint returns correct JSON: `curl -s -X POST https://h3fv5e1t4k.execute-api.us-east-1.amazonaws.com/score -H "Content-Type: application/json" -d '{"payer":"UnitedHealthcare","procedure":"MRI Lumbar Spine","note":"Patient has back pain."}'`
 - [ ] Proposal submitted before listing closes
