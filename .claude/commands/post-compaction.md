@@ -8,11 +8,11 @@ domain: ccc-qoq
 status: APPROVED
 source_of_truth: Studio
 type: skill
-version: "0.2.0"
+version: "0.3.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09-b
-sweep_count: 4
+sweep_count: 5
 tags: [skill, compaction, context, cold-start, orientation, standing-orders]
 qoq_item_id: null
 touches:
@@ -20,9 +20,15 @@ touches:
   - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Step 5 now references shared standing-orders.md (fix item 393 -- silo problem)" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added stale-check for post_compaction_review.md, compaction summary note, agent routing table, new pitfalls, end-of-session update reminder" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-6, date: 2026-06-12, action: updated, notes: "Added Step 3.5 -- event log check to identify work already done before compaction (#513)" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-15, action: updated, notes: "Removed hardcoded ADMIN_TOKEN from Steps 3 and 3.5 (use qoq-api script or MCP -- never hardcode token); added MCP preference for Step 3 focus check; added glossary pointer at top; added two pitfalls (hardcoded token, wrong artifact type)." }
 ---
 
 # /post-compaction — Re-Orientation Protocol
+
+> **System-specific terms unfamiliar?** Read the glossary first:
+> `C:\Users\rossonline\ccc\ccc-qoq\.claude\skills\glossary.md`
+> Covers: turn magnet, lead magnet, moment, sweep_count, co-approval, Ricci, QA Auditor,
+> D1, KV, Worker, touch, provenance, artifact type gate. Two-minute read; prevents costly mistakes.
 
 Run immediately when the conversation summary message appears. The compaction summary
 is a starting point, not a substitute for transcript context. Act only after completing
@@ -96,12 +102,14 @@ If the file is large (> 5000 lines), use `offset` to find the right position:
 
 ## Step 3 — Check Focus Drift
 
+**Prefer MCP** (no 1101 cold-start errors, no token boilerplate):
+```
+mcp__ccc-qoq__get_focus
+```
+
+**Fallback — qoq-api script** (reads token from PS profile — never hardcode):
 ```powershell
-$token = $env:QOQ_ADMIN_TOKEN
-if (-not $token) { Write-Error "Set QOQ_ADMIN_TOKEN in your PS profile first"; exit 1 }
-$h = @{ Authorization = "Bearer $token" }
-$live = Invoke-RestMethod "https://ccc-qoq.rossonlineservices.workers.dev/focus" -Headers $h
-Write-Host "Live focus: $($live.data.focus.title) (id=$($live.data.focus.id))"
+qoq-api GET /focus
 ```
 
 Compare live focus to `memory/focus_state.md`. If they differ:
@@ -117,22 +125,16 @@ Before surfacing pending work, read the session-context artifact to see if any w
 has already been done in this session (e.g., files touched, items closed). This prevents
 re-doing work that happened before compaction.
 
+Use qoq-api (reads token from PS profile — never hardcode the token):
 ```powershell
-$env:QOQ_ADMIN_TOKEN = "171cdb83f3ae87ee99030164f16784ad216a153b2b7296278754435e3485b293"
-$h = @{ Authorization = "Bearer $env:QOQ_ADMIN_TOKEN" }
-$ctx = Invoke-RestMethod "https://ccc-qoq.rossonlineservices.workers.dev/generated/session-context" -Headers $h
-Write-Host $ctx.data
+qoq-api GET /generated/session-context
 ```
 
 The **DNA Activity Today** section shows sessions and file touches logged today. If
 `sessions today > 0`, work has already happened — scan the event log for what was done:
 
 ```powershell
-$env:QOQ_ADMIN_TOKEN = "171cdb83f3ae87ee99030164f16784ad216a153b2b7296278754435e3485b293"
-$h = @{ Authorization = "Bearer $env:QOQ_ADMIN_TOKEN" }
-$base = "https://ccc-qoq.rossonlineservices.workers.dev"
-$evts = Invoke-RestMethod "$base/events?limit=20" -Headers $h
-$evts.data | Select-Object event_type, entity_id, summary, created_at | Format-Table -AutoSize
+qoq-api GET /events?limit=20
 ```
 
 Use these results to:
@@ -149,6 +151,13 @@ From the transcript and summary, identify:
 1. **In-progress task**: The last incomplete operation. Resume it — don't restart from scratch.
 2. **Pending items**: Things the user named that weren't yet done.
 3. **Queue candidates**: Items identified but not yet added to D1 — add them now via `qoq-add`.
+
+**Creating queue items** — use the right qoq-add mode (see `/qoq-add` skill for full docs):
+- **1 item**: `qoq-add -Title "..." -P <parent> -Do <domain> -St queued`
+- **2–5 items, same parent**: `qoq-add -Items "title|desc","title2|desc2" -P <parent> -Do <domain> -St queued`
+- **Any batch with varying parents/domains**: write JSON to `$env:TEMP\qoq-batch.json` → `qoq-add "$env:TEMP\qoq-batch.json"`
+- Use `-DryRun` to preview before creating; `-Regenerate` on the last batch to rebuild KV artifacts
+- **Never** use `qoq-api POST /items` — provenance and metadata are dropped
 
 Report in one paragraph: what you read, what's in-flight, what you're about to do.
 
@@ -226,3 +235,7 @@ use it — it's faster, scriptable, and doesn't require browser state.
 | Trusting stale `post_compaction_review.md` as current | Check `originSessionId` — if prior session, use for constants only |
 | Enlisting Ricci for non-ccc-qoq work | Ricci = ccc-qoq system dev only; proposal/personal work is inline |
 | Touch note claiming additions not yet in the body | Touch record must describe what was done, not what was planned |
+| Hardcoding ADMIN_TOKEN in PowerShell commands | Use qoq-api script or MCP — token lives in PS profile; never hardcode |
+| Manually editing sweep_count in frontmatter | Run `dna-sweep-check -Fix` instead — the script owns sweep_count corrections |
+| Creating queue items via qoq-api POST /items | Always use qoq-add — provenance, session_id, created_by, and metadata are dropped without it |
+| Wrong artifact type (file vs D1 row) | Before creating anything, verify: turn magnet = POST /moments, lead magnet = queue item, reference = .md file |
