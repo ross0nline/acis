@@ -17,7 +17,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell.exe -NonInteractive -File C:\\Scripts\\dna-hook-accumulate.ps1"
+            "command": "powershell.exe",
+            "args": ["-NonInteractive", "-File", "C:\\Scripts\\dna-hook-accumulate.ps1"]
           }
         ]
       }
@@ -28,7 +29,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell.exe -NonInteractive -File C:\\Scripts\\dna-hook-stop.ps1"
+            "command": "powershell.exe",
+            "args": ["-NonInteractive", "-File", "C:\\Scripts\\dna-hook-stop.ps1"]
           }
         ]
       }
