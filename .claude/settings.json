@@ -9,5 +9,29 @@
       "Grep",
       "PowerShell"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NonInteractive -File C:\\Scripts\\dna-hook-accumulate.ps1"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NonInteractive -File C:\\Scripts\\dna-hook-stop.ps1"
+          }
+        ]
+      }
+    ]
   }
 }
