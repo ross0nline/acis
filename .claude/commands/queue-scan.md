@@ -7,11 +7,12 @@ source_of_truth: Studio
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: 97461d8c-a6fc-433f-8294-baa47fb406e7
-updated: 2026-06-11
-sweep_count: 1
+updated: 2026-06-16
+sweep_count: 2
 qoq_item_id: 573
 touches:
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added completion protocol section (#573) — completion_note + git_ref required when closing items" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "Added MCP-first routing, qoq-add field-name gotcha (description not notes), dedup check, metadata provenance fields (#823)" }
 ---
 
 # /queue-scan — Pre-Action Queue Sweep
@@ -46,8 +47,28 @@ For each queueable item, decide:
 - Domain: ccc-qoq | acis | nba-neutral | ccc-admin | personal
 - Priority: within parent context
 
+### 3.5. Dedup check before building the batch
+Before writing any item, mentally verify: is this already in the queue?
+A title-match check is enough. Duplicate items are harder to clean up than to prevent.
+Items from the current session's earlier turns are the most common duplication risk.
+
 ### 4. Queue everything before acting
-Write all items to a temp JSON file → `qoq-add <file>`.
+
+**MCP-first (preferred when wired):**
+```
+create_item title="..." stage="queued" domain="ccc-qoq" parent_id=258 description="..."
+```
+MCP carries full 18-field schema with no PowerShell boilerplate.
+
+**Batch via qoq-add (PS fallback for 3+ items or when MCP unavailable):**
+Write items to a temp JSON file → `qoq-add <file>`.
+
+**qoq-add batch JSON field names — common gotcha:**
+- The prose field is `description`, NOT `notes`. Using `notes` silently creates an item with an empty description and no error.
+- `description` minimum 20 characters. Under 20 chars triggers a WARN (not a failure), but the item is still created with a nearly-empty description — a dead end for future agents.
+- Always include: `title`, `description`, `stage`, `domain`, `parent_id`
+- Optional but important for cold-start traceability: `linked_paths` (JSON array string of source files), `metadata` with `session_id` and `source_type`
+
 Report queued IDs to the user in one line, then proceed.
 
 ### 5. Register new queue items with DNA
