@@ -12,8 +12,8 @@ version: "0.1.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09
-updated: 2026-06-09
-sweep_count: 5
+updated: 2026-06-17
+sweep_count: 6
 tags: [skill, powershell, machine-context, encoding, constraints]
 qoq_item_id: 371
 ---
@@ -198,19 +198,20 @@ Write-Host "Upper: $($name.ToUpper())"
 
 ## Token Per Call — Non-Negotiable
 
-Shell state does NOT persist between PowerShell tool calls. `$env:QOQ_ADMIN_TOKEN` is
-cleared at the end of every tool call.
-
-**Always prepend the token to every PS tool call that uses `qoq-api`:**
+The PowerShell tool loads the user's PS profile at the start of every call.
+`$env:QOQ_ADMIN_TOKEN` is set in the profile and available immediately — no explicit
+assignment needed in tool calls.
 
 ```powershell
-$env:QOQ_ADMIN_TOKEN = "171cdb83f3ae87ee99030164f16784ad216a153b2b7296278754435e3485b293"
+# CORRECT — token already available from profile
 qoq-api GET /focus
+
+# WRONG — never hardcode the literal token value
+# $env:QOQ_ADMIN_TOKEN = "..."
 ```
 
-Never assume the token is already set. Never split the token assignment and the `qoq-api`
-call across two separate tool calls. If the token is missing, `qoq-api` silently fails
-with a 401 and no useful error message.
+Never hardcode a token literal in tool calls, commands, or skill files — it ends up in
+transcripts and git history. If `qoq-api` returns a 401, fix the PS profile, not the call.
 
 ---
 
@@ -286,4 +287,5 @@ In Bash tool, chain with `;` not `&&`.
   - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Added standing orders reference section (fix item 393 — silo problem)" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added token-per-call rule (item 478) and skill-review gate (item 479)" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-17, action: updated, notes: "Token scrub: replaced hardcoded literal with profile-loaded guidance; section renamed Token-Per-Call-Non-Negotiable" }
 -->
