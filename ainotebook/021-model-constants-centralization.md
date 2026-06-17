@@ -1,8 +1,6 @@
----
+﻿---
 created_session: post-78e6e2b4-compaction-6
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-6, action: created, model: claude-sonnet-4-6 }
 ---
 # ADR-021: Model Constants Centralization
 
@@ -70,3 +68,7 @@ The `as const` assertion ensures the type is the literal string — no `string` 
 
 - **ADR-019** — Multi-agent development architecture (defines which work is done by Claude Code vs. delegated agents)
 - **ADR-011** — Claude API usage inventory (lists all inference calls; model strings flow from this ADR)
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-6, action: created, model: claude-sonnet-4-6 }
+-->

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Multi-Tenant RBAC Research — PreClear MD Video Call Prep"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 created_session: post-78e6e2b4-compaction-3
 qoq_item_id: 633
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # Multi-Tenant RBAC Research — PreClear MD Video Call Prep
@@ -146,3 +144,7 @@ Postgres enforces the filter at the storage layer — the application never writ
 This is less robust than Postgres RLS (a developer can bypass the wrapper) but works at scale if the wrapper is the only permitted path to D1. Code review and TypeScript strict mode enforce the pattern.
 
 **If the surgeon-founder asks about scaling beyond D1:** The honest answer is that D1 is appropriate for early stage (hundreds of practices, millions of rows). If the product reaches 10K+ practices with high query volume, the architecture will need Hyperdrive + Neon/Supabase (Postgres with real RLS) behind it. The Workers API layer stays unchanged; only the database binding changes.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

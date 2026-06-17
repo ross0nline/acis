@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # ACIS AINotebook
 
@@ -30,3 +28,7 @@ Each entry documents a decision made during design or development: what was deci
 | [016](016-email-notification-agents.md) | Email Notification Agents: Attestation Reminders & Incident Escalation | Decided & Implemented |
 | [017](017-portfolio-viewer.md) | Portfolio Viewer: Worker-Rendered Markdown with KV Toggle Controls | Decided & Implemented |
 | [018](018-github-pr-automation.md) | GitHub PR Automation: High-Risk Regulatory Events → Pull Requests | Decided & Implemented |
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

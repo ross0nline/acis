@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 010 — Vendor Security Scanner Agent
 
@@ -96,3 +94,7 @@ Change Healthcare (`changehealthcare.com`) — the highest-profile healthcare da
 **Cron-scheduled daily scan** — runs automatically alongside the regulatory scraper. Desirable long-term but costs 6+ Opus calls/day and doesn't allow the "live scan" demo moment. Deferred to Heartbeat agent phase.
 
 **TLS certificate validation** — checking cert expiry, chain validity, and cipher suites via a third-party API (SSL Labs, etc.). Would add meaningful signal but introduces an external dependency and a second API key. The binary `tls_valid` flag (HTTPS succeeds = 1) is sufficient for the demo tier.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

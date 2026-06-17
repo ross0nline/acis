@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 011 — Claude API Usage Inventory
 
@@ -111,3 +109,7 @@ Assesses vendor security posture as a HIPAA Business Associate.
 | scanVendor | on demand / stale-vendor cron | Opus 4.8 | ~0.5K tokens | ~0.2K tokens |
 
 Daily cron cost is dominated by the scraper (~$0.11/day at current volume). Heartbeat adds ~$0.03/day. Playbook and vendor scan are negligible at demo scale.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

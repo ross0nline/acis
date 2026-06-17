@@ -1,4 +1,4 @@
----
+﻿---
 title: "ACIS UI Screenshots — Portfolio Evidence"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 qoq_item_id: 630
 created_session: post-78e6e2b4-compaction-3
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # ACIS UI Screenshots
@@ -36,3 +34,7 @@ Captured live from https://acis.rossonlineservices.com at 1440×900. All tabs sh
 ## UpWork portfolio entry caption (suggested)
 
 > ACIS — Autonomous Compliance Intelligence System. Four compliance modules, six AI agents, live at acis.rossonlineservices.com. Built solo: Cloudflare Workers + D1 + R2 + Pages, React + Tailwind frontend, Claude AI agents via Anthropic API + AI Gateway. HIPAA-domain design with PHI boundary controls throughout.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

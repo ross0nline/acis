@@ -1,4 +1,4 @@
----
+﻿---
 description: Authoring protocol for the ccc-qoq ainotebook — ADRs, reflections, thought-log entries. Covers naming, frontmatter, structure, DNA registration, and context.md updates. Load before creating any ainotebook artifact.
 disable-model-invocation: true
 shell: powershell
@@ -16,9 +16,6 @@ updated: 2026-06-09
 sweep_count: 2
 tags: [skill, ainotebook, adr, reflect, thought-log, dna]
 qoq_item_id: 372
-touches:
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /ainotebook — Authoring Protocol
@@ -237,3 +234,8 @@ Use `action = "updated"` when sweeping an existing file.
 | Thought-log index | `thought-log/index.md` |
 | Ainotebook context | `ainotebook/context.md` |
 | Agent templates | `ainotebook/agenttemplates/` |
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
+-->

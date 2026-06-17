@@ -1,4 +1,4 @@
----
+﻿---
 title: "Bedrock PoC — Full Troubleshooting Runbook"
 type: research
 domain: personal
@@ -7,7 +7,7 @@ created: 2026-06-12
 created_model: claude-sonnet-4-6
 created_session: post-78e6e2b4-compaction-4
 qoq_item_id: 654
-sweep_count: 1
+sweep_count: 0
 touches:
   - model: claude-sonnet-4-6
     session: post-78e6e2b4-compaction-4

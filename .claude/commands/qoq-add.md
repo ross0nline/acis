@@ -1,4 +1,4 @@
----
+﻿---
 description: Bulk queue item creation via qoq-add.ps1. Use whenever queuing 2 or more items in the same turn, or any batch of related items. Bypasses the 900-byte PowerShell command limit.
 disable-model-invocation: true
 shell: powershell
@@ -16,10 +16,6 @@ updated: 2026-06-09
 sweep_count: 3
 tags: [skill, qoq, queue, batch, qoq-add]
 qoq_item_id: null
-touches:
-  - { model: claude-sonnet-4-6, session: 97461d8c-a6fc-433f-8294-baa47fb406e7, date: 2026-06-09, action: created, notes: "Migrated from .claude/commands/qoq-add.md" }
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: swept, notes: "Added hybrid DNA frontmatter; version 1.1.0 marks first sweep" }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /qoq-add — Bulk Queue Item Creation
@@ -113,3 +109,9 @@ IDEAS is the staging area for parent-worthy ideas that haven't found their perma
 - Build hierarchy in two passes: first creates parents, second uses returned IDs as `parent_id`
 - Script reports `id=NNN` per created item — use those for follow-up PATCH calls
 - Split very large batches into logical groups of 10–20 items per file
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: 97461d8c-a6fc-433f-8294-baa47fb406e7, date: 2026-06-09, action: created, notes: "Migrated from .claude/commands/qoq-add.md" }
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: swept, notes: "Added hybrid DNA frontmatter; version 1.1.0 marks first sweep" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
+-->

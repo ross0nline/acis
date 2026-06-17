@@ -1,4 +1,4 @@
----
+﻿---
 title: "ACIS Case Study — PreClear MD Proposal"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 qoq_item_id: 624
 created_session: post-78e6e2b4-compaction-3
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # ACIS: A Live HIPAA Compliance Platform with Production LLM Orchestration
@@ -44,3 +42,7 @@ The ACIS Executive Hub is a five-tab React + Tailwind dashboard — Live Pulse, 
 ## Why This Maps to PreClear MD
 
 The scraper's core mechanic — rubric-based AI scoring of documents against regulatory criteria with structured, explainable output — is the same mechanic PreClear Scan needs against payer criteria. And ACIS's multi-agent pipeline with per-module isolation, shared audit infrastructure, and gateway-logged inference is the same architecture pattern a multi-module healthcare SaaS requires. I've already built this shape of system, end to end, and it's running right now.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # ADR 015 — Email Provider: Resend Now, Cloudflare Email Service Later
 
@@ -112,3 +110,7 @@ await env.SEND_EMAIL.send({ to: [...], subject: ..., html: ... });
 - [Cloudflare Email Service pricing](https://developers.cloudflare.com/email-service/platform/pricing/)
 - [Send Emails With Resend · Cloudflare Workers docs](https://developers.cloudflare.com/workers/tutorials/send-emails-with-resend/)
 - [Cloudflare Email Service launch announcement](https://blog.cloudflare.com/email-service/)
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

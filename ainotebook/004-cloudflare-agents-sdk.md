@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 004 — Cloudflare Agents SDK for Stateful Memory
 
@@ -63,3 +61,7 @@ For a compliance role, **auditable AI decision-making** is exactly the right thi
 ## The Tradeoff
 
 The Agents SDK is relatively new (2025). It's stable but the API may evolve. Binding it tightly to the heartbeat agent rather than all of ACIS limits exposure — if the SDK changes significantly, only the heartbeat agent needs updating, not the entire codebase.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

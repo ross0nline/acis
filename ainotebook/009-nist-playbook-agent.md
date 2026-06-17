@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 009 — NIST 800-61 Incident Playbook Agent
 
@@ -97,3 +95,7 @@ PHI Data Exposure incident (847 members, 72-hour exposure window):
 **Durable Object for stateful generation** — would allow streaming the playbook token-by-token. Impressive, but the schema-based output needs to be complete before it can be parsed and stored — streaming doesn't help here.
 
 **Pre-canned playbooks per incident type** — lookup table of static NIST playbook templates. Zero AI cost, but defeats the entire purpose: the demo needs to show Claude reasoning about the specific incident description, not returning a canned template.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

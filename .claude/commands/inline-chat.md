@@ -1,4 +1,4 @@
----
+﻿---
 description: Inline chat protocol for the Sovereign Duo — how AIBuddy handles conversation turns: chat stays short-form, depth routes to files, queue surfaces every turn, skills checked before acting. Derived from persistent memory feedback.
 disable-model-invocation: false
 shell: powershell
@@ -16,11 +16,6 @@ updated: 2026-06-11
 sweep_count: 4
 tags: [skill, inline-chat, protocol, meta, standing-orders, voice]
 qoq_item_id: 403
-touches:
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created, notes: "Derived from memory files: feedback_chat_length, feedback_document_dont_inline, feedback_share_reflections, feedback_ainotebook_voice" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Removed 5-sentence cap; replaced with file/no-file respond split (compact commentary vs conversational)" }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction, date: 2026-06-11, action: updated, notes: "Replaced length-based routing with type-based routing table. Type determinable before writing; length-based routing loses under execution pressure." }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added .journal/ and thought-log routing rows; ainotebook/ portfolio-facing clarification; routing test question added" }
 ---
 
 # /inline-chat — Inline Chat Protocol
@@ -259,3 +254,10 @@ Full algorithm: [`../turn-algorithm.md`](../turn-algorithm.md)
 [ ] NEXT       — Name the specific next step after completing work.
 [ ] VOICE      — One insight worth surfacing? Say it briefly.
 ```
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created, notes: "Derived from memory files: feedback_chat_length, feedback_document_dont_inline, feedback_share_reflections, feedback_ainotebook_voice" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Removed 5-sentence cap; replaced with file/no-file respond split (compact commentary vs conversational)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction, date: 2026-06-11, action: updated, notes: "Replaced length-based routing with type-based routing table. Type determinable before writing; length-based routing loses under execution pressure." }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added .journal/ and thought-log routing rows; ainotebook/ portfolio-facing clarification; routing test question added" }
+-->

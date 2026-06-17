@@ -1,4 +1,4 @@
----
+﻿---
 title: "AWS Bedrock HIPAA Reference Architecture"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 qoq_item_id: 622
 created_session: post-78e6e2b4-compaction-3
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # AWS Bedrock HIPAA Reference Architecture
@@ -553,3 +551,7 @@ The proposal should demonstrate awareness that while Bedrock's own logging is cl
 | Claude Sonnet 4.6 model card | https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-sonnet-4-6.html | Official |
 | Claude Opus 4.8 model card | https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-opus-4-8.html | Official |
 | AWS HIPAA compliance overview | https://aws.amazon.com/compliance/hipaa-compliance/ | Official |
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

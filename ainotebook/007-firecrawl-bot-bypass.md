@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 007 — Bypassing Bot Protection on CMS.gov and HHS.gov
 
@@ -75,3 +73,7 @@ Hobby tier ($19/mo): 3,000 credits/month. At 60 credits/month for this workload,
 ## What This Demonstrates to a Hiring Manager
 
 The decision tree documented here — try free options first, understand why each fails technically, select the appropriate paid tool only when necessary — is the same reasoning a compliance architect uses when evaluating security tooling. It's not just that it works; it's that the path to making it work is documented and defensible.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

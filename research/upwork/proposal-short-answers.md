@@ -1,4 +1,4 @@
----
+﻿---
 title: "Proposal Short Answers — Q2, Q5, Q6"
 type: research
 domain: personal
@@ -8,9 +8,6 @@ created_model: claude-sonnet-4-6
 qoq_item_id: 625
 created_session: post-78e6e2b4-compaction-3
 sweep_count: 2
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Q2 updated to cite live Bedrock PoC endpoint (#656)" }
 ---
 
 # Short Required Answers
@@ -41,3 +38,8 @@ touches:
 ## Q6 — Preferred PM/workflow tool
 
 > Linear. It's fast, keyboard-driven, and has solid GitHub integration so every ticket links to a commit. You have no setup — I'll provision the workspace, invite you with whatever access level you want (view-only observer or active collaborator), and structure it so you see exactly where every feature is in the pipeline. Standups happen in the ticket comments or async in whatever channel you prefer; I don't need a meeting to give a status update.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Q2 updated to cite live Bedrock PoC endpoint (#656)" }
+-->

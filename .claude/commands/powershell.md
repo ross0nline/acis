@@ -1,4 +1,4 @@
----
+﻿---
 description: PowerShell authoring reference for this machine — PS5.1 constraints, encoding rules, command length limits, PATH scripts. Load before writing any shell commands or scripts.
 disable-model-invocation: false
 shell: powershell
@@ -16,12 +16,6 @@ updated: 2026-06-09
 sweep_count: 5
 tags: [skill, powershell, machine-context, encoding, constraints]
 qoq_item_id: 371
-touches:
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09-b, date: 2026-06-09, action: updated, notes: "Added Cloudflare 1101 false-failure pattern + $PID reserved variable" }
-  - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Added standing orders reference section (fix item 393 — silo problem)" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added token-per-call rule (item 478) and skill-review gate (item 479)" }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /powershell — Machine-Aware PowerShell Reference
@@ -285,3 +279,11 @@ In Bash tool, chain with `;` not `&&`.
 ---
 
 *Reference: [../../machine-context.md](../../machine-context.md)*
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09-b, date: 2026-06-09, action: updated, notes: "Added Cloudflare 1101 false-failure pattern + $PID reserved variable" }
+  - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Added standing orders reference section (fix item 393 — silo problem)" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added token-per-call rule (item 478) and skill-review gate (item 479)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
+-->

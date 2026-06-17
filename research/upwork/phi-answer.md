@@ -1,4 +1,4 @@
----
+﻿---
 title: "PHI Out-of-Logs Answer — PreClear MD Proposal (Required Q7)"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 qoq_item_id: 621
 created_session: post-78e6e2b4-compaction-3
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # Required Q7 — How do you keep PHI out of application logs, error monitoring, and URLs/browser history?
@@ -30,3 +28,7 @@ All Claude/Bedrock API calls route through a purpose-built logging proxy (API Ga
   - D1 audit events (who/what/when) → CloudTrail + RDS row-level audit
 - The answer covers all three surfaces the client called out: logs, error monitoring (Sentry/Datadog), URLs/browser history
 - Audit logging section is a bonus signal — demonstrates HIPAA audit control awareness beyond what was asked
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

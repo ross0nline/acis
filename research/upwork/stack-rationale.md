@@ -1,4 +1,4 @@
----
+﻿---
 title: "Stack Decision + Cloudflare→AWS Translation Rationale"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 qoq_item_id: 623
 created_session: post-78e6e2b4-compaction-3
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # Stack Decision — PreClear MD Proposal (Required Q3)
@@ -73,3 +71,7 @@ The client has made a deliberate, well-reasoned decision: AWS Bedrock because th
 > The choice of Bedrock is non-negotiable for HIPAA — it keeps all inference inside the AWS BAA boundary, routes through a VPC endpoint so PHI never traverses the public internet, and Claude API calls are logged at the metadata level (latency, tokens) not content level. Clerk over Auth0 because its multi-tenant RBAC and practice-scoped session model matches your access pattern out of the box.
 >
 > I work day-to-day in Cloudflare Workers/TypeScript — the architecture patterns are identical to Lambda, and I've already solved HIPAA PHI isolation, AI gateway logging, and audit trail design in production. The runtime is different; the design isn't.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

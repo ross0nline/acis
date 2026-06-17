@@ -1,4 +1,4 @@
----
+﻿---
 title: "Prior Authorization Domain Research — PreClear MD Video Call Prep"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 created_session: post-78e6e2b4-compaction-3
 qoq_item_id: 632
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # Prior Authorization Domain Research — PreClear MD Video Call Prep
@@ -116,3 +114,7 @@ The instinct is to build PA AI at the appeal/P2P stage (after denial). This is w
 **3. Structured extraction enables payer-specific formatting.** Different payers (even on the same MCG criteria) want documentation formatted differently. An AI that reads the clinical note and generates a PA-ready summary, pre-formatted for the target payer, removes the manual translation step that burns 2–4 hours per complex case.
 
 **The developer's role:** Build the extraction and formatting layer. The surgeon-founder provides the clinical criteria mapping (what MCG/InterQual actually looks for). The AI reads the note, confirms the criteria checklist, flags missing elements, and produces the submission package. The value proposition is: submit right the first time.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

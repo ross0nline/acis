@@ -1,4 +1,4 @@
----
+﻿---
 description: Load project context files to orient a cold-start agent or sub-agent. Discovers the relevant context.md hierarchy for the current working area. Run at session start or when entering an unfamiliar part of the codebase.
 disable-model-invocation: false
 shell: powershell
@@ -16,10 +16,6 @@ updated: 2026-06-09
 sweep_count: 3
 tags: [skill, context, cold-start, memory, position-addressed]
 qoq_item_id: 373
-touches:
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
-  - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Added standing orders reference section (fix item 393 — silo problem)" }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /read-context — Context File Loading Protocol
@@ -143,3 +139,9 @@ Write-Host "Live focus: $($live.data.focus.title)"
 
 If memory says one focus and live says another, the user changed focus manually.
 Update memory/focus_state.md to match live and proceed with the live focus.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
+  - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Added standing orders reference section (fix item 393 — silo problem)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
+-->

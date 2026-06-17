@@ -1,4 +1,4 @@
----
+﻿---
 description: x.x.x versioning convention for the Sovereign Duo — family tree naming, when to bump, version vs sweep_count, which files get versioning. Synced from ccc-qoq versioning skill.
 disable-model-invocation: false
 shell: powershell
@@ -15,8 +15,6 @@ created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
 tags: [skill, versioning, dna, x.x.x, family-tree, convention]
 qoq_item_id: 388
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-12, action: created, notes: "Synced from ccc-qoq .claude/skills/versioning/SKILL.md" }
 ---
 
 # /versioning — x.x.x Family Tree Convention
@@ -96,3 +94,7 @@ touches:
   - { model: ..., session: ..., date: ..., action: swept, notes: "Fixed stale reference" }
 ---
 ```
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-12, action: created, notes: "Synced from ccc-qoq .claude/skills/versioning/SKILL.md" }
+-->

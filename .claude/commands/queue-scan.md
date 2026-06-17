@@ -1,4 +1,4 @@
----
+﻿---
 title: "queue-scan"
 type: skill
 domain: ccc-qoq
@@ -8,12 +8,11 @@ created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: 97461d8c-a6fc-433f-8294-baa47fb406e7
 updated: 2026-06-16
-sweep_count: 2
+sweep_count: 4
 qoq_item_id: 573
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added completion protocol section (#573) — completion_note + git_ref required when closing items" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "Added MCP-first routing, qoq-add field-name gotcha (description not notes), dedup check, metadata provenance fields (#823)" }
 ---
+
+> **Self-assessment:** After reading this skill, check if any step, parent ID, field name, or protocol is stale relative to current system knowledge. If yes, note the gap in chat and queue an improvement item under #836 (Skill Improvements).
 
 # /queue-scan — Pre-Action Queue Sweep
 
@@ -111,3 +110,10 @@ patch_item id=N stage=done completion_note="What shipped and where" git_ref="abc
 ```
 
 If closing multiple items in a session, each gets its own `completion_note`. Batch-closing with a single generic note defeats the purpose — done items are the provenance record, not an acknowledgment.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added completion protocol section (#573) — completion_note + git_ref required when closing items" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "Added MCP-first routing, qoq-add field-name gotcha (description not notes), dedup check, metadata provenance fields (#823)" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "auto-touch via Stop hook" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "auto-touch via Stop hook" }
+-->

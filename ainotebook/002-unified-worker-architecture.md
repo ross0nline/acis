@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 002 — Unified Worker vs Microservices
 
@@ -87,3 +85,7 @@ compliance-portfolio/
 └── frontend/              ← Cloudflare Pages (Executive Hub)
     └── src/
 ```
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

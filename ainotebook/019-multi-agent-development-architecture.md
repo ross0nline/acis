@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 019 — Multi-Agent Development Architecture
 
@@ -99,3 +97,7 @@ Claude Code
 - ADR 013 — Operations Tab (UI architecture)
 - ADR 018 — GitHub PR Automation (agent outputs artifacts, not just logs)
 - Memory: `feedback_claude_code_primary.md`
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

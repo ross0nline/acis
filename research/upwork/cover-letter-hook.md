@@ -1,4 +1,4 @@
----
+﻿---
 title: "Cover Letter Opening Hook — PreClear MD"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 qoq_item_id: 629
 created_session: post-78e6e2b4-compaction-3
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # Cover Letter Opening Hook
@@ -37,3 +35,7 @@ Lead with domain resonance, not credentials. Save ACIS and the technical detail 
 - Do not mention rate or timeline in the opener; those go in the structured section after
 - The phrase "TAM slide" might be too insider; consider "a pitch deck" if unsure of the audience's VC familiarity
 - Alternate last line if "built for" feels too strong: "That's the problem I solve."
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

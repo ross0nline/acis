@@ -1,4 +1,4 @@
----
+﻿---
 description: Pre-action skill check protocol — before any non-trivial action, enumerate available skills, confirm which apply, and invoke them. Based on Anthropic engineering Rule 1: prompt skills, not Claude. Run when starting a new task type or when uncertain if a skill covers the work.
 disable-model-invocation: false
 shell: powershell
@@ -16,9 +16,6 @@ updated: 2026-06-09
 sweep_count: 2
 tags: [skill, meta, protocol, intelligence-layer, inline-chat]
 qoq_item_id: 374
-touches:
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /check-skills — Pre-Action Skill Check Protocol
@@ -160,3 +157,8 @@ Skills persist.
 ## Current Skills Index
 
 See [../context.md](../context.md) for the full up-to-date table.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
+-->

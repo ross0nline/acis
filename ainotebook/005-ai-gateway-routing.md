@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 005 — AI Gateway as Observability Layer
 
@@ -87,3 +85,7 @@ const anthropic = new Anthropic({
 ```
 
 `AI_GATEWAY_URL` is a `[vars]` entry in `wrangler.toml` (not a secret — the URL is not sensitive). `ANTHROPIC_API_KEY` is a Wrangler encrypted secret.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Content Routing Policy — Where Different Content Types Live"
 type: research
 domain: ccc-qoq
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 created_session: post-78e6e2b4-compaction-3
 qoq_item_id: 664
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created, notes: "Written to prevent ainotebook/021-style routing errors. Formalized inline-chat.md routing table." }
 ---
 
 # Content Routing Policy
@@ -99,3 +97,7 @@ If no → it goes in .journal/ or thought-log/, never committed to a public repo
 - `inline-chat.md` — routing table and portfolio-safe test
 - `post-compaction.md` — not yet linked, should reference this
 - `ainotebook/` — implied by absence of non-portfolio content there
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created, notes: "Written to prevent ainotebook/021-style routing errors. Formalized inline-chat.md routing table." }
+-->

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Protocol Specialist Agent Design"
 type: research
 domain: ccc-qoq
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 created_session: agent-design-657-658
 qoq_item_id: 657
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: agent-design-657-658, date: 2026-06-12, action: created, notes: "Design doc for Protocol Specialist agent — queue item 657. Covers triggers, boundaries, draft description, key protocol rules." }
 ---
 
 # Protocol Specialist Agent Design
@@ -159,3 +157,7 @@ Protocol Specialist
 ├── Is fed by General-purpose — when a cold-start agent discovers DNA gaps
 └── Is NOT a substitute for — system development (Ricci) or quality audit (QA Auditor)
 ```
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: agent-design-657-658, date: 2026-06-12, action: created, notes: "Design doc for Protocol Specialist agent — queue item 657. Covers triggers, boundaries, draft description, key protocol rules." }
+-->

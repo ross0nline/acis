@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 001 — Four Projects → One System
 
@@ -76,3 +74,7 @@ The individual `CHARTER.md` files in `projects/` remain as planning documents an
 ACIS is Project #2 in the CCC (Compliance Command Center) meta-system. CCC Admin (`ccc-admin`) is the global registry that tracks ACIS's module status, deployment state, and activity log. ACIS Workers report to CCC Admin via Service Bindings whenever a meaningful state change occurs (new regulatory event ingested, attestation status updated, incident opened).
 
 This means the hiring manager demo has two layers: ACIS at `acis.rossonlineservices.com` showing the compliance operations center, and CCC Admin at `dashboard.rossonlineservices.com` showing the meta-system that manages ACIS itself. The latter demonstrates the kind of operational awareness that distinguishes a program manager from a project executor.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

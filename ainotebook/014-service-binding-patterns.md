@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 014 — Service Binding Patterns: Two Calling Conventions
 
@@ -68,3 +66,7 @@ This is the property the CCC Admin architecture was designed around (see the CCC
 | Module route handler triggered by HTTP request | Either — but **A** is still preferred if `env` is in scope |
 | Frontend component needs to trigger a CCC Admin event | **B** — POST to `/internal/event`, let the Worker proxy it |
 | External integration (webhook, etc.) | **B** — same as frontend |
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

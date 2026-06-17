@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 003 — D1 Schema: Five-Table Design
 
@@ -93,3 +91,7 @@ The five tables represent distinct domains. An incident doesn't belong to a vend
 ## What This Intentionally Omits
 
 No `users` or `auth` table — ACIS is a single-admin system. Authentication is handled at the Worker layer via the `ADMIN_TOKEN` secret (same pattern as CCC Admin). The database layer has no auth logic.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

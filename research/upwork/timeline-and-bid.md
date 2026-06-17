@@ -1,4 +1,4 @@
----
+﻿---
 title: "Timeline by Phase + Bid Calculation"
 type: research
 domain: personal
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 qoq_item_id: 626
 created_session: post-78e6e2b4-compaction-3
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
 ---
 
 # Timeline by Phase + Bid (Required Q4)
@@ -93,3 +91,7 @@ Present the midpoint ($39,900) as the estimate with a ±15% band depending on sc
 > Phase 5 (Week 12): Security hardening, PHI audit, BAA documentation, production cutover.
 >
 > Happy to refine phase estimates after the NDA call and prototype review — the validation engine and payer criteria complexity are the main unknowns right now.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created }
+-->

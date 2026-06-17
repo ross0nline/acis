@@ -1,4 +1,4 @@
----
+﻿---
 title: "DNA Event Logger Enhancement Proposal"
 type: research
 domain: ccc-qoq
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 created_session: post-78e6e2b4-compaction-3
 qoq_item_id: 659
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created, notes: "Based on live D1 schema audit — touches 316-325 showed turn=NULL and session_db_id=NULL as systemic gaps" }
 ---
 
 # DNA Event Logger — Enhancement Proposal
@@ -111,3 +109,7 @@ ALTER TABLE dna_touches ADD COLUMN change_magnitude TEXT CHECK(change_magnitude 
 ```
 
 No data migration needed — NULL is the correct default for historical records.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: created, notes: "Based on live D1 schema audit — touches 316-325 showed turn=NULL and session_db_id=NULL as systemic gaps" }
+-->

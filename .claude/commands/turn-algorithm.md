@@ -1,4 +1,4 @@
----
+﻿---
 title: "Turn Algorithm — Sovereign Duo Per-Turn Pseudo-Code"
 domain: ccc-qoq
 status: APPROVED
@@ -11,23 +11,6 @@ created_session: 78e6e2b4-34df-4c73-852c-d71397a90c55
 updated: 2026-06-12
 tags: [turn-algorithm, protocol, per-turn, pseudo-code, standing-orders]
 qoq_item_id: 487
-touches:
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: created, notes: "Extracted from standing-orders.md into own file per item 487" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added context.md auto-read, ainotebook category creation, focus awareness, removed 5-sentence cap, split respond into file/no-file paths" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added detailed DNA pseudo-code block (frontmatter sync, COALESCE gotcha, status/sweep_count rules) and skill check block (3-step gate, disable_model_invocation guard)" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Named the context.md vs SKILL.md distinction: context=orientation/map, skill=action protocol/instructions; split PRE-WORK into two labelled sections" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Expanded queue scan into full pseudo-code block: trigger heuristics, classify, dedup, batch vs single POST, report IDs" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added DNA verification gate (Step 3): assert frontmatter.updated, touches appended, dnaPost.success — stop if any fails" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "MCP integration: /mcp in skill check map, create_item in queue dispatch (preferred over PS when wired), get_focus in focus awareness" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added POST-WORK: SKILL/ALGORITHM REVIEW gate before RESPOND — check each new capability/pattern for encoding before concluding" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added linked_paths to queue scan classify block — required when signal source is a file. Added REFLECTION GATE phase before RESPOND." }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Gap analysis applied: first-turn gate, MCP metadata note (519), memory file archive gate (515), turn_focus_type classification (516), tightened reflection trigger, post-compaction explicit reference" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added /deploy to skill check map with PowerShell Set-Location note" }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction, date: 2026-06-11, action: updated, notes: "Moved skill check before queue scan. Removed stale MCP item 519 comment. Added global skill fallback and /partner-check to skill map." }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Updated global skill fallback to reference ~/.claude/skill-index.md (item #595)" }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Fixed sweep_count rule: sweep_count = total touch count, not swept-action counter. Removed stale DB comment." }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added sequence-surface step to RESPOND block (#606) — tierAndRank pending queue when 3+ items, replaces single-next." }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-12, action: updated, notes: "Added version bump trigger to POST-WORK: SKILL/ALGORITHM REVIEW block (#532). Bump minor when behavior changes; bump patch when fixing errors." }
 sweep_count: 16
 ---
 
@@ -318,3 +301,22 @@ fn turn(userMessage):
 ```
 
 *Expands to: [`standing-orders.md`](standing-orders.md)*
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: created, notes: "Extracted from standing-orders.md into own file per item 487" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added context.md auto-read, ainotebook category creation, focus awareness, removed 5-sentence cap, split respond into file/no-file paths" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added detailed DNA pseudo-code block (frontmatter sync, COALESCE gotcha, status/sweep_count rules) and skill check block (3-step gate, disable_model_invocation guard)" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Named the context.md vs SKILL.md distinction: context=orientation/map, skill=action protocol/instructions; split PRE-WORK into two labelled sections" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Expanded queue scan into full pseudo-code block: trigger heuristics, classify, dedup, batch vs single POST, report IDs" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added DNA verification gate (Step 3): assert frontmatter.updated, touches appended, dnaPost.success — stop if any fails" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "MCP integration: /mcp in skill check map, create_item in queue dispatch (preferred over PS when wired), get_focus in focus awareness" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added POST-WORK: SKILL/ALGORITHM REVIEW gate before RESPOND — check each new capability/pattern for encoding before concluding" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added linked_paths to queue scan classify block — required when signal source is a file. Added REFLECTION GATE phase before RESPOND." }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Gap analysis applied: first-turn gate, MCP metadata note (519), memory file archive gate (515), turn_focus_type classification (516), tightened reflection trigger, post-compaction explicit reference" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added /deploy to skill check map with PowerShell Set-Location note" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction, date: 2026-06-11, action: updated, notes: "Moved skill check before queue scan. Removed stale MCP item 519 comment. Added global skill fallback and /partner-check to skill map." }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Updated global skill fallback to reference ~/.claude/skill-index.md (item #595)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Fixed sweep_count rule: sweep_count = total touch count, not swept-action counter. Removed stale DB comment." }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added sequence-surface step to RESPOND block (#606) — tierAndRank pending queue when 3+ items, replaces single-next." }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-12, action: updated, notes: "Added version bump trigger to POST-WORK: SKILL/ALGORITHM REVIEW block (#532). Bump minor when behavior changes; bump patch when fixing errors." }
+-->

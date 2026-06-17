@@ -1,4 +1,4 @@
----
+﻿---
 description: Git workflow protocol for the Sovereign Duo — co-author convention, conventional commits, HEREDOC message format, what to commit vs avoid, per-project deploy scoping. Load before any git operation.
 disable-model-invocation: false
 shell: powershell
@@ -16,9 +16,6 @@ updated: 2026-06-09
 sweep_count: 2
 tags: [skill, git, commits, co-author, versioning]
 qoq_item_id: 387
-touches:
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
 ---
 
 # /git — Git Workflow Protocol
@@ -282,3 +279,8 @@ After a commit that creates or modifies DNA-tracked files:
 3. Add a touch entry to the frontmatter's `touches` array
 
 The git commit is the version record. D1 is the intelligence record. Both should stay in sync.
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09, date: 2026-06-09, action: created }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
+-->

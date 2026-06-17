@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 012 — Heartbeat Agent: Daily Self-Audit Loop
 
@@ -128,3 +126,7 @@ CCC Admin failures are caught and logged rather than thrown, so a Service Bindin
 **Parallel scraper + heartbeat** — saves ~10–30s of cron wall time. Rejected because the heartbeat's `recent_24h` metric would race against the scraper's writes and potentially report 0 new events on a day the scraper ran successfully.
 
 **Separate cron schedule for heartbeat** — e.g., run the audit at 09:00 after the scraper finishes at 08:00. Avoids the race without sequential await. Adds a second cron trigger entry but otherwise clean — worth reconsidering if the scraper ever becomes long-running enough to approach Workers' CPU limits.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

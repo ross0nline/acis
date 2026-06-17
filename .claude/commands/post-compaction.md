@@ -1,4 +1,4 @@
----
+﻿---
 description: Post-compaction re-orientation protocol. Run immediately when a conversation summary message appears — before any other action. Reads transcript turns, loads memory, checks focus drift, scans queue, activates standing orders.
 disable-model-invocation: false
 shell: powershell
@@ -15,12 +15,6 @@ created_session: post-compaction-2026-06-09-b
 sweep_count: 5
 tags: [skill, compaction, context, cold-start, orientation, standing-orders]
 qoq_item_id: null
-touches:
-  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09-b, date: 2026-06-09, action: created }
-  - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Step 5 now references shared standing-orders.md (fix item 393 -- silo problem)" }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added stale-check for post_compaction_review.md, compaction summary note, agent routing table, new pitfalls, end-of-session update reminder" }
-  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-6, date: 2026-06-12, action: updated, notes: "Added Step 3.5 -- event log check to identify work already done before compaction (#513)" }
-  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-15, action: updated, notes: "Removed hardcoded ADMIN_TOKEN from Steps 3 and 3.5 (use qoq-api script or MCP -- never hardcode token); added MCP preference for Step 3 focus check; added glossary pointer at top; added two pitfalls (hardcoded token, wrong artifact type)." }
 ---
 
 # /post-compaction — Re-Orientation Protocol
@@ -239,3 +233,11 @@ use it — it's faster, scriptable, and doesn't require browser state.
 | Manually editing sweep_count in frontmatter | Run `dna-sweep-check -Fix` instead — the script owns sweep_count corrections |
 | Creating queue items via qoq-api POST /items | Always use qoq-add — provenance, session_id, created_by, and metadata are dropped without it |
 | Wrong artifact type (file vs D1 row) | Before creating anything, verify: turn magnet = POST /moments, lead magnet = queue item, reference = .md file |
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09-b, date: 2026-06-09, action: created }
+  - { model: claude-sonnet-4-6, session: fix-393, date: 2026-06-09, action: updated, notes: "Step 5 now references shared standing-orders.md (fix item 393 -- silo problem)" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added stale-check for post_compaction_review.md, compaction summary note, agent routing table, new pitfalls, end-of-session update reminder" }
+  - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-6, date: 2026-06-12, action: updated, notes: "Added Step 3.5 -- event log check to identify work already done before compaction (#513)" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-15, action: updated, notes: "Removed hardcoded ADMIN_TOKEN from Steps 3 and 3.5 (use qoq-api script or MCP -- never hardcode token); added MCP preference for Step 3 focus check; added glossary pointer at top; added two pitfalls (hardcoded token, wrong artifact type)." }
+-->

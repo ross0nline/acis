@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 013 — Operations Tab: Admin Controls in the Executive Hub
 
@@ -80,3 +78,7 @@ Executive Hub tabs:
 - The last heartbeat is always one click away
 
 This is the full "Autonomous Compliance Intelligence System" demo — no terminal, no curl, no separate tools.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

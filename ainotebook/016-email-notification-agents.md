@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # ADR 016 — Email Notification Agents: Attestation Reminders & Incident Escalation
 
@@ -119,3 +117,7 @@ The email agents run before the heartbeat so the heartbeat can include `sent_rem
 **Webhooks instead of email** — would require a receiving endpoint (Slack, PagerDuty, etc.). Email was chosen because it requires no third-party account beyond Resend, it's universally accessible, and it produces a compliance audit trail in the inbox.
 
 **D1-backed send deduplication** — prevent re-sending the same reminder on consecutive days. Not implemented: the email content reflects the current state on each run, so re-sending on consecutive overdue days is intentional escalation behavior, not noise. If it becomes annoying in practice, a `last_reminded_at` column in `attestation_vault` is the right fix.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

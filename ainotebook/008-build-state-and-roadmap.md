@@ -1,10 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 3
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
-  - { session: post-78e6e2b4-compaction-4, action: updated, model: claude-sonnet-4-6 }
-  - { session: post-78e6e2b4-compaction-6, action: updated, model: claude-sonnet-4-6 }
 ---
 # 008 — Current Build State & Remaining Roadmap
 
@@ -174,3 +170,9 @@ runScraper → runVendorScan → runAttestationReminders → runIncidentEscalati
 - `GITHUB_TOKEN` Worker secret set — fine-grained PAT, Contents + PRs R/W on `ross0nline/acis`
 - `POST /api/scraper/demo-pr` — admin endpoint to trigger PR for highest-risk existing D1 event
 - Demo PR #1 open: ACA HHS Notice of Benefit and Payment Parameters for 2027 (Risk: 9/10)
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+  - { session: post-78e6e2b4-compaction-4, action: updated, model: claude-sonnet-4-6 }
+  - { session: post-78e6e2b4-compaction-6, action: updated, model: claude-sonnet-4-6 }
+-->

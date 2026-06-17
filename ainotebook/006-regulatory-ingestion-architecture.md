@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # 006 — Regulatory Ingestion: Three-Source Architecture
 
@@ -84,3 +82,7 @@ All three source types check for URL existence before inserting. The Federal Reg
 ## Cron Schedule
 
 `0 8 * * *` — 8:00 AM UTC daily. Selected to run before US business hours start (3–4 AM Eastern) so compliance staff see fresh data when they open their dashboards in the morning.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

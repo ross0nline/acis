@@ -1,4 +1,4 @@
----
+﻿---
 title: "Script Specialist Agent Design"
 type: research
 domain: ccc-qoq
@@ -8,8 +8,6 @@ created_model: claude-sonnet-4-6
 created_session: agent-design-657-658
 qoq_item_id: 658
 sweep_count: 1
-touches:
-  - { model: claude-sonnet-4-6, session: agent-design-657-658, date: 2026-06-12, action: created, notes: "Design doc for Script Specialist agent — queue item 658. Includes full inventory of 14 existing scripts and top 5 workflow gaps." }
 ---
 
 # Script Specialist Agent Design
@@ -178,3 +176,7 @@ Script Specialist
 ├── Is called by General-purpose — when a user says "can we script this?"
 └── Is NOT for — application code (TypeScript/Workers), SQL migrations, React components
 ```
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: agent-design-657-658, date: 2026-06-12, action: created, notes: "Design doc for Script Specialist agent — queue item 658. Includes full inventory of 14 existing scripts and top 5 workflow gaps." }
+-->

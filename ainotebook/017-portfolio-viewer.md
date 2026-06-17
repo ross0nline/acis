@@ -1,8 +1,6 @@
 ﻿---
 created_session: post-78e6e2b4-compaction-4
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
 ---
 # ADR 017 — Portfolio Viewer: Worker-Rendered Markdown with KV Toggle Controls
 
@@ -141,3 +139,7 @@ The push-first requirement is enforced in the deploy script to prevent a silent 
 **Storing document content in KV** — would eliminate the GitHub dependency entirely. Rejected because it would require a separate sync step to update KV whenever docs change. GitHub as the source of truth is already the workflow (edit → commit → push → visible).
 
 **Embedding docs in the ACIS Executive Hub** — a "Portfolio" tab alongside Live Pulse, Attestation, etc. Rejected because the Operations tab (with admin controls) is meant to be shown to the hiring audience. Mixing the portfolio admin panel into ACIS Operations would expose admin controls in a demo context.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-4, action: swept, model: claude-sonnet-4-6 }
+-->

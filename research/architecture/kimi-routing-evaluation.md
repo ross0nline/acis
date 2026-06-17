@@ -1,8 +1,6 @@
----
+﻿---
 created_session: post-78e6e2b4-compaction-6
 sweep_count: 1
-touches:
-  - { session: post-78e6e2b4-compaction-6, action: created, model: claude-sonnet-4-6 }
 ---
 # Kimi K2 Routing Evaluation for ACIS Regulatory Scraper
 
@@ -109,3 +107,7 @@ The ACIS scraper's priority is data quality and reliable JSON output — a miscl
 ## Queue Decision
 
 Close #612 as **Won't Do (for now)** — the economic case doesn't hold at current scale. Reopened when volume or cost warrant it. The analysis above serves as the design document if we ever proceed.
+
+<!-- dna-touches
+  - { session: post-78e6e2b4-compaction-6, action: created, model: claude-sonnet-4-6 }
+-->
