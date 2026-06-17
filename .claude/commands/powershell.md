@@ -13,7 +13,7 @@ created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09
 updated: 2026-06-17
-sweep_count: 6
+sweep_count: 7
 tags: [skill, powershell, machine-context, encoding, constraints]
 qoq_item_id: 371
 ---
@@ -288,4 +288,5 @@ In Bash tool, chain with `;` not `&&`.
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: updated, notes: "Added token-per-call rule (item 478) and skill-review gate (item 479)" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-17, action: updated, notes: "Token scrub: replaced hardcoded literal with profile-loaded guidance; section renamed Token-Per-Call-Non-Negotiable" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-17, action: updated, notes: "auto-touch via Stop hook" }
 -->
