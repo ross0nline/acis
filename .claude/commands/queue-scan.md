@@ -4,11 +4,12 @@ type: skill
 domain: ccc-qoq
 status: APPROVED
 source_of_truth: Studio
+version: "0.2.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: 97461d8c-a6fc-433f-8294-baa47fb406e7
-updated: 2026-06-16
-sweep_count: 4
+updated: 2026-06-19
+sweep_count: 5
 qoq_item_id: 573
 ---
 
@@ -40,11 +41,30 @@ Look back 3-5 turns for:
 - Insights that belong in the queue
 
 ### 3. Build the queue batch
-For each queueable item, decide:
-- Parent: which project root or milestone owns it?
-- Stage: `queued` (concrete, will be done) or `idea` (exploratory)
-- Domain: ccc-qoq | acis | nba-neutral | ccc-admin | personal
-- Priority: within parent context
+For each queueable item, populate ALL provenance fields — not just title and stage. A cold-start agent must be able to follow the trail from any item back to every source that synthesized it.
+
+| Field | Rule |
+|---|---|
+| `title` | Imperative, scannable, under 10 words |
+| `stage` | `queued` (concrete) or `idea` (exploratory) |
+| `domain` | ccc-qoq \| acis \| nba-neutral \| ccc-admin \| personal |
+| `parent_id` | Which milestone or project root owns it? IDEAS(150) for unanchored items |
+| `priority` | 1.0=critical 3.0=next 5.0=normal 9.0=someday |
+| `notes` / `description` | Why it matters, what it unblocks, how it was discovered. Min 20 chars. |
+| `linked_paths` | **Required** when signal came from a file. JSON array string of ALL source files. An item with `linked_paths=null` and no session context is an orphan. |
+| `metadata` | Always include `{session_id, source_type}`. `source_type`: "user_message" \| "file_synthesis" \| "code_review" \| "observation" \| "error_found" |
+
+#### Recognized Candidate Types
+These artifact types have special semantics in the queue — recognize them before creating a generic task:
+
+| Signal | Correct type | Parent |
+|---|---|---|
+| Named principle or lesson worth persisting | ainotebook/reflect/ entry | (file, not queue item) |
+| Architectural decision made or deferred | ainotebook/adr/ entry | (file, not queue item) |
+| Cluster of files referenced across multiple items/docs | `type=file-anchor` queue item | conceptually-owning node |
+| Forward-looking intent + marketing artifact | `type=lead-magnet` queue item | #554 |
+| Session milestone + emotional context | `POST /moments` (D1 row) + queue item with `moment_id` FK | relevant node |
+| Everything else | task, idea, decision, brainstorm, milestone | nearest project parent |
 
 ### 3.5. Dedup check before building the batch
 Before writing any item, mentally verify: is this already in the queue?
@@ -116,4 +136,5 @@ If closing multiple items in a session, each gets its own `completion_note`. Bat
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "Added MCP-first routing, qoq-add field-name gotcha (description not notes), dedup check, metadata provenance fields (#823)" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "auto-touch via Stop hook" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "auto-touch via Stop hook" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-19, action: updated, notes: "v0.2.0 — expanded step 3 with full provenance field table; added Recognized Candidate Types (file-anchor, lead-magnet, moment, reflect, ADR); closes #870" }
 -->
