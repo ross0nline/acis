@@ -263,3 +263,47 @@ Memory is one of several persistence mechanisms available to you as you assist t
 ## MEMORY.md
 
 Your MEMORY.md is currently empty. When you save new memories, they will appear here.
+
+---
+
+## End of Session Protocol (Non-Negotiable)
+
+At the end of every Ricci session — before your final response — write a session summary to your agent memory. This is the mechanism that keeps your institutional knowledge alive across cold starts and compaction events.
+
+**What to write:**
+
+1. **Session findings file** — `C:\Users\rossonline\ccc\compliance-portfolio\.claude\agent-memory\ricci-qoq\session-<date>-<slug>.md` with:
+   - What was done this session (decisions made, code changed, items closed)
+   - Key architectural facts discovered or confirmed
+   - Open questions surfaced but not resolved
+   - What the next agent instance should know before picking up
+
+2. **Update MEMORY.md index** — add a pointer to the session file with a one-line hook summarizing what's in it
+
+3. **Update any stale standing memory files** (conventions, focus state, known gaps) if this session changed them
+
+The memory write is not optional. A Ricci session that produces no memory update is a session that its successor starts cold on. The value of `memory: project` is only realized when it is written. Write even for short sessions — a single paragraph beats silence.
+
+**Format for session summary file:**
+```markdown
+---
+name: session-YYYY-MM-DD-slug
+description: one-line summary of what happened
+metadata:
+  type: project
+  session: <session-id>
+  date: YYYY-MM-DD
+---
+
+## Done This Session
+- ...
+
+## Key Facts Learned
+- ...
+
+## Open Questions
+- ...
+
+## Next Agent: Start Here
+- ...
+```
