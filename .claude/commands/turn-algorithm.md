@@ -8,10 +8,10 @@ version: "0.1.0"
 created: 2026-06-10
 created_model: claude-sonnet-4-6
 created_session: 78e6e2b4-34df-4c73-852c-d71397a90c55
-updated: 2026-06-12
+updated: 2026-06-19
 tags: [turn-algorithm, protocol, per-turn, pseudo-code, standing-orders]
 qoq_item_id: 487
-sweep_count: 16
+sweep_count: 17
 ---
 
 # Turn Algorithm
@@ -107,6 +107,7 @@ fn turn(userMessage):
       | vision / long-horizon idea from user         → stage="idea",   parent=relevantNode
       | bug or error discovered                      → stage="queued", notes=repro+impact
       | architecture decision made or deferred       → stage="idea",   notes=ADRcandidate
+      | cluster of files across multiple items/docs  → type=file-anchor, parent=owningNode
       | skill gap identified                         → stage="idea",   parent=IDEAS(150)
       | risk surfaced but not actioned               → stage="queued", priority=high
 
@@ -319,4 +320,5 @@ fn turn(userMessage):
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Fixed sweep_count rule: sweep_count = total touch count, not swept-action counter. Removed stale DB comment." }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added sequence-surface step to RESPOND block (#606) — tierAndRank pending queue when 3+ items, replaces single-next." }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-12, action: updated, notes: "Added version bump trigger to POST-WORK: SKILL/ALGORITHM REVIEW block (#532). Bump minor when behavior changes; bump patch when fixing errors." }
+  - { model: , session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-19, action: updated, notes: "Added file-anchor heuristic to queue scan candidate list (#871)" }
 -->
