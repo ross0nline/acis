@@ -8,8 +8,8 @@ version: "0.2.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: 97461d8c-a6fc-433f-8294-baa47fb406e7
-updated: 2026-06-19
-sweep_count: 6
+updated: 2026-06-20
+sweep_count: 7
 qoq_item_id: 573
 ---
 
@@ -142,4 +142,5 @@ If closing multiple items in a session, each gets its own `completion_note`. Bat
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "auto-touch via Stop hook" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-19, action: updated, notes: "v0.2.0 — expanded step 3 with full provenance field table; added Recognized Candidate Types (file-anchor, lead-magnet, moment, reflect, ADR); closes #870" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-19, action: updated, notes: "auto-touch via Stop hook" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-20, action: updated, notes: "auto-touch via Stop hook" }
 -->

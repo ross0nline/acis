@@ -12,7 +12,7 @@ version: "0.4.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09-b
-sweep_count: 6
+sweep_count: 7
 tags: [skill, compaction, context, cold-start, orientation, standing-orders]
 qoq_item_id: null
 ---
@@ -239,4 +239,5 @@ use it — it's faster, scriptable, and doesn't require browser state.
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-6, date: 2026-06-12, action: updated, notes: "Added Step 3.5 -- event log check to identify work already done before compaction (#513)" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-15, action: updated, notes: "Removed hardcoded ADMIN_TOKEN from Steps 3 and 3.5 (use qoq-api script or MCP -- never hardcode token); added MCP preference for Step 3 focus check; added glossary pointer at top; added two pitfalls (hardcoded token, wrong artifact type)." }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-20, action: updated, notes: "v0.4.0 -- removed compaction summary shortcut from Step 1 (user never intended it); JSONL read is non-negotiable, summary is not a substitute; added pitfall row for this mistake." }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-20, action: updated, notes: "auto-touch via Stop hook" }
 -->
