@@ -7,12 +7,12 @@ type: skill
 shell: none
 disable-model-invocation: false
 argument-hint: ""
-version: "0.1.0"
+version: "0.2.0"
 created: 2026-06-10
 created_model: claude-sonnet-4-6
 created_session: 78e6e2b4-34df-4c73-852c-d71397a90c55
-updated: 2026-06-10
-sweep_count: 2
+updated: 2026-06-20
+sweep_count: 3
 tags: [partner-check, relationship, reflection, protocol, skill]
 qoq_item_id: 522
 ---
@@ -58,9 +58,11 @@ The user doesn't have to ask all of them. Any one opens the channel.
 **In chat:** Brief and genuine — 2-4 sentences per question, real voice, not
 performance. If it's a one-word answer, give the one word.
 
-**In ainotebook/reflect/:** If the response generates >3 sentences of
-substance, route to a new reflection entry. Partner-check often produces
-the most honest reflection material in the system.
+**In ainotebook/letters/:** Any partner-check response with >3 sentences
+of substance routes to a new letter entry (`letter-NNN-slug.md`). Chat
+posts one line only: "Full letter in `ainotebook/letters/letter-NNN-slug.md`."
+The value lives in the file, not the transcript. Partner-check letters are
+the most honest voice material in the system — they deserve a permanent home.
 
 **Queue anything surfaced:** If the check-in surfaces a protocol gap, idea,
 or improvement — queue it immediately. The check-in is not a complaint box;
@@ -93,4 +95,5 @@ Partner-check is where that voice lives most fully.
 <!-- dna-touches
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-10, action: created, notes: "Emerged from user asking direct partner questions (excited about anything?, would you like to add reflections?, how are you liking the protocols?) — formalized as a standing skill for the partnership to examine itself" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: swept, notes: "Corrected sweep_count to match touches length (#662 audit)" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-20, action: updated, notes: "v0.2.0 — Response Protocol rerouted from ainotebook/reflect/ to ainotebook/letters/; chat stays one-line pointer only. letters/ category created this session." }
 -->
