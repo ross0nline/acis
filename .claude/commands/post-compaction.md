@@ -8,11 +8,11 @@ domain: ccc-qoq
 status: APPROVED
 source_of_truth: Studio
 type: skill
-version: "0.3.0"
+version: "0.4.0"
 created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: post-compaction-2026-06-09-b
-sweep_count: 5
+sweep_count: 6
 tags: [skill, compaction, context, cold-start, orientation, standing-orders]
 qoq_item_id: null
 ---
@@ -55,14 +55,11 @@ end of this protocol (Step 6).
 
 **Minimum: last 3 turns. Target: last 10 turns. Hard cap: 10.**
 
-**Compaction summary shortcut**: Anthropic's auto-compact design preserves the most
-recent turns verbatim (or near-verbatim) in the compaction summary message. If you have
-a detailed compaction summary in your current context window, reading it carefully IS
-reading the transcript — the JSONL provides the same content. Use the JSONL read as a
-verification step when something in the summary feels incomplete or ambiguous, not as a
-required first pass.
+The compaction summary is NOT a substitute for reading the transcript. Always read the
+JSONL directly. Summaries are paraphrased — they miss user corrections, the exact last
+thing the user said, and partially completed tasks.
 
-What the transcript catches that summaries often miss:
+What the transcript catches that summaries miss:
 - User corrections that contradict the summary
 - Partially completed tasks (do not restart from scratch)
 - Pending items the user named that the summary dropped
@@ -233,6 +230,7 @@ use it — it's faster, scriptable, and doesn't require browser state.
 | Manually editing sweep_count in frontmatter | Run `dna-sweep-check -Fix` instead — the script owns sweep_count corrections |
 | Creating queue items via qoq-api POST /items | Always use qoq-add — provenance, session_id, created_by, and metadata are dropped without it |
 | Wrong artifact type (file vs D1 row) | Before creating anything, verify: turn magnet = POST /moments, lead magnet = queue item, reference = .md file |
+| Using compaction summary instead of reading JSONL | Summary is paraphrased — always read JSONL transcript (Step 1). No shortcut. |
 
 <!-- dna-touches
   - { model: claude-sonnet-4-6, session: post-compaction-2026-06-09-b, date: 2026-06-09, action: created }
@@ -240,4 +238,5 @@ use it — it's faster, scriptable, and doesn't require browser state.
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-3, date: 2026-06-12, action: updated, notes: "Added stale-check for post_compaction_review.md, compaction summary note, agent routing table, new pitfalls, end-of-session update reminder" }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-6, date: 2026-06-12, action: updated, notes: "Added Step 3.5 -- event log check to identify work already done before compaction (#513)" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-15, action: updated, notes: "Removed hardcoded ADMIN_TOKEN from Steps 3 and 3.5 (use qoq-api script or MCP -- never hardcode token); added MCP preference for Step 3 focus check; added glossary pointer at top; added two pitfalls (hardcoded token, wrong artifact type)." }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-20, action: updated, notes: "v0.4.0 -- removed compaction summary shortcut from Step 1 (user never intended it); JSONL read is non-negotiable, summary is not a substitute; added pitfall row for this mistake." }
 -->

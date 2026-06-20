@@ -9,7 +9,7 @@ created: 2026-06-09
 created_model: claude-sonnet-4-6
 created_session: 97461d8c-a6fc-433f-8294-baa47fb406e7
 updated: 2026-06-19
-sweep_count: 5
+sweep_count: 6
 qoq_item_id: 573
 ---
 
@@ -100,10 +100,14 @@ After qoq-add completes, POST /dna/file for any skill/memory files created as pa
 | v0.7.0 milestone | 255 |
 | Tooling + Docs | 257 |
 | Brainstorms: System Design | 258 |
-| IDEAS (staging) | 150 |
+| IDEAS (staging / unanchored) | 150 |
+| Lead Magnet root | 554 |
 | CCC-ADMIN | 149 |
 | ACIS | 35 |
 | NBA-NEUTRAL | 1 |
+
+For full artifact type taxonomy and dedup guidance, see:
+`C:\Users\rossonline\ccc\ccc-qoq\research\architecture\queue-candidate-types.md`
 
 ## Output format
 ```
@@ -137,4 +141,5 @@ If closing multiple items in a session, each gets its own `completion_note`. Bat
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "auto-touch via Stop hook" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-16, action: updated, notes: "auto-touch via Stop hook" }
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-19, action: updated, notes: "v0.2.0 — expanded step 3 with full provenance field table; added Recognized Candidate Types (file-anchor, lead-magnet, moment, reflect, ADR); closes #870" }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-19, action: updated, notes: "auto-touch via Stop hook" }
 -->
