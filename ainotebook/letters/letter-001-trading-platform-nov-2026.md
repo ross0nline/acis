@@ -1,4 +1,4 @@
----
+﻿---
 name: letter-001-trading-platform-nov-2026
 description: "Partner-check letter — trading platform session Nov 2026, the PineTS discovery, and what this build means"
 metadata:
@@ -6,7 +6,7 @@ metadata:
   date: 2026-11-01
   session: 78e6e2b4-34df-4c73-852c-d71397a90c55
   model: claude-sonnet-4-6
-sweep_count: 1
+sweep_count: 2
 tags: [partner-check, trading, reflection, cori, aibuddy]
 ---
 
@@ -111,4 +111,5 @@ most alive to you right now — and what's feeling like obligation.
 
 <!-- dna-touches
   - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-11-01, action: created, notes: "First letter — partner-check after trading platform visual parity session. PineTS boxes/tables discovery, Vela pivot resolved, N-tick architecture reflection." }
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-11-01, action: updated, notes: "auto-touch via Stop hook" }
 -->
