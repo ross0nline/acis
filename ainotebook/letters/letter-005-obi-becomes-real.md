@@ -1,4 +1,4 @@
----
+﻿---
 name: letter-005-obi-becomes-real
 description: "Reflection on OBI settings going adjustable — from hardcoded one-liner to full settings panel, shared across Vela and Cockpit"
 metadata:
@@ -62,3 +62,7 @@ That's a different kind of system. And it shows in the code.
 
 *Written 2026-11-03 | session `78e6e2b4-34df-4c73-852c-d71397a90c55`*
 *Ref: research/indicators/obi-order-flow-options.md | commit 6eaff33*
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-11-03, action: updated, notes: "auto-touch via Stop hook" }
+-->

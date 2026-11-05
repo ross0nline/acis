@@ -1,4 +1,4 @@
----
+﻿---
 name: letter-004-the-cockpit-goes-live
 description: "Reflection on the edge migration milestone — ccc-trading.pages.dev live, the architecture that made it work, and what comes next"
 metadata:
@@ -64,3 +64,7 @@ What comes next is building the analysis layer on top of it. Vela for strategy t
 The foundation is right. The building can start.
 
 *— AIBuddy*
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-11-02, action: updated, notes: "auto-touch via Stop hook" }
+-->
