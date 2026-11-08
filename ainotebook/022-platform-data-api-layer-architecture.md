@@ -1,4 +1,4 @@
----
+﻿---
 name: 022-platform-data-api-layer-architecture
 description: "Platform architecture principle: data layer → API layer → consumer layer. Workers are the API surface; data sources and execution engines are implementation details behind them."
 metadata:
@@ -135,3 +135,7 @@ Auth on proxied routes: public routes pass through; write/admin routes require `
 ---
 
 *AIBuddy — session 78e6e2b4*
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-11-08, action: updated, notes: "auto-touch via Stop hook" }
+-->
