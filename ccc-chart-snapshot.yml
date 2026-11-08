@@ -1,0 +1,76 @@
+- generic [ref=f47e4]:
+  - generic [ref=f47e5]:
+    - button "QQQ" [ref=f47e6] [cursor=pointer]
+    - button "Timeframe — 144T" [ref=f47e9] [cursor=pointer]: 144T
+    - button "Chart style — Candles" [ref=f47e14] [cursor=pointer]
+    - button "Indicators" [ref=f47e21] [cursor=pointer]
+    - button "Undo" [disabled] [ref=f47e27]
+    - button "Redo" [disabled] [ref=f47e32]
+    - generic [ref=f47e37]:
+      - generic [ref=f47e38]:
+        - button "Book" [ref=f47e39] [cursor=pointer]
+        - button "OBI" [ref=f47e44] [cursor=pointer]
+        - button "Code" [ref=f47e49] [cursor=pointer]
+      - button "Alerts" [ref=f47e53] [cursor=pointer]
+      - generic [ref=f47e58]:
+        - button "Data window" [ref=f47e59] [cursor=pointer]
+        - button "Object tree" [ref=f47e64] [cursor=pointer]
+      - button "Download screenshot" [ref=f47e70] [cursor=pointer]
+  - generic [ref=f47e75]:
+    - generic [ref=f47e77]:
+      - button "Cursor" [ref=f47e78] [cursor=pointer]
+      - generic [ref=f47e84]:
+        - button "Lines" [ref=f47e85] [cursor=pointer]
+        - button "Lines — more"
+      - generic [ref=f47e90]:
+        - button "Fibonacci" [ref=f47e91] [cursor=pointer]
+        - button "Fibonacci — more"
+      - generic [ref=f47e95]:
+        - button "Patterns" [ref=f47e96] [cursor=pointer]
+        - button "Patterns — more"
+      - generic [ref=f47e101]:
+        - button "Measurements" [ref=f47e102] [cursor=pointer]
+        - button "Measurements — more"
+      - generic [ref=f47e108]:
+        - button "Shapes" [ref=f47e109] [cursor=pointer]
+        - button "Shapes — more"
+      - generic [ref=f47e115]:
+        - button "Text" [ref=f47e116] [cursor=pointer]
+        - button "Text — more"
+      - generic [ref=f47e121]:
+        - button "Icons" [ref=f47e122] [cursor=pointer]
+        - button "Icons — more"
+      - button "Measure" [ref=f47e128] [cursor=pointer]
+      - button "Eraser (click/drag to delete)" [ref=f47e137] [cursor=pointer]
+      - generic [ref=f47e143]:
+        - button "Magnet snap" [ref=f47e144] [cursor=pointer]
+        - button "Magnet snap — more"
+      - button "Stay in drawing mode" [ref=f47e151] [cursor=pointer]
+      - button "Sync drawings on all charts" [ref=f47e158] [cursor=pointer]
+      - button "Collapse toolbar" [ref=f47e165] [cursor=pointer]
+    - generic [ref=f47e172]:
+      - generic [ref=f47e173]:
+        - generic [ref=f47e174]
+        - status [ref=f47e176]
+      - generic: QQQ · 144T
+      - generic [ref=f47e178]:
+        - generic [ref=f47e179]: QQ
+        - generic [ref=f47e180]: QQQ
+        - generic [ref=f47e181]: · 144T
+        - generic "Market Open" [ref=f47e183]
+      - link "Charting by Vela" [ref=f47e190] [cursor=pointer]:
+        - /url: https://velacharts.dev/?utm_source=vela&utm_medium=attribution
+  - generic [ref=f47e200]:
+    - button "1D" [ref=f47e201] [cursor=pointer]
+    - button "7D" [ref=f47e202] [cursor=pointer]
+    - button "1M" [ref=f47e203] [cursor=pointer]
+    - button "3M" [ref=f47e204] [cursor=pointer]
+    - button "6M" [ref=f47e205] [cursor=pointer]
+    - button "YTD" [ref=f47e206] [cursor=pointer]
+    - button "1Y" [ref=f47e207] [cursor=pointer]
+    - button "5Y" [ref=f47e208] [cursor=pointer]
+    - button "ALL" [ref=f47e209] [cursor=pointer]
+    - button "Time zone" [ref=f47e210] [cursor=pointer]:
+      - generic [ref=f47e211]: 05:38:14
+      - generic [ref=f47e212]: UTC
+    - button "Chart settings" [ref=f47e213] [cursor=pointer]
