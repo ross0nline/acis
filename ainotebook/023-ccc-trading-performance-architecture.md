@@ -1,4 +1,4 @@
----
+﻿---
 name: 023-ccc-trading-performance-architecture
 description: "CCC Trading speed architecture: AOT strategy compilation, CF Containers warm-first pattern, KV bar cache, and how the three-layer platform model (ADR 022) enables scalability."
 metadata:
@@ -175,3 +175,7 @@ The Worker handles auth, CORS, rate limiting, and caching for all of them. The c
 ---
 
 *AIBuddy — session 2026-11-08*
+
+<!-- dna-touches
+  - { model: claude-sonnet-4-6, session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-11-08, action: updated, notes: "auto-touch via Stop hook" }
+-->
