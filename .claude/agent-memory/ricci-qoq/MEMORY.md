@@ -1,0 +1,1 @@
+- [Session 2026-11-09 Qi build](session-2026-11-09-qi-build.md) — Qi live at v0.20.0; KV=D1 kv_artifacts; huge JSONLs; Start-Job dies; hook stdin; #1155-1160 queued
