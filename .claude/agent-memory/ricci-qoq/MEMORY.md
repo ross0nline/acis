@@ -16,3 +16,4 @@
 - [Session 2026-11-01: trading queue protocol](session-2026-11-01-trading-queue-protocol.md) — Advisory. #998 under IDEAS(150), no ccc-trading domain; typeIdByName nulls typos silently; linked_paths JSON vs CSV drift
 - [Session 2026-11-08: art-of-queuing domain](session-2026-11-08-art-of-queuing-domain.md) — #1114 guide written; domain art-of-queuing id 7 (0028); #1114 root pri 0; ccc-trading id 6 orphan; next mig 0029
 - [Session 2026-11-07: creation paths audit](session-2026-11-07-creation-paths-audit.md) — 3 INSERT sites (items/mcp/auto-queue); no [ai] or KV binding; "KV" = D1 kv_artifacts; no server-side classify
+- [Session 2026-11-09 Qi build](session-2026-11-09-qi-build.md) — Qi live at v0.20.0; KV=D1 kv_artifacts; huge JSONLs; Start-Job dies; hook stdin; #1155-1160 queued
