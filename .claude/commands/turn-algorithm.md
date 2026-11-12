@@ -8,10 +8,10 @@ version: "0.1.0"
 created: 2026-06-10
 created_model: claude-sonnet-4-6
 created_session: 78e6e2b4-34df-4c73-852c-d71397a90c55
-updated: 2026-06-19
+updated: 2026-11-12
 tags: [turn-algorithm, protocol, per-turn, pseudo-code, standing-orders]
 qoq_item_id: 487
-sweep_count: 17
+sweep_count: 18
 ---
 
 # Turn Algorithm
@@ -137,12 +137,11 @@ fn turn(userMessage):
 
   if candidates:
     if mcpAvailable():
-      ids = [create_item(c) for c in candidates]         // MCP tool — no token, no PS boilerplate
+      ids = [create_item(c) for c in candidates]         // MCP first: works on any machine with the client config
       // create_item supports full 18-field schema: linked_paths, metadata, tags, protocol_version
-    elif len(candidates) >= 3:
-      ids = batchPOST(candidates via qoq-add tempFile)   // batch for 3+ items (PS fallback)
     else:
-      ids = singlePOST(candidates via qoq-api)           // 1–2 items (PS fallback)
+      write(candidates, "$env:TEMP\qoq-batch.json")
+      ids = qoq-add "$env:TEMP\qoq-batch.json"           // fallback: needs local C:\Scripts and QOQ_ADMIN_TOKEN
     chat("Queued: " + ids)                               // report before responding
 
   // ── FOCUS AWARENESS ───────────────────────────────────────────────────────
@@ -321,4 +320,5 @@ fn turn(userMessage):
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-2, date: 2026-06-11, action: updated, notes: "Added sequence-surface step to RESPOND block (#606) — tierAndRank pending queue when 3+ items, replaces single-next." }
   - { model: claude-sonnet-4-6, session: post-78e6e2b4-compaction-4, date: 2026-06-12, action: updated, notes: "Added version bump trigger to POST-WORK: SKILL/ALGORITHM REVIEW block (#532). Bump minor when behavior changes; bump patch when fixing errors." }
   - { model: , session: 78e6e2b4-34df-4c73-852c-d71397a90c55, date: 2026-06-19, action: updated, notes: "Added file-anchor heuristic to queue scan candidate list (#871)" }
+  - { model: claude-sonnet-4-6, session: af1c3b0e-8461-409b-b080-c1751aea3ea5, date: 2026-11-12, action: updated, notes: "auto-touch via Stop hook" }
 -->

@@ -77,10 +77,10 @@ Items from the current session's earlier turns are the most common duplication r
 ```
 create_item title="..." stage="queued" domain="ccc-qoq" parent_id=258 description="..."
 ```
-MCP carries full 18-field schema with no PowerShell boilerplate.
+MCP carries full 18-field schema with no PowerShell boilerplate, and works on any machine with the client config.
 
-**Batch via qoq-add (PS fallback for 3+ items or when MCP unavailable):**
-Write items to a temp JSON file → `qoq-add <file>`.
+**Fallback via qoq-add (when MCP is unavailable):**
+Write items to a temp JSON file → `qoq-add <file>`. Needs local C:\Scripts and QOQ_ADMIN_TOKEN.
 
 **qoq-add batch JSON field names — common gotcha:**
 - The prose field is `description`, NOT `notes`. Using `notes` silently creates an item with an empty description and no error.

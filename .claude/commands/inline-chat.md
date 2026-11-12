@@ -219,7 +219,7 @@ improve, and compound. One-off prompts evaporate.
 | Design exploration | `research/architecture/slug.md` |
 | Trade-off analysis | `research/architecture/slug.md` or `ainotebook/analysis/` |
 | Brainstorm dump | `C:\Users\rossonline\ccc\brainstorm\slug.md` |
-| Queue item | POST /items (via /qoq-add) |
+| Queue item | `create_item` (MCP) first; `/qoq-add` when MCP is unavailable |
 | Chat observation | Chat only — brief, one or two sentences |
 
 If no category exists for the content type, create it. Never leave substantial content
